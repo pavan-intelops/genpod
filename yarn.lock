@@ -2820,6 +2820,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@remix-run/router@npm:1.14.0":
+  version: 1.14.0
+  resolution: "@remix-run/router@npm:1.14.0"
+  checksum: 1a64439087ed77b4eec804f55ba9bbb63275eb756f0c6ef8cfa7d92609e29bb8d87d03f3b5446586130d12d2bd59f799baed167044ee80f6dce5456609c317d4
+  languageName: node
+  linkType: hard
+
 "@rollup/pluginutils@npm:^5.0.2":
   version: 5.1.0
   resolution: "@rollup/pluginutils@npm:5.1.0"
@@ -3742,7 +3749,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tabler/icons@npm:^2.44.0":
+"@tabler/icons-react@npm:^2.44.0":
+  version: 2.44.0
+  resolution: "@tabler/icons-react@npm:2.44.0"
+  dependencies:
+    "@tabler/icons": "npm:2.44.0"
+    prop-types: "npm:^15.7.2"
+  peerDependencies:
+    react: ^16.5.1 || ^17.0.0 || ^18.0.0
+  checksum: 92c755b6e57c46b8b7832fc5557057b3f84985d1069f028a8fa0e92c2e99d7b9adb682f0bf5d07b2d49e97ad3677439c109a254025527b83d5fc96d9a05dba1f
+  languageName: node
+  linkType: hard
+
+"@tabler/icons@npm:2.44.0, @tabler/icons@npm:^2.44.0":
   version: 2.44.0
   resolution: "@tabler/icons@npm:2.44.0"
   checksum: 42d069a355b66af5a749aa68db149297778f582511b95b3d2bf70902e9e1c3f7e0977791378359bcbb04e39af582d2b7a270932531eb832accfd2f8fda0e7d72
@@ -7197,6 +7216,7 @@ __metadata:
     "@storybook/react-vite": "npm:^7.6.6"
     "@storybook/test": "npm:^7.6.6"
     "@tabler/icons": "npm:^2.44.0"
+    "@tabler/icons-react": "npm:^2.44.0"
     "@types/react": "npm:^18.2.43"
     "@types/react-dom": "npm:^18.2.17"
     "@typescript-eslint/eslint-plugin": "npm:^6.14.0"
@@ -7213,6 +7233,7 @@ __metadata:
     postcss-simple-vars: "npm:^7.0.1"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
+    react-router-dom: "npm:^6.21.0"
     storybook: "npm:^7.6.6"
     storybook-dark-mode: "npm:^3.0.3"
     tailwindcss: "npm:^3.4.0"
@@ -9473,6 +9494,30 @@ __metadata:
     "@types/react":
       optional: true
   checksum: dcd523ada602bd0a839c2032cadf0b3e4af55ee85acefee3760976a9cceaa4606927801b093bbb8bf3c2989c71e048f5428c2c6eb9e6681762e86356833d039b
+  languageName: node
+  linkType: hard
+
+"react-router-dom@npm:^6.21.0":
+  version: 6.21.0
+  resolution: "react-router-dom@npm:6.21.0"
+  dependencies:
+    "@remix-run/router": "npm:1.14.0"
+    react-router: "npm:6.21.0"
+  peerDependencies:
+    react: ">=16.8"
+    react-dom: ">=16.8"
+  checksum: 635b233dd993599954f82fba9f4baa915061a75bfac79fff142aecdfa4ed418efd7de32e0455b50715fc11250951f049bbd3ead4cb55cfe09fe35c1948717359
+  languageName: node
+  linkType: hard
+
+"react-router@npm:6.21.0":
+  version: 6.21.0
+  resolution: "react-router@npm:6.21.0"
+  dependencies:
+    "@remix-run/router": "npm:1.14.0"
+  peerDependencies:
+    react: ">=16.8"
+  checksum: ff499df6994353b79ddd4abf35004c4dce944668fa16b18896a72ba255447d3f5ca50018d90f3034abbe08b87a5757141b09144f8eb17e4f375d8850373a11c3
   languageName: node
   linkType: hard
 
