@@ -1,0 +1,23 @@
+{
+	"name": "intelops-genpod",
+	"dockerFile": "Dockerfile",
+	"settings": {
+		"terminal.integrated.shell.linux": "/bin/bash"
+	},
+	"extensions": [
+		"dbaeumer.vscode-eslint",
+		"esbenp.prettier-vscode",
+		"storybook.storybook",
+		"ms-vscode.vscode-typescript-tslint-plugin",
+		"ms-azuretools.vscode-docker"
+	],
+	"forwardPorts": [
+		3000, // Vite
+		6006 // Storybook
+	],
+	"remoteUser": "node",
+	"mounts": [
+		"source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
+	],
+	"postCreateCommand": "yarn install"
+}
