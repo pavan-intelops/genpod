@@ -13,10 +13,13 @@ export type MicroServiceNodeFormData = {
 }
 export type DBNodeFormData = {
 	name: string
+	description: string
+
 	type: NodeTypes.DB_NODE
 }
 export type ClientNodeFormData = {
 	name: string
+	description: string
 	type: NodeTypes.CLIENT_NODE
 }
 export type MicroServiceNode = Node<

@@ -7,19 +7,22 @@ import theme from 'src/theme.ts'
 import Home from './pages/home/Home'
 import Layout from './pages/layout/Layout'
 import { ReactFlowProvider } from 'reactflow'
+import { ModalsProvider } from '@mantine/modals'
 
 function App() {
 	return (
 		<MantineProvider theme={theme} defaultColorScheme='dark'>
 			<ReactFlowProvider>
-				<Routes>
-					<Route path='/' element={<Layout />}>
-						<Route index element={<Home />} />
-						{/* <Route path="about" element={<About />} />
+				<ModalsProvider>
+					<Routes>
+						<Route path='/' element={<Layout />}>
+							<Route index element={<Home />} />
+							{/* <Route path="about" element={<About />} />
           <Route path="dashboard" element={<Dashboard />} /> */}
-						{/* <Route path="*" element={<NoMatch />} /> */}
-					</Route>
-				</Routes>
+							{/* <Route path="*" element={<NoMatch />} /> */}
+						</Route>
+					</Routes>
+				</ModalsProvider>
 			</ReactFlowProvider>
 		</MantineProvider>
 	)

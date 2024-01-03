@@ -1,4 +1,3 @@
-import { Button } from '@mantine/core'
 import ReactFlow, {
 	Background,
 	BackgroundVariant,
@@ -6,30 +5,21 @@ import ReactFlow, {
 	MiniMap,
 	Panel,
 } from 'reactflow'
+import { AddNodeModal } from 'src/components/modals/AddNodeModal'
+import MicroserviceNode from './nodes/Microservice.node'
 import { useFlowStore } from './store/flowstore'
-import { MicroServiceNode, NodeTypes } from './store/types.store'
+import { NodeTypes } from './store/types.store'
 
+const nodeTypes = {
+	[NodeTypes.MICROSERVICE]: MicroserviceNode,
+}
 export default function Flow() {
-	const { nodes, edges, onNodesChange, onEdgesChange, onConnect, addNode } =
+	const { nodes, edges, onNodesChange, onEdgesChange, onConnect } =
 		useFlowStore()
-	const handleAddNodeClick = () => {
-		const node: MicroServiceNode = {
-			data: {
-				description: 'Lol',
-				name: 'Lol',
-				type: NodeTypes.MICROSERVICE,
-			},
-			id: Date.now().toString(),
-			position: {
-				x: Math.random() * window.innerWidth,
-				y: (Math.random() * window.innerHeight) / 2,
-			},
-		}
-		addNode(node)
-	}
 	return (
 		<div style={{ width: '100%', height: '100%' }}>
 			<ReactFlow
+				nodeTypes={nodeTypes}
 				nodes={nodes}
 				edges={edges}
 				onNodesChange={onNodesChange}
@@ -37,12 +27,7 @@ export default function Flow() {
 				onConnect={onConnect}
 			>
 				<Panel position='top-left'>
-					<Button
-						onClick={handleAddNodeClick}
-						className=' bg-gray-400 px-3 py-1 rounded-md mx-1 outline'
-					>
-						Add Node
-					</Button>
+					<AddNodeModal />
 				</Panel>
 				<Controls />
 				<MiniMap />

@@ -1,0 +1,14 @@
+.node {
+	width: rem(300);
+	cursor: pointer;
+	background: var(--mantine-color-gray-5);
+	border-radius: var(--mantine-radius-md);
+	opacity: 0.8;
+}
+
+.node.node_selected {
+	outline: 2px solid var(--mantine-color-orange-6);
+}
+.node__header {
+	padding: var(--mantine-spacing-md) var(--mantine-spacing-lg);
+}
