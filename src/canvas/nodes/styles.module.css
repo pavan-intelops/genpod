@@ -10,5 +10,6 @@
 	outline: 2px solid var(--mantine-color-orange-6);
 }
 .node__header {
-	padding: var(--mantine-spacing-md) var(--mantine-spacing-lg);
+	padding: var(--mantine-spacing-sm) var(--mantine-spacing-sm);
+	/* height: rem(36); */
 }

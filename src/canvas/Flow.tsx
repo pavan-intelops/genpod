@@ -2,7 +2,6 @@ import ReactFlow, {
 	Background,
 	BackgroundVariant,
 	Controls,
-	MiniMap,
 	Panel,
 } from 'reactflow'
 import { AddNodeModal } from 'src/components/modals/AddNodeModal'
@@ -30,7 +29,6 @@ export default function Flow() {
 					<AddNodeModal />
 				</Panel>
 				<Controls />
-				<MiniMap />
 				<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
 			</ReactFlow>
 		</div>

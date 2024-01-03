@@ -1,11 +1,11 @@
-import { Drawer, Grid, GridCol, Stack, Text } from '@mantine/core'
+import { Box, Drawer, Flex, Grid, Text } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
 import { IconArrowForwardUp, IconEdit } from '@tabler/icons-react'
 import { Link } from 'react-router-dom'
 import { Handle, NodeProps, Position } from 'reactflow'
 import { useFlowStore } from '../store/flowstore'
 import { CustomNodeFormData, NodeTypes } from '../store/types.store'
 import classes from './styles.module.css'
-import { useDisclosure } from '@mantine/hooks'
 
 export default function MicroserviceNode(props: NodeProps<CustomNodeFormData>) {
 	const { selected, id } = props
@@ -16,31 +16,31 @@ export default function MicroserviceNode(props: NodeProps<CustomNodeFormData>) {
 		return (
 			<>
 				<Handle type='target' position={Position.Right} />
-				<Stack
+				<Flex
+					direction='column'
+					justify='center'
 					className={`${classes.node} ${selected && classes.node_selected}`}
-					align='center'
+					gap={0}
 				>
 					<Grid
 						className={classes.node__header}
-						style={{
-							width: '100%',
-						}}
-						align='center'
+						// align='center'
+						// justify='center'
 					>
-						<GridCol span={8}>
+						<Grid.Col span={8}>
 							<Text tt='uppercase' c='orange.5' fw='bold' ta='left'>
 								{getNodeFormData(id)?.data.name}
 							</Text>
-						</GridCol>
-						<GridCol span={2}>
+						</Grid.Col>
+						<Grid.Col span={2}>
 							<IconEdit
 								onClick={() => {
 									open()
 								}}
 							/>
-						</GridCol>
+						</Grid.Col>
 
-						<GridCol span={2}>
+						<Grid.Col span={2}>
 							<Link to={`/node/${id}`}>
 								<IconArrowForwardUp
 									onClick={() => {
@@ -48,12 +48,12 @@ export default function MicroserviceNode(props: NodeProps<CustomNodeFormData>) {
 									}}
 								/>
 							</Link>
-						</GridCol>
+						</Grid.Col>
 					</Grid>
-					<Stack align='center'>
+					<Box bg='gray.4' w='100%'>
 						<h3>{getNodeFormData(id)?.data.description}</h3>
-					</Stack>
-				</Stack>
+					</Box>
+				</Flex>
 				<Drawer
 					opened={opened}
 					onClose={close}

@@ -40,8 +40,10 @@ export function AddNodeModal() {
 							required
 							label='Node Name'
 							placeholder='Enter Node Name'
+							data-autofocus
 						/>
 						<TextInput
+							mt='md'
 							withAsterisk
 							required
 							label='Node Description'
