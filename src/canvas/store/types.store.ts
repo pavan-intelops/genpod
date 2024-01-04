@@ -1,4 +1,5 @@
 import { Edge, Node, OnConnect, OnEdgesChange, OnNodesChange } from 'reactflow'
+import { MicroServiceNodeFormData } from '../nodes/microservice/MicroserviceNode.types'
 
 export enum NodeTypes {
 	MICROSERVICE = 'microservice',
@@ -6,11 +7,7 @@ export enum NodeTypes {
 	DB_NODE = 'db-node',
 	CLIENT_NODE = 'client-node',
 }
-export type MicroServiceNodeFormData = {
-	name: string
-	description: string
-	type: NodeTypes.MICROSERVICE
-}
+
 export type DBNodeFormData = {
 	name: string
 	description: string
@@ -46,7 +43,7 @@ export interface FlowStore {
 	setNodes: (nodes: CustomNode[]) => void
 	setEdges: (edges: Edge[]) => void
 	setNodeFormData: (nodeFormData: CustomNodeFormData, nodeId?: string) => void
-	getNodeFormData: (nodeId: string) => CustomNode | undefined
+	getNodeFormData: (nodeId: string) => CustomNodeFormData | undefined
 	onNodesChange: OnNodesChange
 	onEdgesChange: OnEdgesChange
 	onConnect: OnConnect

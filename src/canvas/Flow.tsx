@@ -5,7 +5,7 @@ import ReactFlow, {
 	Panel,
 } from 'reactflow'
 import { AddNodeModal } from 'src/components/modals/AddNodeModal'
-import MicroserviceNode from './nodes/Microservice.node'
+import MicroserviceNode from './nodes/microservice/MicroserviceNode.node'
 import { useFlowStore } from './store/flowstore'
 import { NodeTypes } from './store/types.store'
 

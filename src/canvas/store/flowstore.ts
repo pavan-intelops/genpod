@@ -129,7 +129,7 @@ export const useFlowStore = create<FlowStore>()(
 				})
 			},
 			getNodeFormData: (nodeId: string) => {
-				return get().nodes.find((node) => node.id === nodeId)
+				return get().nodes.find((node) => node.id === nodeId)?.data
 			},
 			isNodeEditDrawerOpen: false,
 			setActiveNode: (nodeId: string) => {

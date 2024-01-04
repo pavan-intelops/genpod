@@ -1,5 +1,6 @@
 .node {
 	width: rem(300);
+	height: rem(360);
 	cursor: pointer;
 	background: var(--mantine-color-gray-5);
 	border-radius: var(--mantine-radius-md);

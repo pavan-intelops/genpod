@@ -1,15 +1,5 @@
 import { Grid, Stack } from '@mantine/core'
-import { useCallback } from 'react'
 
-import ReactFlow, {
-	Background,
-	BackgroundVariant,
-	Controls,
-	MiniMap,
-	addEdge,
-	useEdgesState,
-	useNodesState,
-} from 'reactflow'
 import 'reactflow/dist/style.css'
 import Flow from 'src/canvas/Flow'
 import { HeaderDefault } from 'src/components/headers/header-default/HeaderDefault'
@@ -23,6 +13,7 @@ export default function Layout() {
 				style={{
 					width: '100vw',
 				}}
+				gutter={0}
 			>
 				<Grid.Col span={2}>
 					<SideNavbar />
