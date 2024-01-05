@@ -72,7 +72,7 @@ export default function MicroserviceNode(props: NodeProps<CustomNodeFormData>) {
 					onClose={close}
 					title='Fill Node Form Details'
 					position='right'
-					size='80%'
+					size='md'
 					overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
 				>
 					<MicroServiceNodeDrawerForm nodeId={id} />
