@@ -1,5 +1,6 @@
 import { Box, Button, Group, TextInput, Textarea } from '@mantine/core'
 import { modals } from '@mantine/modals'
+import { getInitialMicroserviceNodeFormData } from 'src/canvas/nodes/microservice/Microservice.utils'
 import { useFlowStore } from 'src/canvas/store/flowstore'
 import { MicroServiceNode, NodeTypes } from 'src/canvas/store/types.store'
 import { getRandomNodeId } from 'src/utils/nanoid'
@@ -10,10 +11,12 @@ export function AddNodeModal() {
 	const addDummyNode = () => {
 		const node: MicroServiceNode = {
 			data: {
+				...getInitialMicroserviceNodeFormData(),
 				name: 'Dummy Node Name',
 				description: `Insanely large node description
 Insanely large node description
 written by me`,
+				type: NodeTypes.MICROSERVICE,
 			},
 			type: NodeTypes.MICROSERVICE,
 			id: getRandomNodeId(),
@@ -29,8 +32,10 @@ written by me`,
 	const handleAddNodeClick = (name: string, description: string) => {
 		const node: MicroServiceNode = {
 			data: {
+				...getInitialMicroserviceNodeFormData(),
 				description: description,
 				name: name,
+				type: NodeTypes.MICROSERVICE,
 			},
 			type: NodeTypes.MICROSERVICE,
 			id: Date.now().toString(),

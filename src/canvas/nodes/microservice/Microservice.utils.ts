@@ -1,4 +1,9 @@
+import { ComboboxItem } from '@mantine/core'
+import { UseFormReturn } from 'react-hook-form'
+import { NodeTypes } from 'src/canvas/store/types.store'
 import {
+	MicroServiceNodeFormData,
+	SupportedDBs,
 	SupportedFrameworks,
 	SupportedLanguages,
 	SupportedServers,
@@ -149,7 +154,7 @@ export const getFrameworkOptions = (
 	language: SupportedLanguages,
 	server: SupportedServers,
 	template: SupportedTemplates
-): SupportedFrameworks[] | null => {
+): string[] | null => {
 	const languageData = languageRelatedData[language]
 	if (!languageData) return null
 	const serverData = languageData[server]
@@ -162,7 +167,7 @@ export const getFrameworkOptions = (
 export const getTemplateOptions = (
 	language: SupportedLanguages,
 	server: SupportedServers
-): SupportedTemplates[] | null => {
+): string[] | null => {
 	const languageData = languageRelatedData[language]
 	if (!languageData) return null
 	const serverData = languageData[server]
@@ -178,6 +183,92 @@ export const getServerOptions = (
 	return languageData.servers.length ? languageData.servers : null
 }
 
-export const getLanguageOptions = (): SupportedLanguages[] => {
-	return Object.keys(languageRelatedData) as SupportedLanguages[]
+export const getLanguageOptions = (): ComboboxItem[] => {
+	const arr = Object.keys(languageRelatedData).map((key) => {
+		return {
+			value: key,
+			label: key,
+			disabled: false,
+		} as ComboboxItem
+	})
+	return arr
+}
+
+export const getInitialMicroserviceNodeFormData =
+	(): MicroServiceNodeFormData => {
+		return {
+			id: '',
+			name: '',
+			type: NodeTypes.MICROSERVICE,
+			description: '',
+			restConfig: {
+				clients: [],
+				framework: '',
+				server: {
+					port: '',
+					resources: [],
+					sqlDB: '',
+					noSQLDB: '',
+					openApiFileYamlContent: '',
+				},
+				template: '',
+			},
+			grpcConfig: {
+				framework: '',
+				template: '',
+				clients: [],
+				server: {
+					noSQLDB: '',
+					port: '',
+					resources: [],
+					sqlDB: '',
+					protoFileContent: '',
+				},
+			},
+			wsConfig: {
+				framework: '',
+				template: '',
+				clients: [],
+				server: {
+					noSQLDB: '',
+					port: '',
+					resources: [],
+					sqlDB: '',
+				},
+			},
+			annotations: {},
+			metadata: {},
+		}
+	}
+
+export const handleResets = (
+	form: UseFormReturn<Partial<MicroServiceNodeFormData>>
+) => {
+	form.resetField('restConfig.template', {
+		defaultValue: getTemplateOptions(
+			form.getValues('language')!,
+			SupportedServers.REST
+		)?.[0],
+	})
+	form.resetField('restConfig.framework', {
+		defaultValue: getFrameworkOptions(
+			form.getValues('language')!,
+			SupportedServers.REST,
+			(form.getValues('restConfig.template') as SupportedTemplates)!
+		)?.[0],
+	})
+}
+
+export const getSQLDBOptions = (type: 'sql' | 'noSql'): string[] => {
+	if (type === 'sql') {
+		return [
+			SupportedDBs.Map,
+			SupportedDBs.MySQL,
+			SupportedDBs['MySQL-GORM'],
+			SupportedDBs.SQLite,
+			SupportedDBs['SQLite-GORM'],
+		]
+	} else {
+		return [SupportedDBs.MongoDB]
+	}
 }

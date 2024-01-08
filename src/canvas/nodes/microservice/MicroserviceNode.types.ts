@@ -1,3 +1,5 @@
+import { NodeTypes } from 'src/canvas/store/types.store'
+
 export interface FieldMetadata {
 	datatype: string
 	isComposite: boolean
@@ -29,12 +31,12 @@ export interface GRPCClient {
 }
 
 export interface RESTConfig {
-	template: string
-	framework: string
+	template: SupportedTemplates | string
+	framework: SupportedFrameworks | string
 	server: {
 		port: string
-		sqlDB: string
-		noSQLDB: string
+		sqlDB?: string
+		noSQLDB?: string
 		resources?: Resource[]
 		openApiFileYamlContent?: string
 	}
@@ -67,14 +69,14 @@ export type MicroServiceNodeFormData = Partial<{
 	id: string
 	name: string
 	description: string
-	language: string
+	language: SupportedLanguages
 	restConfig?: RESTConfig
 	grpcConfig?: GRPCConfig
 	wsConfig?: WsConfig
 	metadata: Record<string, string>
 	annotations: Record<string, string>
+	type: NodeTypes
 }>
-
 export enum SupportedLanguages {
 	GO = 'go',
 	JAVA = 'java',
@@ -104,4 +106,13 @@ export enum SupportedFrameworks {
 	RUBY_ON_RAILS = 'ruby-on-rails',
 	RUBY_SINATRA = 'ruby-sinatra',
 	PYTHON_FLASK = 'python-flask',
+}
+
+export enum SupportedDBs {
+	MySQL = 'mysql',
+	SQLite = 'sqlite',
+	Map = 'map',
+	'SQLite-GORM' = 'sqlite-gorm',
+	'MySQL-GORM' = 'mysql-gorm',
+	MongoDB = 'mongodb',
 }

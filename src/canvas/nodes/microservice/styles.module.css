@@ -14,3 +14,9 @@
 	padding: var(--mantine-spacing-sm) var(--mantine-spacing-sm);
 	/* height: rem(36); */
 }
+
+.group {
+	padding: rem(10);
+	margin: rem(10);
+	border: 1px solid var(--mantine-color-gray-4);
+}
