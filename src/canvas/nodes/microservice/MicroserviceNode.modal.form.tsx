@@ -1,5 +1,5 @@
-import { Button, Flex, Grid, Group, Text } from '@mantine/core'
-import { UseFormReturn, useForm } from 'react-hook-form'
+import { Button, Flex, Grid, Group, Modal, Text } from '@mantine/core'
+import { UseFormReturn, useFieldArray, useForm } from 'react-hook-form'
 import {
 	FileInput,
 	NumberInput,
@@ -26,6 +26,8 @@ import classes from './styles.module.css'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { notifications } from '@mantine/notifications'
+import { useDisclosure } from '@mantine/hooks'
+import AddResourceModalContent from './AddResourceModalContent'
 
 interface MicroServiceNodeDrawerFormProps {
 	nodeId: string
@@ -95,11 +97,23 @@ export default function MicroServiceNodeDrawerForm(
 ) {
 	const { getNodeFormData } = useFlowStore()
 	const currentFormData = getNodeFormData(props.nodeId)
+	const [
+		isAddResourceModalOpen,
+		{ close: closeAddResourceModal, open: openAddResourceModal },
+	] = useDisclosure(false)
 
 	const form = useForm<MicroServiceNodeFormDataUI>({
 		defaultValues: structuredClone(currentFormData),
 		resolver: zodResolver(schema),
 	})
+	// const {
+	// 	fields: resources,
+	// 	append: appendResource,
+	// 	update: updateResource,
+	// } = useFieldArray({
+	// 	control: form.control,
+	// 	name: 'restConfig.server.resources',
+	// })
 	return (
 		<div>
 			<form onSubmit={form.handleSubmit((data) => console.log(data))}>
@@ -197,11 +211,52 @@ export default function MicroServiceNodeDrawerForm(
 							</Grid.Col>
 							{form.watch('restConfig.template') ===
 								SupportedTemplates.COMPAGE && getDBInfo(form)}
+							<Grid.Col span={6}>
+								<Button
+									onClick={() => {
+										openAddResourceModal()
+									}}
+									variant='outline'
+								>
+									Add Resources
+								</Button>
+							</Grid.Col>
 						</Grid>
 					)}
 					<Button type='submit'>Submit</Button>
 				</Flex>
 			</form>
+			<Modal
+				opened={isAddResourceModalOpen}
+				onClose={closeAddResourceModal}
+				title='Add Resources'
+				size='lg'
+			>
+				{/* 
+          1. text input for resource name
+          2. list of checkboxes for supportedMethods
+          3. Input to add Attribute and DataType
+                  and a Button to add more
+        */}
+				{/* {resources.map((resource, index) => {
+					return (
+						<>
+							<TextInput
+								label='Resource Name'
+								control={form.control}
+								name={`restConfig.server.resources.${index}.name`}
+							/>
+						</>
+					)
+				})} */}
+				<AddResourceModalContent
+					onResourceAdd={(resource) => {
+						console.log('====================================')
+						console.log(resource)
+						console.log('====================================')
+					}}
+				/>
+			</Modal>
 		</div>
 	)
 }

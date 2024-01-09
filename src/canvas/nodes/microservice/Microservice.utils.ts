@@ -6,6 +6,7 @@ import {
 	SupportedDBs,
 	SupportedFrameworks,
 	SupportedLanguages,
+	SupportedMethods,
 	SupportedServers,
 	SupportedTemplates,
 } from './MicroserviceNode.types'
@@ -271,4 +272,14 @@ export const getSQLDBOptions = (type: 'sql' | 'noSql'): string[] => {
 	} else {
 		return [SupportedDBs.MongoDB]
 	}
+}
+
+export const getSupportedMethods = (): SupportedMethods[] => {
+	return [
+		SupportedMethods.DELETE,
+		SupportedMethods.GET,
+		SupportedMethods.POST,
+		SupportedMethods.LIST,
+		SupportedMethods.PUT,
+	]
 }
