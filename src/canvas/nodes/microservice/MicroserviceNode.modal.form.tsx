@@ -18,40 +18,88 @@ import {
 } from './Microservice.utils'
 import {
 	MicroServiceNodeFormData,
+	MicroServiceNodeFormDataUI,
 	SupportedServers,
 	SupportedTemplates,
 } from './MicroserviceNode.types'
 import classes from './styles.module.css'
+import * as z from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { notifications } from '@mantine/notifications'
 
 interface MicroServiceNodeDrawerFormProps {
 	nodeId: string
 }
+
+const schema = z.object({
+	name: z.string().min(1),
+	description: z.string().optional(),
+	language: z.string().min(1),
+	restConfig: z.object({
+		template: z.string().min(1, {
+			message: 'Please select a template',
+		}),
+		framework: z.string().min(1, {
+			message: 'Please select a framework',
+		}),
+		server: z.object({
+			port: z.number().nonnegative().optional(),
+			sqlDB: z.string().min(1).optional(),
+			noSQLDB: z.string().min(1).optional(),
+			openApiFileYamlContent: z
+				.custom<File>((val) => val instanceof File, 'Please upload a file')
+				.refine(
+					(val) => {
+						if (
+							val.type === 'application/json' ||
+							val.type === 'application/x-yaml'
+						) {
+							return true
+						} else {
+							notifications.show({
+								title: 'Not Supported File Type',
+								message: 'Please upload a yaml or json file',
+								color: 'red',
+								autoClose: 3000,
+							})
+
+							return false
+						}
+					},
+					{
+						message: 'Please upload a yaml or json file',
+					}
+				)
+				.optional(),
+		}),
+	}),
+	annotations: z
+		.array(
+			z.object({
+				key: z.string().min(1),
+				value: z.string().min(1),
+			})
+		)
+		.optional(),
+	grpcConfig: z
+		.object({
+			protoFile: z.string().min(1).optional(),
+			protoFileContent: z.string().min(1).optional(),
+		})
+		.optional(),
+	metadata: z.record(z.string()).optional(),
+})
+
 export default function MicroServiceNodeDrawerForm(
 	props: MicroServiceNodeDrawerFormProps
 ) {
 	const { getNodeFormData } = useFlowStore()
 	const currentFormData = getNodeFormData(props.nodeId)
 
-	const form = useForm<MicroServiceNodeFormData>({
+	const form = useForm<MicroServiceNodeFormDataUI>({
 		defaultValues: structuredClone(currentFormData),
+		resolver: zodResolver(schema),
 	})
-
-	const isDBInputDisabled = (type: 'sql' | 'noSql') => {
-		// if both the fields are empty then enable both the fields
-		// else enable the field which is selected and disable the other
-		if (
-			!form.watch('restConfig.server.sqlDB') &&
-			!form.watch('restConfig.server.noSQLDB')
-		) {
-			return false
-		}
-		if (type === 'sql') {
-			return !!form.watch('restConfig.server.noSQLDB')
-		}
-		if (type === 'noSql') {
-			return !!form.watch('restConfig.server.sqlDB')
-		}
-	}
 	return (
 		<div>
 			<form onSubmit={form.handleSubmit((data) => console.log(data))}>
@@ -134,19 +182,21 @@ export default function MicroServiceNodeDrawerForm(
 									}
 								/>
 							</Grid.Col>
+							<Grid.Col span={12}>
+								{form.watch('restConfig.template') ===
+									SupportedTemplates.OPEN_API && (
+									<>
+										<FileInput
+											accept='.yaml,.yml,.json'
+											control={form.control}
+											name='restConfig.server.openApiFileYamlContent'
+											label='Upload YAML file'
+										/>
+									</>
+								)}
+							</Grid.Col>
 							{form.watch('restConfig.template') ===
-								SupportedTemplates.OPEN_API && (
-								<>
-									<FileInput
-										control={form.control}
-										name='restConfig.server.openApiFileYamlContent'
-										label='Upload YAML file'
-									/>
-								</>
-							)}
-							{form.watch('restConfig.template') ===
-								SupportedTemplates.COMPAGE &&
-								getDBInfo(form, isDBInputDisabled)}
+								SupportedTemplates.COMPAGE && getDBInfo(form)}
 						</Grid>
 					)}
 					<Button type='submit'>Submit</Button>
@@ -155,10 +205,8 @@ export default function MicroServiceNodeDrawerForm(
 		</div>
 	)
 }
-function getDBInfo(
-	form: UseFormReturn<Partial<MicroServiceNodeFormData>>,
-	isDBInputDisabled: (type: 'sql' | 'noSql') => boolean | undefined
-) {
+
+function getDBInfo(form: UseFormReturn<Partial<MicroServiceNodeFormData>>) {
 	return (
 		<>
 			<Grid.Col span={6}>
@@ -172,7 +220,6 @@ function getDBInfo(
 			<Grid.Col span={12}>
 				<Group>
 					<Select
-						disabled={isDBInputDisabled('sql')}
 						control={form.control}
 						name='restConfig.server.sqlDB'
 						label='SQL Database'
@@ -180,7 +227,6 @@ function getDBInfo(
 						data={getSQLDBOptions('sql')}
 					/>
 					<Select
-						disabled={isDBInputDisabled('noSql')}
 						control={form.control}
 						name='restConfig.server.noSQLDB'
 						label='No SQL Database'

@@ -1,4 +1,10 @@
-import { createTheme, rem } from '@mantine/core'
+import {
+	CSSVariablesResolver,
+	DEFAULT_THEME,
+	createTheme,
+	mergeMantineTheme,
+	rem,
+} from '@mantine/core'
 
 const theme = createTheme({
 	fontFamily: 'Roboto, sans-serif',
@@ -180,6 +186,7 @@ const theme = createTheme({
 	},
 	white: '#fff',
 	black: '#0f0f0f',
+
 	cursorType: 'pointer',
 	other: {
 		statusColors: {
@@ -190,5 +197,16 @@ const theme = createTheme({
 		},
 	},
 })
+export const cssVariableResolver: CSSVariablesResolver = (theme) => ({
+	variables: {
+		'--mantine-color-error': theme.other.statusColors.error,
+	},
+	dark: {
+		'--mantine-color-error': theme.other.statusColors.error,
+	},
+	light: {
+		'--mantine-color-error': theme.other.statusColors.error,
+	},
+})
 
-export default theme
+export default mergeMantineTheme(DEFAULT_THEME, theme)

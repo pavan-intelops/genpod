@@ -7,9 +7,17 @@ export interface FieldMetadata {
 
 export interface Resource {
 	name: string
-	allowedMethods: string[]
+	allowedMethods: (string | SupportedMethods)[]
 	// the below map can contain metadata about the field.
 	fields: Record<string, FieldMetadata>
+}
+
+export enum SupportedMethods {
+	POST = 'POST',
+	GET = 'GET',
+	PUT = 'PUT',
+	DELETE = 'DELETE',
+	LIST = 'LIST',
 }
 export interface GRPCConfig {
 	template: string
@@ -64,7 +72,10 @@ export interface WsClient {
 	sourceNodeId: string
 	port: string
 }
-
+export type MicroServiceNodeFormDataUI = Omit<
+	MicroServiceNodeFormData,
+	'id' | 'type' | 'wsConfig' | 'metadata' | 'annotations'
+>
 export type MicroServiceNodeFormData = Partial<{
 	id: string
 	name: string

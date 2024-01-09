@@ -12,7 +12,8 @@
 		"ms-azuretools.vscode-docker",
 		"wix.vscode-import-cost",
 		"jock.svg",
-		"ChakrounAnas.turbo-console-log"
+		"ChakrounAnas.turbo-console-log",
+		"naumovs.color-highlight"
 	],
 	"forwardPorts": [
 		3000, // Vite
