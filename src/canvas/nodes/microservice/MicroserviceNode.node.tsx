@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 import { Handle, NodeProps, Position } from 'reactflow'
 import { useFlowStore } from '../../store/flowstore'
 import { CustomNodeFormData, NodeTypes } from '../../store/types.store'
-import MicroServiceNodeDrawerForm from './MicroserviceNode.modal.form'
+import MicroServiceNodeDrawerForm from './form/MicroserviceNode.modal.form'
 import classes from './styles.module.css'
 
 export default function MicroserviceNode(props: NodeProps<CustomNodeFormData>) {
@@ -68,6 +68,7 @@ export default function MicroserviceNode(props: NodeProps<CustomNodeFormData>) {
 					</Box>
 				</Flex>
 				<Drawer
+					closeOnEscape
 					opened={opened}
 					onClose={close}
 					title='Fill Node Form Details'

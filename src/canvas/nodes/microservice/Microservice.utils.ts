@@ -260,7 +260,7 @@ export const handleResets = (
 	})
 }
 
-export const getSQLDBOptions = (type: 'sql' | 'noSql'): string[] => {
+export const getDBOptions = (type: 'sql' | 'noSql'): string[] => {
 	if (type === 'sql') {
 		return [
 			SupportedDBs.Map,
