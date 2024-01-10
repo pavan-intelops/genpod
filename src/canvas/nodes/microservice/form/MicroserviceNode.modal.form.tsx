@@ -16,6 +16,7 @@ import { schema } from './resolvers'
 
 interface MicroServiceNodeDrawerFormProps {
 	nodeId: string
+	onSubmit: (data: MicroServiceNodeFormData) => void
 }
 
 export default function MicroServiceNodeDrawerForm(
@@ -53,6 +54,7 @@ export default function MicroServiceNodeDrawerForm(
 						transformToNodeFormData(form.getValues()),
 						props.nodeId
 					)
+					props.onSubmit(transformToNodeFormData(form.getValues()))
 				}, console.error)}
 			>
 				<TextInput

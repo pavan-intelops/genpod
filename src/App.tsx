@@ -1,6 +1,8 @@
 import '@mantine/core/styles.css'
 import { Notifications } from '@mantine/notifications'
 import '@mantine/notifications/styles.css'
+import '@mantine/code-highlight/styles.css'
+
 import { Route, Routes } from 'react-router-dom'
 import './App.css'
 

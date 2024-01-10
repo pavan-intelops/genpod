@@ -13,7 +13,8 @@
 		"wix.vscode-import-cost",
 		"jock.svg",
 		"ChakrounAnas.turbo-console-log",
-		"naumovs.color-highlight"
+		"naumovs.color-highlight",
+		"kaiwood.center-editor-window"
 	],
 	"forwardPorts": [
 		3000, // Vite

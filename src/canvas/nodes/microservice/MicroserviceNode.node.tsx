@@ -76,7 +76,12 @@ export default function MicroserviceNode(props: NodeProps<CustomNodeFormData>) {
 					size='lg'
 					overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
 				>
-					<MicroServiceNodeDrawerForm nodeId={id} />
+					<MicroServiceNodeDrawerForm
+						nodeId={id}
+						onSubmit={() => {
+							close()
+						}}
+					/>
 				</Drawer>
 				<Handle type='source' position={Position.Left} id='a' />
 			</>
