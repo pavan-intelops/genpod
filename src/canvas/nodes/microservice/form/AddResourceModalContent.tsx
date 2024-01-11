@@ -106,7 +106,9 @@ export default function AddResourceModalContent(props: Props) {
 
 	return (
 		<form
-			onSubmit={form.handleSubmit((data) => {
+			onSubmit={form.handleSubmit((data, e) => {
+				e?.stopPropagation()
+				e?.preventDefault()
 				const resource: Resource = {
 					name: data.name,
 					allowedMethods: data.allowedMethods.map((method) => method.id),

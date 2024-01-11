@@ -49,7 +49,9 @@ export default function MicroServiceNodeDrawerForm(
 	return (
 		<>
 			<form
-				onSubmit={form.handleSubmit(() => {
+				onSubmit={form.handleSubmit((_, e) => {
+					e?.stopPropagation()
+					e?.preventDefault()
 					setNodeFormData(
 						transformToNodeFormData(form.getValues()),
 						props.nodeId

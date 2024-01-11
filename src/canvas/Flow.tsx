@@ -4,11 +4,11 @@ import ReactFlow, {
 	Controls,
 	Panel,
 } from 'reactflow'
-import { AddNodeModal } from 'src/components/modals/AddNodeModal'
+import { AddNodeModal } from 'src/components/common/modals/AddNodeModal'
 import MicroserviceNode from './nodes/microservice/MicroserviceNode.node'
 import { useFlowStore } from './store/flowstore'
 import { NodeTypes } from './store/types.store'
-import { Button, Drawer } from '@mantine/core'
+import { Box, Button, Drawer } from '@mantine/core'
 import CodeViewDrawer from './drawers/code-view/CodeViewDrawer'
 import { useDisclosure } from '@mantine/hooks'
 
@@ -24,8 +24,11 @@ export default function Flow() {
 	] = useDisclosure(false)
 	return (
 		<>
-			<div style={{ width: '100%', height: '100%' }}>
+			<Box w='100%' h='100%'>
 				<ReactFlow
+					proOptions={{
+						hideAttribution: true,
+					}}
 					nodeTypes={nodeTypes}
 					nodes={nodes}
 					edges={edges}
@@ -48,7 +51,7 @@ export default function Flow() {
 					<Controls />
 					<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
 				</ReactFlow>
-			</div>
+			</Box>
 			<Drawer
 				size='xl'
 				position='right'

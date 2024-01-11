@@ -107,7 +107,9 @@ export default function UpdateResourceModalContent(props: Props) {
 
 	return (
 		<form
-			onSubmit={form.handleSubmit((data) => {
+			onSubmit={form.handleSubmit((data, e) => {
+				e?.stopPropagation()
+				e?.preventDefault()
 				if (props.resourceIndex === undefined) {
 					return
 				}
