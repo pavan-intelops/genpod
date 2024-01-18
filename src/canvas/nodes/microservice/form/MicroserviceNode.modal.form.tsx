@@ -28,6 +28,7 @@ export default function MicroServiceNodeDrawerForm(
 	const form = useForm<MicroServiceNodeFormDataUI>({
 		defaultValues: structuredClone(currentFormData),
 		resolver: zodResolver(schema),
+		reValidateMode: 'onSubmit',
 	})
 	const transformToNodeFormData = (
 		data: MicroServiceNodeFormDataUI
@@ -49,7 +50,7 @@ export default function MicroServiceNodeDrawerForm(
 	return (
 		<>
 			<form
-				onSubmit={form.handleSubmit((_, e) => {
+				onSubmit={(e) => {
 					e?.stopPropagation()
 					e?.preventDefault()
 					setNodeFormData(
@@ -57,7 +58,7 @@ export default function MicroServiceNodeDrawerForm(
 						props.nodeId
 					)
 					props.onSubmit(transformToNodeFormData(form.getValues()))
-				}, console.error)}
+				}}
 			>
 				<TextInput
 					control={form.control}

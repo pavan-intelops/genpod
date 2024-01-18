@@ -9,59 +9,47 @@
 		var(--mantine-color-dark-6)
 	);
 }
+
 .root {
 	height: 68vh;
 }
 
 .tab {
 	position: relative;
-	border: rem(1px) solid
+	border: 1px solid
 		light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-4));
 	background-color: light-dark(
 		var(--mantine-color-white),
 		var(--mantine-color-dark-6)
 	);
+}
 
-	&:first-of-type {
-		border-radius: rem(4px) 0 0 rem(4px);
+.tab:first-of-type {
+	border-radius: 4px 0 0 4px;
+}
 
-		@mixin rtl {
-			border-radius: 0 rem(4px) rem(4px) 0;
-		}
-	}
+.tab:last-of-type {
+	border-radius: 0 4px 4px 0;
+}
 
-	&:last-of-type {
-		border-radius: 0 rem(4px) rem(4px) 0;
+.tab + .tab {
+	border-left-width: 0;
+}
 
-		@mixin rtl {
-			border-radius: rem(4px) 0 0 rem(4px);
-		}
-	}
+.tab:hover {
+	background-color: light-dark(
+		var(--mantine-color-gray-0),
+		var(--mantine-color-dark-5)
+	);
+}
 
-	& + & {
-		border-left-width: 0;
+.tab[data-active] {
+	z-index: 1;
+	background-color: var(--mantine-color-orange-filled);
+	border-color: var(--mantine-color-orange-filled);
+	color: var(--mantine-color-white);
+}
 
-		@mixin rtl {
-			border-right-width: 0;
-			border-left-width: rem(1px);
-		}
-	}
-
-	@mixin hover {
-		background-color: light-dark(
-			var(--mantine-color-gray-0),
-			var(--mantine-color-dark-5)
-		);
-	}
-
-	&[data-active] {
-		z-index: 1;
-		background-color: var(--mantine-color-orange-filled);
-		border-color: var(--mantine-color-orange-filled);
-		color: var(--mantine-color-white);
-
-		@mixin hover {
-			background-color: var(--mantine-color-orange-filled-hover);
-		}
-	}
+.tab[data-active]:hover {
+	background-color: var(--mantine-color-orange-filled-hover);
 }

@@ -57,6 +57,7 @@ export default function Flow() {
 				position='right'
 				onClose={closeCodeViewDrawer}
 				opened={isCodeViewDrawerOpen}
+				closeOnEscape={false}
 			>
 				<CodeViewDrawer />
 			</Drawer>

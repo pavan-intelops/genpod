@@ -68,7 +68,7 @@ export default function MicroserviceNode(props: NodeProps<CustomNodeFormData>) {
 					</Box>
 				</Flex>
 				<Drawer
-					closeOnEscape
+					closeOnEscape={false}
 					opened={opened}
 					onClose={close}
 					title='Fill Node Form Details'

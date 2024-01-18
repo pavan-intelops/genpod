@@ -96,23 +96,36 @@ export default function UpdateResourceModalContent(props: Props) {
 			...getInitialData(props.initialData),
 		},
 	})
-	const allowedMethodsFieldArray = useFieldArray({
-		control: form.control,
-		name: 'allowedMethods',
-	})
 	const fieldsFieldArray = useFieldArray({
 		control: form.control,
 		name: 'fields',
 	})
+	const handleCheckboxChange = (method: string, isChecked: boolean) => {
+		const currentAllowedMethods = form.getValues('allowedMethods')
+		let newAllowedMethods
 
+		if (isChecked) {
+			// Add the method if not already in the list
+			newAllowedMethods = currentAllowedMethods.some((m) => m.id === method)
+				? currentAllowedMethods
+				: [...currentAllowedMethods, { id: method }]
+		} else {
+			// Remove the method from the list
+			newAllowedMethods = currentAllowedMethods.filter((m) => m.id !== method)
+		}
+
+		// Update the form state
+		form.setValue('allowedMethods', newAllowedMethods)
+	}
 	return (
 		<form
-			onSubmit={form.handleSubmit((data, e) => {
+			onSubmit={(e) => {
 				e?.stopPropagation()
 				e?.preventDefault()
 				if (props.resourceIndex === undefined) {
 					return
 				}
+				const data = form.getValues()
 				const resource: Resource = {
 					name: data.name,
 					allowedMethods: data.allowedMethods.map((method) => method.id),
@@ -125,7 +138,7 @@ export default function UpdateResourceModalContent(props: Props) {
 					}, {} as Record<string, FieldMetadata>),
 				}
 				props.onResourceUpdate(resource, props.resourceIndex)
-			})}
+			}}
 		>
 			<Grid>
 				<Grid.Col span={12}>
@@ -140,18 +153,16 @@ export default function UpdateResourceModalContent(props: Props) {
 				</Grid.Col>
 				<Grid.Col span={12}>
 					<Stack>
-						{getSupportedMethods().map((method, index) => (
+						{getSupportedMethods().map((method) => (
 							<Checkbox
 								defaultChecked={props.initialData?.allowedMethods.includes(
 									method
 								)}
-								key={index}
+								key={method}
 								label={method}
 								id={method}
-								name={`allowedMethods.${index}`}
-								onChange={() => {
-									allowedMethodsFieldArray.append({ id: method })
-								}}
+								name={`allowedMethods.${method}`}
+								onChange={(e) => handleCheckboxChange(method, e.target.checked)}
 							/>
 						))}
 					</Stack>

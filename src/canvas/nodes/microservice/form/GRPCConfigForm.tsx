@@ -144,6 +144,7 @@ export default function GRPCConfigForm({ form }: GRPCConfigFormProps) {
 				onClose={closeAddResourceModal}
 				title='Add Resources'
 				size='lg'
+				closeOnEscape={false}
 			>
 				<AddResourceModalContent
 					onResourceAdd={(resource) => {
@@ -153,6 +154,7 @@ export default function GRPCConfigForm({ form }: GRPCConfigFormProps) {
 				/>
 			</Modal>
 			<Modal
+				closeOnEscape={false}
 				opened={isEditResourceModalOpen}
 				onClose={closeEditResourceModal}
 				title='Edit Resource'

@@ -106,9 +106,10 @@ export default function AddResourceModalContent(props: Props) {
 
 	return (
 		<form
-			onSubmit={form.handleSubmit((data, e) => {
-				e?.stopPropagation()
-				e?.preventDefault()
+			onSubmit={(e) => {
+				e.preventDefault()
+				e.stopPropagation()
+				const data = form.getValues()
 				const resource: Resource = {
 					name: data.name,
 					allowedMethods: data.allowedMethods.map((method) => method.id),
@@ -121,7 +122,7 @@ export default function AddResourceModalContent(props: Props) {
 					}, {} as Record<string, FieldMetadata>),
 				}
 				props.onResourceAdd(resource)
-			})}
+			}}
 		>
 			<Grid>
 				<Grid.Col span={12}>
