@@ -1,13 +1,14 @@
 import { Box, Tabs, Text } from '@mantine/core'
 import { IconFileSettings, IconGitBranch } from '@tabler/icons-react'
 import React from 'react'
+import { useSearchParams } from 'react-router-dom'
 import Layout from 'src/components/common/layout/Layout'
 import User from 'src/components/user'
 import classes from './profile.module.css'
 
 interface ProfileProps {}
-
 const Profile: React.FC<ProfileProps> = () => {
+	const [searchParams] = useSearchParams()
 	return (
 		<Layout>
 			<Box className={classes.box}>
@@ -15,7 +16,7 @@ const Profile: React.FC<ProfileProps> = () => {
 					Profile
 				</Text>
 				<Tabs
-					defaultValue='projects'
+					defaultValue={searchParams.get('activeTab') || 'projects'}
 					orientation='vertical'
 					activateTabWithKeyboard
 					classNames={{
