@@ -3,8 +3,9 @@ import { useForm } from 'react-hook-form'
 import { Select, TextInput, Textarea } from 'react-hook-form-mantine'
 import { useFlowStore } from 'src/canvas/store/flowstore'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { useCallback } from 'react'
 import { NodeTypes } from 'src/canvas/store/types.store'
+import { NodeDrawerFormProps } from 'src/canvas/types'
 import { getLanguageOptions, handleResets } from '../Microservice.utils'
 import {
 	MicroServiceNodeFormData,
@@ -12,15 +13,11 @@ import {
 } from '../MicroserviceNode.types'
 import GRPCConfigForm from './GRPCConfigForm'
 import RestConfigForm from './RESTConfigForm'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { schema } from './resolvers'
 
-interface MicroServiceNodeDrawerFormProps {
-	nodeId: string
-	onSubmit: (data: MicroServiceNodeFormData) => void
-}
-
 export default function MicroServiceNodeDrawerForm(
-	props: MicroServiceNodeDrawerFormProps
+	props: NodeDrawerFormProps<MicroServiceNodeFormData>
 ) {
 	const { getNodeFormData, setNodeFormData } = useFlowStore()
 	const currentFormData = getNodeFormData(props.nodeId)
@@ -28,37 +25,40 @@ export default function MicroServiceNodeDrawerForm(
 	const form = useForm<MicroServiceNodeFormDataUI>({
 		defaultValues: structuredClone(currentFormData),
 		resolver: zodResolver(schema),
-		reValidateMode: 'onSubmit',
+		reValidateMode: 'onBlur',
+		criteriaMode: 'all',
 	})
-	const transformToNodeFormData = (
-		data: MicroServiceNodeFormDataUI
-	): MicroServiceNodeFormData => {
-		const t: MicroServiceNodeFormData = {
-			name: data.name,
-			description: data.description,
-			language: data.language,
-			restConfig: data.restConfig || undefined,
-			grpcConfig: data.grpcConfig || undefined,
-			annotations: {},
-			id: 'form' + props.nodeId,
-			metadata: {},
-			type: NodeTypes.MICROSERVICE,
-			wsConfig: undefined,
-		}
-		return t
-	}
+	const transformToNodeFormData = useCallback(
+		(data: MicroServiceNodeFormDataUI): MicroServiceNodeFormData => {
+			const t: MicroServiceNodeFormData = {
+				name: data.name,
+				description: data.description,
+				language: data.language,
+				restConfig: data.restConfig || undefined,
+				grpcConfig: data.grpcConfig || undefined,
+				annotations: {},
+				id: 'form' + props.nodeId,
+				metadata: {},
+				type: NodeTypes.MICROSERVICE,
+				wsConfig: undefined,
+			}
+			return t
+		},
+		[props.nodeId]
+	)
 	return (
 		<>
 			<form
-				onSubmit={(e) => {
-					e?.stopPropagation()
-					e?.preventDefault()
+				onSubmitCapture={(e) => {
+					e.preventDefault()
+				}}
+				onSubmit={form.handleSubmit((data) => {
 					setNodeFormData(
 						transformToNodeFormData(form.getValues()),
 						props.nodeId
 					)
-					props.onSubmit(transformToNodeFormData(form.getValues()))
-				}}
+					props.onSubmit(transformToNodeFormData(data))
+				})}
 			>
 				<TextInput
 					control={form.control}

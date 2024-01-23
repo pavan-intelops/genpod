@@ -1,5 +1,7 @@
 import { Edge, Node, OnConnect, OnEdgesChange, OnNodesChange } from 'reactflow'
 import { MicroServiceNodeFormData } from '../nodes/microservice/MicroserviceNode.types'
+import { DBNodeFormData } from '../nodes/db-node/DBNode.types'
+import { ClientNodeFormData } from '../nodes/client-node/ClientNode.types'
 
 export enum NodeTypes {
 	MICROSERVICE = 'microservice',
@@ -8,25 +10,11 @@ export enum NodeTypes {
 	CLIENT_NODE = 'client-node',
 }
 
-export type DBNodeFormData = {
-	name: string
-	description: string
+export type MicroServiceNode = Node<MicroServiceNodeFormData, NodeTypes>
+export type DBNode = Node<DBNodeFormData, NodeTypes>
+export type ClientNode = Node<ClientNodeFormData, NodeTypes>
 
-	type: NodeTypes.DB_NODE
-}
-export type ClientNodeFormData = {
-	name: string
-	description: string
-	type: NodeTypes.CLIENT_NODE
-}
-export type MicroServiceNode = Node<
-	MicroServiceNodeFormData,
-	NodeTypes.MICROSERVICE
->
-export type DBNode = Node<DBNodeFormData, NodeTypes.DB_NODE>
-export type ClientNode = Node<ClientNodeFormData, NodeTypes.CLIENT_NODE>
-
-export type CustomNode = ClientNode | MicroServiceNode | DBNode
+export type CustomNode = MicroServiceNode | DBNode | ClientNode
 export type CustomNodeFormData =
 	| MicroServiceNodeFormData
 	| DBNodeFormData

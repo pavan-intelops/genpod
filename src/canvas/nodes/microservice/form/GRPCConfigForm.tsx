@@ -45,7 +45,6 @@ export default function GRPCConfigForm({ form }: GRPCConfigFormProps) {
 		control: form.control,
 		name: 'grpcConfig.server.resources',
 	})
-
 	return (
 		<>
 			<Flex direction='column' className={classes.group} mt='md' gap='md'>
@@ -55,7 +54,9 @@ export default function GRPCConfigForm({ form }: GRPCConfigFormProps) {
 				<Grid grow>
 					<Grid.Col span={6}>
 						<NumberInput
+							withAsterisk
 							control={form.control}
+							valueIsNumericString
 							name='grpcConfig.server.port'
 							label='Port'
 							placeholder='Port'
@@ -64,6 +65,7 @@ export default function GRPCConfigForm({ form }: GRPCConfigFormProps) {
 					<Grid.Col span={12}>
 						<Group>
 							<Select
+								withAsterisk
 								control={form.control}
 								name='grpcConfig.server.sqlDB'
 								label='SQL Database'
@@ -71,6 +73,7 @@ export default function GRPCConfigForm({ form }: GRPCConfigFormProps) {
 								data={getDBOptions('sql')}
 							/>
 							<Select
+								withAsterisk
 								control={form.control}
 								name='grpcConfig.server.noSQLDB'
 								label='No SQL Database'

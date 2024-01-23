@@ -1,19 +1,23 @@
+import { Box, Button, Drawer } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
 import ReactFlow, {
 	Background,
 	BackgroundVariant,
 	Controls,
 	Panel,
 } from 'reactflow'
-import { AddNodeModal } from 'src/components/common/modals/AddNodeModal'
+import AddNodeModal from 'src/components/common/modal/AddNodeModal'
+import CodeViewDrawer from './drawers/code-view/CodeViewDrawer'
+import DBNode from './nodes/db-node/DBNode.node'
 import MicroserviceNode from './nodes/microservice/MicroserviceNode.node'
 import { useFlowStore } from './store/flowstore'
 import { NodeTypes } from './store/types.store'
-import { Box, Button, Drawer } from '@mantine/core'
-import CodeViewDrawer from './drawers/code-view/CodeViewDrawer'
-import { useDisclosure } from '@mantine/hooks'
+import ClientNode from './nodes/client-node/ClientNode.node'
 
 const nodeTypes = {
 	[NodeTypes.MICROSERVICE]: MicroserviceNode,
+	[NodeTypes.DB_NODE]: DBNode,
+	[NodeTypes.CLIENT_NODE]: ClientNode,
 }
 export default function Flow() {
 	const { nodes, edges, onNodesChange, onEdgesChange, onConnect } =
@@ -37,14 +41,22 @@ export default function Flow() {
 					onConnect={onConnect}
 				>
 					<Panel position='top-left'>
-						<AddNodeModal />
-						<Button
-							bg='blue.4'
-							ml='sm'
-							onClick={() => {
-								openCodeViewDrawer()
-							}}
-						>
+						<AddNodeModal
+							type={NodeTypes.MICROSERVICE}
+							buttonText='Add Microservice Node'
+							mx='sm'
+						/>
+						<AddNodeModal
+							type={NodeTypes.DB_NODE}
+							buttonText='Add DB Node'
+							mx='sm'
+						/>
+						<AddNodeModal
+							type={NodeTypes.CLIENT_NODE}
+							buttonText='Add Client Node'
+							mx='sm'
+						/>
+						<Button bg='blue.4' ml='sm' onClick={() => openCodeViewDrawer()}>
 							View Code
 						</Button>
 					</Panel>

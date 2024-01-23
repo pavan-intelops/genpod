@@ -63,6 +63,7 @@ export default function RestConfigForm({ form }: RestConfigFormProps) {
 				<Grid grow>
 					<Grid.Col span={6}>
 						<Select
+							withAsterisk
 							w='100%'
 							defaultValue={
 								getTemplateOptions(
@@ -84,6 +85,7 @@ export default function RestConfigForm({ form }: RestConfigFormProps) {
 					</Grid.Col>
 					<Grid.Col span={6}>
 						<Select
+							withAsterisk
 							w='100%'
 							defaultValue={
 								getFrameworkOptions(
@@ -111,6 +113,7 @@ export default function RestConfigForm({ form }: RestConfigFormProps) {
 							SupportedTemplates.OPEN_API && (
 							<>
 								<FileInput
+									withAsterisk
 									accept='.yaml,.yml,.json'
 									control={form.control}
 									name='restConfig.server.openApiFileYamlContent'

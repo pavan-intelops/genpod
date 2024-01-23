@@ -119,13 +119,13 @@ export default function UpdateResourceModalContent(props: Props) {
 	}
 	return (
 		<form
-			onSubmit={(e) => {
-				e?.stopPropagation()
-				e?.preventDefault()
+			onSubmitCapture={(e) => {
+				e.preventDefault()
 				if (props.resourceIndex === undefined) {
 					return
 				}
-				const data = form.getValues()
+			}}
+			onSubmit={form.handleSubmit((data) => {
 				const resource: Resource = {
 					name: data.name,
 					allowedMethods: data.allowedMethods.map((method) => method.id),
@@ -137,8 +137,8 @@ export default function UpdateResourceModalContent(props: Props) {
 						return acc
 					}, {} as Record<string, FieldMetadata>),
 				}
-				props.onResourceUpdate(resource, props.resourceIndex)
-			}}
+				props.onResourceUpdate(resource, props.resourceIndex!)
+			})}
 		>
 			<Grid>
 				<Grid.Col span={12}>
