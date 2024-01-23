@@ -1,15 +1,22 @@
 import {
+	Button,
 	CSSVariablesResolver,
 	DEFAULT_THEME,
 	createTheme,
 	mergeMantineTheme,
 	rem,
 } from '@mantine/core'
+import classes from './mantine.module.css'
 
 const theme = createTheme({
 	fontFamily: 'Roboto, sans-serif',
 	primaryColor: 'orange',
 	primaryShade: 5,
+	components: {
+		Button: Button.extend({
+			classNames: classes,
+		}),
+	},
 	colors: {
 		orange: [
 			'#FEF3EB',

@@ -21,7 +21,7 @@ interface ProjectData {
 }
 const getProjects = (): Promise<ProjectData[]> => {
 	return new Promise((resolve) => {
-		const projects = new Array(400).fill(0).map((_, index) => ({
+		const projects = new Array(4).fill(0).map((_, index) => ({
 			id: index.toString(),
 			name: `Project Name ${index}`,
 			repositoryUrl: `https://github.com/ghana7989/intelops-genpod`,
