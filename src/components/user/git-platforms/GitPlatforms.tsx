@@ -54,7 +54,7 @@ export default function GitPlatforms() {
 								<Table.Td>{gitPlatform.gitPlatform}</Table.Td>
 								<Table.Td>{gitPlatform.url}</Table.Td>
 								<Table.Td>{gitPlatform.username}</Table.Td>
-								<Table.Td>{gitPlatform.personalAccessToken}</Table.Td>
+								<Table.Td>****************************************</Table.Td>
 								<Table.Td>
 									<ActionIcon
 										p={2}
@@ -84,9 +84,6 @@ export default function GitPlatforms() {
 				<AddGitPlatformModalContent
 					onClose={close}
 					onSubmit={(data) => {
-						console.log('====================================')
-						console.log(data)
-						console.log('====================================')
 						setGitPlatforms(data)
 						close()
 					}}
