@@ -94,6 +94,7 @@ export default function AddResourceModalContent(props: Props) {
 		defaultValues: {
 			...getInitialData(props.initialData),
 		},
+		mode: 'onBlur',
 	})
 	const allowedMethodsFieldArray = useFieldArray({
 		control: form.control,
@@ -106,9 +107,12 @@ export default function AddResourceModalContent(props: Props) {
 
 	return (
 		<form
+			onSubmitCapture={(e) => {
+				e.preventDefault()
+				// e.stopPropagation()
+			}}
 			onSubmit={form.handleSubmit((data, e) => {
 				e?.stopPropagation()
-				e?.preventDefault()
 				const resource: Resource = {
 					name: data.name,
 					allowedMethods: data.allowedMethods.map((method) => method.id),

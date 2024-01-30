@@ -1,0 +1,33 @@
+.node {
+	width: rem(300);
+	height: rem(360);
+	cursor: pointer;
+	border-radius: var(--mantine-radius-md);
+	opacity: 0.8;
+}
+
+.node.node_selected {
+	outline: 2px solid var(--mantine-color-orange-6);
+}
+.node__header {
+	padding: var(--mantine-spacing-sm) var(--mantine-spacing-sm);
+	background: var(--mantine-color-gray-5);
+
+	/* height: rem(36); */
+}
+/* make node body an ellipse shaped */
+.node__body {
+	height: 100px;
+	/* width: 150px; */
+	border-radius: 50%;
+	align-self: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.group {
+	padding: rem(10);
+	margin: rem(10);
+	border: 1px solid var(--mantine-color-gray-4);
+	border-radius: var(--mantine-radius-md);
+}

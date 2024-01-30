@@ -8,7 +8,6 @@ export interface FieldMetadata {
 export interface Resource {
 	name: string
 	allowedMethods: string[]
-	// the below map can contain metadata about the field.
 	fields: Record<string, FieldMetadata>
 }
 

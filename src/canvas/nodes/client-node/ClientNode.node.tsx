@@ -1,28 +1,24 @@
-import classNames from 'classnames'
-import { useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { Handle, NodeProps, Position } from 'reactflow'
-
 import { Box, Drawer, Flex, Grid, Text } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { IconArrowForwardUp, IconEdit } from '@tabler/icons-react'
-
-import { useFlowStore } from '../../store/flowstore'
-import { CustomNodeFormData, NodeTypes } from '../../store/types.store'
-import MicroServiceNodeDrawerForm from './form/MicroserviceNode.drawer.form'
+import { IconEdit } from '@tabler/icons-react'
+import classNames from 'classnames'
+import { useEffect } from 'react'
+import { Handle, NodeProps, Position } from 'reactflow'
+import { useFlowStore } from 'src/canvas/store/flowstore'
+import { CustomNodeFormData, NodeTypes } from 'src/canvas/store/types.store'
+import ClientNodeDrawerForm from './form/ClientNodeDrawerForm'
 import classes from './styles.module.css'
 
-export default function MicroserviceNode(props: NodeProps<CustomNodeFormData>) {
+export default function ClientNode(props: NodeProps<CustomNodeFormData>) {
 	const { selected, id } = props
 	const { getNodeFormData, setActiveNode } = useFlowStore()
 	const [opened, { open, close }] = useDisclosure(false)
 
 	useEffect(() => {
 		if (selected) setActiveNode(id)
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selected])
 
-	if (props.type === NodeTypes.MICROSERVICE)
+	if (props.type === NodeTypes.CLIENT_NODE) {
 		return (
 			<>
 				<Handle type='target' position={Position.Right} />
@@ -47,30 +43,22 @@ export default function MicroserviceNode(props: NodeProps<CustomNodeFormData>) {
 								}}
 							/>
 						</Grid.Col>
-
-						<Grid.Col span={2}>
-							<Link to={`/node/${id}`}>
-								<IconArrowForwardUp
-									onClick={() => {
-										// addInitialNode(id)
-									}}
-								/>
-							</Link>
-						</Grid.Col>
 					</Grid>
 					<Box
+						className={classes.node__body}
 						bg='gray.4'
 						w='100%'
-						style={{
-							flex: 1,
-						}}
+						style={
+							{
+								// flex: 1,
+							}
+						}
 						p='xs'
 					>
 						<Text c='gray.0'>{getNodeFormData(id)?.description}</Text>
 					</Box>
 				</Flex>
 				<Drawer
-					closeOnClickOutside={false}
 					closeOnEscape={false}
 					opened={opened}
 					onClose={close}
@@ -79,16 +67,16 @@ export default function MicroserviceNode(props: NodeProps<CustomNodeFormData>) {
 					size='lg'
 					overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
 				>
-					<MicroServiceNodeDrawerForm
+					<ClientNodeDrawerForm
 						nodeId={id}
-						onSubmit={(data) => {
-							console.log('data: ', data)
+						onSubmit={() => {
+							close()
 						}}
 					/>
 				</Drawer>
 				<Handle type='source' position={Position.Left} id='a' />
 			</>
 		)
-
-	return null
+	}
+	return <div>ClientNode</div>
 }
