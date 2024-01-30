@@ -10,4 +10,5 @@ export interface UserStore {
 		gitPlatforms: GitPlatform | GitPlatform[],
 		append?: boolean
 	) => void
+	removeGitPlatform: (gitPlatform: GitPlatform) => void
 }

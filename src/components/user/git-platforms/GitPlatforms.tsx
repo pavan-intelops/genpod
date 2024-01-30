@@ -14,24 +14,31 @@ import { useCallback } from 'react'
 import useUserStore from 'src/store/userStore'
 import AddGitPlatformModalContent from './AddGitPlatformModalContent'
 import { modals } from '@mantine/modals'
+import { GitPlatform } from 'src/store/types'
 
 export default function GitPlatforms() {
 	const [opened, { open, close }] = useDisclosure(false)
-	const { gitPlatforms, setGitPlatforms } = useUserStore()
+	const { gitPlatforms, setGitPlatforms, removeGitPlatform } = useUserStore()
 	const handleOnButtonClick = useCallback(() => {
 		return open()
 	}, [open])
-	const openDeleteModal = (platform: string) =>
+	const openDeleteModal = (platform: GitPlatform) =>
 		modals.openConfirmModal({
-			title: `Delete your ${platform}`,
+			title: `Delete your ${platform.gitPlatform} platform?`,
 			centered: true,
 			children: (
-				<Text size='sm'>Are you sure you want to remove the platform?</Text>
+				<Text size='sm'>
+					Are you sure you want to remove the {platform.gitPlatform} of user{' '}
+					<Text size='sm' fw='bolder' display='inline-block'>
+						{platform.username}
+					</Text>
+				</Text>
 			),
 			labels: { confirm: 'Delete It', cancel: "No don't delete it" },
 			confirmProps: { color: 'red.5' },
 			onConfirm: () => {
 				// TODO: Proceed to delete the platform
+				removeGitPlatform(platform)
 				return console.log('Confirmed')
 			},
 		})
@@ -59,7 +66,7 @@ export default function GitPlatforms() {
 									<ActionIcon
 										p={2}
 										bg='red.7'
-										onClick={() => openDeleteModal(gitPlatform.gitPlatform)}
+										onClick={() => openDeleteModal(gitPlatform)}
 									>
 										<IconTrash />
 									</ActionIcon>

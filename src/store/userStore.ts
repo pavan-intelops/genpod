@@ -18,6 +18,13 @@ const useUserStore = create<UserStore>((set, get) => ({
 			}
 		}
 	},
+	removeGitPlatform: (gitPlatform) => {
+		set({
+			gitPlatforms: get().gitPlatforms.filter(
+				(gp) => gp.username !== gitPlatform.username
+			),
+		})
+	},
 }))
 
 export default useUserStore
