@@ -1,4 +1,4 @@
-import { Box, Button, Flex, FocusTrap, Space } from '@mantine/core'
+import { Box, Button, Flex, Space } from '@mantine/core'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { PasswordInput, Select, TextInput } from 'react-hook-form-mantine'

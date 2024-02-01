@@ -12,3 +12,7 @@
 	width: 100%;
 	column-gap: var(--mantine-spacing-lg);
 }
+
+.form{
+  border-radius: var(--mantine-radius-md);
+}
