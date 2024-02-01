@@ -1,30 +1,79 @@
-import { create } from 'zustand'
+import { StoreApi, create } from 'zustand'
 import { UserStore } from './types'
 
+const gitPlatformStore = (
+	set: StoreApi<UserStore>['setState'],
+	get: StoreApi<UserStore>['getState']
+): Pick<UserStore, 'gitPlatformStore'> => {
+	return {
+		gitPlatformStore: {
+			gitPlatforms: [],
+			setGitPlatforms: (gitPlatforms, append = true) => {
+				const { gitPlatforms: currentGitPlatforms } = get().gitPlatformStore
+				if (Array.isArray(gitPlatforms)) {
+					if (append) {
+						set({
+							gitPlatformStore: {
+								...get().gitPlatformStore,
+								gitPlatforms: [...currentGitPlatforms, ...gitPlatforms],
+							},
+						})
+					} else {
+						set({
+							gitPlatformStore: {
+								...get().gitPlatformStore,
+								gitPlatforms,
+							},
+						})
+					}
+				} else {
+					if (append) {
+						set({
+							gitPlatformStore: {
+								...get().gitPlatformStore,
+								gitPlatforms: [...currentGitPlatforms, gitPlatforms],
+							},
+						})
+					} else {
+						set({
+							gitPlatformStore: {
+								...get().gitPlatformStore,
+								gitPlatforms: [gitPlatforms],
+							},
+						})
+					}
+				}
+			},
+			removeGitPlatform: (gitPlatform) => {
+				set({
+					gitPlatformStore: {
+						...get().gitPlatformStore,
+						gitPlatforms: get().gitPlatformStore.gitPlatforms.filter(
+							(gp) => gp.username !== gitPlatform.username
+						),
+					},
+				})
+			},
+		},
+	}
+}
+
 const useUserStore = create<UserStore>((set, get) => ({
-	gitPlatforms: [],
-	setGitPlatforms: (gitPlatforms, append = true) => {
-		if (Array.isArray(gitPlatforms)) {
-			if (append) {
-				set({ gitPlatforms: [...get().gitPlatforms, ...gitPlatforms] })
-			} else {
-				set({ gitPlatforms })
-			}
-		} else {
-			if (append) {
-				set({ gitPlatforms: [...get().gitPlatforms, gitPlatforms] })
-			} else {
-				set({ gitPlatforms: [gitPlatforms] })
-			}
-		}
+	personalDetails: {
+		email: '',
 	},
-	removeGitPlatform: (gitPlatform) => {
-		set({
-			gitPlatforms: get().gitPlatforms.filter(
-				(gp) => gp.username !== gitPlatform.username
-			),
-		})
+	isUserLoggedIn: () => {
+		return !!get().personalDetails.email
 	},
+	setPersonalDetails: (personalDetails) => {
+		set(
+			{
+				personalDetails,
+			},
+			false
+		)
+	},
+	...gitPlatformStore(set, get),
 }))
 
 export default useUserStore

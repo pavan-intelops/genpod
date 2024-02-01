@@ -5,6 +5,16 @@ export interface GitPlatform {
 	username: string
 }
 export interface UserStore {
+	gitPlatformStore: GitPlatformStore
+	personalDetails: PersonalDetails
+	setPersonalDetails: (personalDetails: PersonalDetails) => void
+	isUserLoggedIn: () => boolean
+}
+
+export interface PersonalDetails {
+	email: string
+}
+export interface GitPlatformStore {
 	gitPlatforms: GitPlatform[]
 	setGitPlatforms: (
 		gitPlatforms: GitPlatform | GitPlatform[],

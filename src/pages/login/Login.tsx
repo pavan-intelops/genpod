@@ -1,12 +1,33 @@
-import { Button, Container, Flex, Text } from '@mantine/core'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Button, Container, Flex, Space, Text } from '@mantine/core'
 import { useForm } from 'react-hook-form'
 import { TextInput } from 'react-hook-form-mantine'
+import { useNavigate } from 'react-router-dom'
+import useUserStore from 'src/store/userStore'
+import * as z from 'zod'
+
+const resolver = z.object({
+	email: z.string().email(),
+})
 
 export default function Login() {
 	const form = useForm({
 		defaultValues: {
 			email: '',
 		},
+		mode: 'all',
+		resolver: zodResolver(resolver),
+		shouldFocusError: true,
+		shouldUseNativeValidation: false,
+	})
+	const { setPersonalDetails } = useUserStore()
+	const navigate = useNavigate()
+
+	const handleSubmit = form.handleSubmit((data) => {
+		setPersonalDetails({
+			email: data.email,
+		})
+		navigate('/')
 	})
 	return (
 		<Container
@@ -31,22 +52,25 @@ export default function Login() {
 				<Text size='xl' fw='bold' td='underline' ta='left'>
 					Add your email to create projects
 				</Text>
-				<TextInput
-					type='email'
-					placeholder='Email'
-					control={form.control}
-					name='email'
-					withAsterisk
-					label='Email'
-				/>
-				<Button
-					color='orange'
-					onClick={() => {
-						console.log(form.getValues())
+				<form
+					onSubmit={handleSubmit}
+					onSubmitCapture={(e) => {
+						e.preventDefault()
 					}}
 				>
-					Login
-				</Button>
+					<TextInput
+						type='email'
+						placeholder='Email'
+						control={form.control}
+						name='email'
+						withAsterisk
+						label='Email'
+					/>
+					<Space h='sm' />
+					<Button type='submit' color='orange'>
+						Login
+					</Button>
+				</form>
 			</Flex>
 		</Container>
 	)

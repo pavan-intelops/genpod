@@ -18,7 +18,9 @@ import { GitPlatform } from 'src/store/types'
 
 export default function GitPlatforms() {
 	const [opened, { open, close }] = useDisclosure(false)
-	const { gitPlatforms, setGitPlatforms, removeGitPlatform } = useUserStore()
+	const {
+		gitPlatformStore: { gitPlatforms, setGitPlatforms, removeGitPlatform },
+	} = useUserStore()
 	const handleOnButtonClick = useCallback(() => {
 		return open()
 	}, [open])

@@ -1,25 +1,31 @@
 import { Grid } from '@mantine/core'
-import Flow from 'src/canvas/Flow'
+import React from 'react'
 import SideNavbar from 'src/components/common/side-nav/SideNavbar'
 import { sideNavData } from 'src/components/common/side-nav/data'
+import AddOrLoadProject from 'src/components/home/projects/AddOrLoadProject'
+import Protected from 'src/hoc/protected'
 import Layout from '../../components/common/layout/Layout'
 
-export default function Home() {
+const Home = React.memo(() => {
 	return (
-		<Layout>
-			<Grid
-				style={{
-					width: '100vw',
-				}}
-				gutter={0}
-			>
-				<Grid.Col span={2}>
-					<SideNavbar data={sideNavData} />
-				</Grid.Col>
-				<Grid.Col span={10}>
-					<Flow />
-				</Grid.Col>
-			</Grid>
-		</Layout>
+		<Protected>
+			<Layout>
+				<Grid
+					style={{
+						width: '100vw',
+					}}
+					gutter={0}
+				>
+					<Grid.Col span={2}>
+						<SideNavbar data={sideNavData} />
+					</Grid.Col>
+					<Grid.Col span={10}>
+						<AddOrLoadProject />
+					</Grid.Col>
+				</Grid>
+			</Layout>
+		</Protected>
 	)
-}
+})
+
+export default Home

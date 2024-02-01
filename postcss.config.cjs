@@ -1,5 +1,6 @@
 module.exports = {
 	plugins: {
+		'tailwindcss/nesting': 'postcss-nested',
 		'postcss-preset-mantine': {},
 		'postcss-simple-vars': {
 			variables: {
