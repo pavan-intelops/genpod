@@ -5,6 +5,7 @@
 		"terminal.integrated.shell.linux": "/bin/bash"
 	},
 	"extensions": [
+		"vunguyentuan.vscode-css-variables",
 		"ChakrounAnas.turbo-console-log",
 		"christian-kohler.npm-intellisense",
 		"christian-kohler.path-intellisense",
