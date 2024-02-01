@@ -1,8 +1,4 @@
-import '@mantine/code-highlight/styles.css'
-import '@mantine/core/styles.css'
 import { Notifications } from '@mantine/notifications'
-import '@mantine/notifications/styles.css'
-import 'reactflow/dist/style.css'
 
 import { Route, Routes } from 'react-router-dom'
 import './App.css'
@@ -12,6 +8,7 @@ import { ModalsProvider } from '@mantine/modals'
 import { ReactFlowProvider } from 'reactflow'
 import theme, { cssVariableResolver } from 'src/theme.ts'
 import Home from './pages/home/Home'
+import Login from './pages/login/Login'
 import Profile from './pages/profile/Profile'
 
 function App() {
@@ -25,11 +22,8 @@ function App() {
 			<ReactFlowProvider>
 				<ModalsProvider>
 					<Routes>
-						<Route path='/' element={<Home />}>
-							{/* <Route path="about" element={<About />} />
-          <Route path="dashboard" element={<Dashboard />} /> */}
-							{/* <Route path="*" element={<NoMatch />} /> */}
-						</Route>
+						<Route path='/' element={<Home />} />
+						<Route path='/login' element={<Login />} />
 						<Route path='/profile' index element={<Profile />} />
 					</Routes>
 				</ModalsProvider>
