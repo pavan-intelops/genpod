@@ -13,8 +13,13 @@ import theme, { cssVariableResolver } from 'src/theme.ts'
 import Home from './pages/home/Home'
 import Login from './pages/login/Login'
 import Profile from './pages/profile/Profile'
+import { useLayoutEffect } from 'react'
+import { runEnvVariablesCheck } from './utils/checkEnvVariables'
 
 function App() {
+	useLayoutEffect(() => {
+		runEnvVariablesCheck()
+	}, [])
 	return (
 		<MantineProvider
 			theme={theme}
