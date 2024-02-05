@@ -1,6 +1,9 @@
+import '@mantine/code-highlight/styles.css'
+import '@mantine/core/styles.css'
 import { Notifications } from '@mantine/notifications'
-
+import '@mantine/notifications/styles.css'
 import { Route, Routes } from 'react-router-dom'
+import 'reactflow/dist/style.css'
 import './App.css'
 
 import { MantineProvider } from '@mantine/core'
