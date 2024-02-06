@@ -2,7 +2,7 @@ import '@mantine/code-highlight/styles.css'
 import '@mantine/core/styles.css'
 import { Notifications } from '@mantine/notifications'
 import '@mantine/notifications/styles.css'
-import { Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import 'reactflow/dist/style.css'
 import './App.css'
 
@@ -23,24 +23,26 @@ function App() {
 		runEnvVariablesCheck()
 	}, [])
 	return (
-		<MantineProvider
-			theme={theme}
-			defaultColorScheme='dark'
-			cssVariablesResolver={cssVariableResolver}
-		>
-			<QueryClientProvider client={queryClient}>
-				<Notifications />
-				<ReactFlowProvider>
-					<ModalsProvider>
-						<Routes>
-							<Route path='/' element={<Home />} />
-							<Route path='/login' element={<Login />} />
-							<Route path='/profile' index element={<Profile />} />
-						</Routes>
-					</ModalsProvider>
-				</ReactFlowProvider>
-			</QueryClientProvider>
-		</MantineProvider>
+		<BrowserRouter>
+			<MantineProvider
+				theme={theme}
+				defaultColorScheme='dark'
+				cssVariablesResolver={cssVariableResolver}
+			>
+				<QueryClientProvider client={queryClient}>
+					<Notifications />
+					<ReactFlowProvider>
+						<ModalsProvider>
+							<Routes>
+								<Route path='/' element={<Home />} />
+								<Route path='/login' element={<Login />} />
+								<Route path='/profile' index element={<Profile />} />
+							</Routes>
+						</ModalsProvider>
+					</ReactFlowProvider>
+				</QueryClientProvider>
+			</MantineProvider>
+		</BrowserRouter>
 	)
 }
 
