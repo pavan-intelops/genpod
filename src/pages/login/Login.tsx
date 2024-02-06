@@ -3,6 +3,7 @@ import { Button, Container, Flex, Space, Text } from '@mantine/core'
 import { useForm } from 'react-hook-form'
 import { TextInput } from 'react-hook-form-mantine'
 import { useNavigate } from 'react-router-dom'
+import { useUserOperations } from 'src/api/useUserOperations'
 import useUserStore from 'src/store/userStore'
 import * as z from 'zod'
 
@@ -22,12 +23,16 @@ export default function Login() {
 	})
 	const { setPersonalDetails } = useUserStore()
 	const navigate = useNavigate()
-
-	const handleSubmit = form.handleSubmit((data) => {
+	const { postUser } = useUserOperations()
+	const handleSubmit = form.handleSubmit(async (data) => {
 		setPersonalDetails({
 			email: data.email,
 		})
-		navigate('/')
+		const res = postUser.mutate({
+			email: data.email,
+		})
+		console.log('data: ', res)
+		postUser.isSuccess && navigate('/')
 	})
 	return (
 		<Container
