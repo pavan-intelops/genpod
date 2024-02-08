@@ -24,7 +24,7 @@ const getProjects = (): Promise<ProjectData[]> => {
 		const projects = new Array(4).fill(0).map((_, index) => ({
 			id: index.toString(),
 			name: `Project Name ${index}`,
-			repositoryUrl: `https://github.com/ghana7989/intelops-genpod`,
+			repositoryUrl: "https://github.com/ghana7989/intelops-genpod",
 			isRepositoryPublic: Math.random() > 0.5,
 			version: '1.0.0',
 		}))
