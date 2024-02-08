@@ -2,26 +2,31 @@ import {
 	ActionIcon,
 	Autocomplete,
 	Group,
+	Menu,
 	Tooltip,
 	rem,
 	useMantineColorScheme,
 } from '@mantine/core'
 import {
 	IconBell,
+	IconLogout,
 	IconMoon,
 	IconSearch,
 	IconSettings,
 	IconSun,
 	IconUser,
 } from '@tabler/icons-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import GenPodLogo from 'src/assets/logos/GenpodLogo'
 import classes from './HeaderDefault.module.css'
+import useUserStore from 'src/store/userStore'
 
 export function HeaderDefault() {
 	const { colorScheme, setColorScheme } = useMantineColorScheme({
 		keepTransitions: true,
 	})
+	const { logout } = useUserStore()
+	const navigate = useNavigate()
 	return (
 		<header className={classes.header}>
 			<div className={classes.inner}>
@@ -49,13 +54,39 @@ export function HeaderDefault() {
 								</ActionIcon>
 							</Tooltip>
 						</Link>
-						<Link to='/settings'>
-							<Tooltip label='Settings'>
-								<ActionIcon display='block' variant='transparent'>
-									<IconSettings />
-								</ActionIcon>
-							</Tooltip>
-						</Link>
+						<Menu shadow='md' width={300}>
+							<Menu.Target>
+								<Tooltip label='Settings'>
+									<ActionIcon display='block' variant='transparent'>
+										<IconSettings />
+									</ActionIcon>
+								</Tooltip>
+							</Menu.Target>
+							<Menu.Dropdown>
+								<Link to='/settings'>
+									<Menu.Item
+										leftSection={
+											<IconSettings
+												style={{ width: rem(14), height: rem(14) }}
+											/>
+										}
+									>
+										Settings
+									</Menu.Item>
+								</Link>
+								<Menu.Item
+									leftSection={
+										<IconLogout style={{ width: rem(14), height: rem(14) }} />
+									}
+									onClick={() => {
+										logout()
+										navigate('/login')
+									}}
+								>
+									Sign Out
+								</Menu.Item>
+							</Menu.Dropdown>
+						</Menu>
 						<Link to='/notifications'>
 							<Tooltip label='Notifications'>
 								<ActionIcon display='block' variant='transparent'>

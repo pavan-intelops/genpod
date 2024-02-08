@@ -9,6 +9,7 @@ export interface UserStore {
 	personalDetails: PersonalDetails
 	setPersonalDetails: (personalDetails: PersonalDetails) => void
 	isUserLoggedIn: () => boolean
+	logout: () => void
 }
 
 export interface PersonalDetails {
