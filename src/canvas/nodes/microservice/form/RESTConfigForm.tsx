@@ -163,7 +163,7 @@ export default function RestConfigForm({ form }: RestConfigFormProps) {
 						</Button>
 					</Grid.Col>
 				</Grid>
-				{!!form.watch('restConfig.server.resources') &&
+				{Boolean(form.watch('restConfig.server.resources')) &&
 					form.watch('restConfig.server.resources')!.length > 0 && (
 						<Table>
 							<Table.Caption>Existing Resources</Table.Caption>

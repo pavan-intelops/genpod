@@ -93,7 +93,7 @@ export default function GRPCConfigForm({ form }: GRPCConfigFormProps) {
 						</Button>
 					</Grid.Col>
 				</Grid>
-				{!!form.watch('grpcConfig.server.resources') &&
+				{Boolean(form.watch('grpcConfig.server.resources')) &&
 					form.watch('grpcConfig.server.resources')!.length > 0 && (
 						<Table>
 							<Table.Caption>Existing Resources</Table.Caption>

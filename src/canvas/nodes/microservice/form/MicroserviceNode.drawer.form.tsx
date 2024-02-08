@@ -84,7 +84,7 @@ export default function MicroServiceNodeDrawerForm(
 						handleResets(form)
 					}}
 				/>
-				{!!form.watch('language') && (
+				{Boolean(form.watch('language')) && (
 					<>
 						<RestConfigForm form={form} />
 						<GRPCConfigForm form={form} />

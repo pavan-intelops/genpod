@@ -63,7 +63,7 @@ const useUserStore = create<UserStore>((set, get) => ({
 		email: '',
 	},
 	isUserLoggedIn: () => {
-		return !!get().personalDetails.email
+		return Boolean(get().personalDetails.email)
 	},
 	setPersonalDetails: (personalDetails) => {
 		set(
