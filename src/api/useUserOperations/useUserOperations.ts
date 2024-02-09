@@ -1,47 +1,25 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import useUserStore from 'src/store/userStore'
-import { UserDTO } from './useUserOperations.types'
 import axios from '../axios'
+import { UserDTO } from './useUserOperations.types'
 
 export function useUserOperations() {
-	const queryClient = useQueryClient()
-	const {
-		personalDetails: { email },
-	} = useUserStore()
-
-	const postUser = useMutation({
-		mutationFn: async (user: UserDTO) => {
-			const { data } = await axios.post(`/users`, user)
-			return data as UserDTO
-		},
-		onSuccess: (data) => {
-			queryClient.refetchQueries({
-				exact: true,
-				queryKey: ['get-user', data.email],
-			})
-		},
-	})
-	const getUser = useQuery({
-		queryFn: async ({ queryKey }) => {
-			const email = queryKey[1]
-			if (!email) {
-				return null
-			}
-			try {
-				const { data } = await axios.get(`/users/${email}`)
-				return data as UserDTO
-			} catch (error) {
-				postUser.mutate({
-					email: email,
-				})
-				return postUser.data as UserDTO
-			}
-		},
-		queryKey: ['get-user', email],
-		retry: 0,
-		throwOnError: false,
-		notifyOnChangeProps: 'all',
-	})
+	const postUser = async (user: UserDTO): Promise<UserDTO> => {
+		const { data } = await axios.post(`/users`, user)
+		return data
+	}
+	const getUser = async (email: string): Promise<UserDTO | null> => {
+		if (!email) {
+			return Promise.resolve(null) // Or handle this case as needed
+		}
+		try {
+			const { data } = await axios.get(`/users/${email}`)
+			return data
+		} catch (error) {
+			// If the user is not found, you might want to automatically post/create the user
+			// This behavior was inferred from your original useQuery and useMutation setup
+			const newUser = await postUser({ email }) // Assuming email is the only required field for UserDTO
+			return newUser
+		}
+	}
 
 	return { postUser, getUser }
 }

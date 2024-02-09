@@ -9,22 +9,26 @@ import {
 	Text,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
+import { modals } from '@mantine/modals'
 import { IconTrash } from '@tabler/icons-react'
 import { useCallback } from 'react'
+import { useGitPlatformOperations } from 'src/api/useGitPlatformOperations'
+import { GitPlatform } from 'src/store/types'
 import useUserStore from 'src/store/userStore'
 import AddGitPlatformModalContent from './AddGitPlatformModalContent'
-import { modals } from '@mantine/modals'
-import { GitPlatform } from 'src/store/types'
 
 export default function GitPlatforms() {
 	const [opened, { open, close }] = useDisclosure(false)
 	const {
-		gitPlatformStore: { gitPlatforms, setGitPlatforms, removeGitPlatform },
+		gitPlatformStore: { gitPlatforms, setGitPlatforms },
 	} = useUserStore()
+
+	const { postGitPlatform } = useGitPlatformOperations()
+
 	const handleOnButtonClick = useCallback(() => {
 		return open()
 	}, [open])
-	const openDeleteModal = (platform: GitPlatform) =>
+	const openDeleteModal = (platform: GitPlatform) => {
 		modals.openConfirmModal({
 			title: `Delete your ${platform.gitPlatform} platform?`,
 			centered: true,
@@ -40,10 +44,10 @@ export default function GitPlatforms() {
 			confirmProps: { color: 'red.5' },
 			onConfirm: () => {
 				// TODO: Proceed to delete the platform
-				removeGitPlatform(platform)
 				return console.log('Confirmed')
 			},
 		})
+	}
 	return (
 		<>
 			<Box p='sm'>
@@ -92,8 +96,10 @@ export default function GitPlatforms() {
 			>
 				<AddGitPlatformModalContent
 					onClose={close}
-					onSubmit={(data) => {
-						setGitPlatforms(data)
+					onSubmit={async (data) => {
+						const res = await postGitPlatform(data)
+
+						setGitPlatforms(res)
 						close()
 					}}
 				/>

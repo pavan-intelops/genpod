@@ -1,9 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Container, Flex, Space, Text } from '@mantine/core'
-import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { TextInput } from 'react-hook-form-mantine'
 import { useNavigate } from 'react-router-dom'
+import { useUserOperations } from 'src/api/useUserOperations'
 import useUserStore from 'src/store/userStore'
 import * as z from 'zod'
 
@@ -21,18 +21,19 @@ export default function Login() {
 		shouldFocusError: true,
 		shouldUseNativeValidation: false,
 	})
-	const { setPersonalDetails, personalDetails } = useUserStore()
+	const { setPersonalDetails } = useUserStore()
+	const { getUser } = useUserOperations()
 	const navigate = useNavigate()
+
 	const handleSubmit = form.handleSubmit(async (data) => {
-		setPersonalDetails({
-			email: data.email,
-		})
-	})
-	useEffect(() => {
-		if (personalDetails.email) {
+		const user = await getUser(data.email)
+		if (user) {
+			setPersonalDetails({
+				email: data.email,
+			})
 			navigate('/')
 		}
-	}, [navigate, personalDetails.email])
+	})
 	return (
 		<Container
 			mt='auto'

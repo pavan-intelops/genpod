@@ -5,11 +5,13 @@ const axios = new Axios({
 	baseURL: GLOBAL_CONSTANTS.baseBackendUrl,
 })
 axios.interceptors.request.use((config) => {
-	const token = localStorage.getItem('token')
-	if (token) {
-		config.headers
-	}
-	return config
+	return {
+		...config,
+		headers: {
+			...config.headers,
+			'Content-Type': 'application/json',
+		},
+	} as typeof config
+	// Add your request interceptor logic here
 })
-
 export default axios
