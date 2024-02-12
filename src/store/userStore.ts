@@ -92,6 +92,12 @@ const useUserStore = create<UserStore>()(
 			}),
 			{
 				name: 'user-store',
+				partialize: (state) => {
+					// only storing personalDetails in localStorage
+					return {
+						personalDetails: state.personalDetails,
+					}
+				},
 			}
 		)
 	)

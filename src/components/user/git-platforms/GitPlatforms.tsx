@@ -11,7 +11,7 @@ import {
 import { useDisclosure } from '@mantine/hooks'
 import { modals } from '@mantine/modals'
 import { IconTrash } from '@tabler/icons-react'
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useGitPlatformOperations } from 'src/api/useGitPlatformOperations'
 import { GitPlatform } from 'src/store/types'
 import useUserStore from 'src/store/userStore'
@@ -23,7 +23,20 @@ export default function GitPlatforms() {
 		gitPlatformStore: { gitPlatforms, setGitPlatforms },
 	} = useUserStore()
 
-	const { postGitPlatform } = useGitPlatformOperations()
+	const { postGitPlatform, deleteGitPlatform, getGitPlatforms } =
+		useGitPlatformOperations()
+
+	const fetchAndSetGitPlatforms = useCallback(async () => {
+		const res = await getGitPlatforms()
+		res.data && setGitPlatforms(res.data, false)
+	}, [])
+
+	useEffect(() => {
+		// eslint-disable-next-line no-extra-semi
+		;(async function () {
+			await fetchAndSetGitPlatforms()
+		})()
+	}, [fetchAndSetGitPlatforms])
 
 	const handleOnButtonClick = useCallback(() => {
 		return open()
@@ -42,9 +55,9 @@ export default function GitPlatforms() {
 			),
 			labels: { confirm: 'Delete It', cancel: "No don't delete it" },
 			confirmProps: { color: 'red.5' },
-			onConfirm: () => {
-				// TODO: Proceed to delete the platform
-				return console.log('Confirmed')
+			onConfirm: async () => {
+				await deleteGitPlatform(platform.gitPlatform)
+				await fetchAndSetGitPlatforms()
 			},
 		})
 	}
@@ -98,9 +111,10 @@ export default function GitPlatforms() {
 					onClose={close}
 					onSubmit={async (data) => {
 						const res = await postGitPlatform(data)
-
-						setGitPlatforms(res)
-						close()
+						if (res.data) {
+							setGitPlatforms(res.data)
+							close()
+						}
 					}}
 				/>
 			</Modal>

@@ -39,19 +39,21 @@ export function useGitPlatformOperations() {
 				`/users/${email}/gitPlatforms`,
 				transformedData
 			)
-			return { data: transformTGitPlatform(data) }
+			return { data: transformTGitPlatform(JSON.parse(data)) }
 		} catch (error) {
 			return { error }
 		}
 	}
 
-	const getGitPlatform = async (name: string) => {
+	const getGitPlatforms = async () => {
 		if (!email) {
 			return { error: new Error('User email is required') }
 		}
 		try {
-			const { data } = await axios.get(`/users/${email}/gitPlatforms/${name}`)
-			return { data: transformTGitPlatform(data) }
+			const res = await axios.get(`/users/${email}/gitPlatforms`)
+			return {
+				data: JSON.parse(res.data).map(transformTGitPlatform) as GitPlatform[],
+			}
 		} catch (error) {
 			return { error }
 		}
@@ -89,7 +91,7 @@ export function useGitPlatformOperations() {
 
 	return {
 		postGitPlatform,
-		getGitPlatform,
+		getGitPlatforms,
 		updateGitPlatform,
 		deleteGitPlatform,
 	}
