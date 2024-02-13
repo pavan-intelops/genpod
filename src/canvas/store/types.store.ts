@@ -1,7 +1,7 @@
 import { Edge, Node, OnConnect, OnEdgesChange, OnNodesChange } from 'reactflow'
-import { MicroServiceNodeFormData } from '../nodes/microservice/MicroserviceNode.types'
-import { DBNodeFormData } from '../nodes/db-node/DBNode.types'
 import { ClientNodeFormData } from '../nodes/client-node/ClientNode.types'
+import { DBNodeFormData } from '../nodes/db-node/DBNode.types'
+import { MicroServiceNodeFormData } from '../nodes/microservice/MicroserviceNode.types'
 
 export enum NodeTypes {
 	MICROSERVICE = 'microservice',
@@ -20,10 +20,12 @@ export type CustomNodeFormData =
 	| DBNodeFormData
 	| ClientNodeFormData
 
+export type CustomEdge = Edge
+
 export interface FlowStore {
 	flowKey: string
 	nodes: CustomNode[]
-	edges: Edge[]
+	edges: CustomEdge[]
 	activeNode: CustomNode | null
 	refreshActiveNode: () => void
 	setActiveNode: (nodeId: string) => void
@@ -37,4 +39,17 @@ export interface FlowStore {
 	onConnect: OnConnect
 	isNodeEditDrawerOpen: boolean
 	toggleNodeEditDrawer: () => void
+}
+export type NodeConsumerData = MicroServiceNodeFormData
+export interface CompageJson {
+	edges: Record<string, CustomEdge>
+	nodes: Record<string, CustomNode>
+	version?: string
+	workspace?: unknown
+	undoHistory?: unknown
+	potentialNode?: unknown
+	potentialEdge?: unknown
+	plugins?: unknown
+	panels?: unknown
+	editor?: unknown
 }
