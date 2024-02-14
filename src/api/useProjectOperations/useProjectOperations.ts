@@ -12,7 +12,11 @@ export const useProjectOperations = () => {
 			return { error: new Error('User email is required') }
 		}
 		try {
-			const { data } = await axios.post(`/users/${email}/projects`, project)
+			const stringifiedProject = JSON.stringify(project)
+			const { data } = await axios.post(
+				`/users/${email}/projects`,
+				stringifiedProject
+			)
 			return { data }
 		} catch (error) {
 			return { error }

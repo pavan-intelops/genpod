@@ -32,7 +32,6 @@ export default function GitPlatforms() {
 	}, [])
 
 	useEffect(() => {
-		// eslint-disable-next-line no-extra-semi
 		;(async function () {
 			await fetchAndSetGitPlatforms()
 		})()

@@ -1,7 +1,6 @@
 import {
 	ActionIcon,
 	Center,
-	Loader,
 	ScrollArea,
 	SimpleGrid,
 	Table,
@@ -10,28 +9,17 @@ import {
 } from '@mantine/core'
 import { modals } from '@mantine/modals'
 import { IconRefresh, IconTrash } from '@tabler/icons-react'
-import { memo, useEffect, useState } from 'react'
+import { memo, useEffect } from 'react'
+import { useProjectOperations } from 'src/api/useProjectOperations/useProjectOperations'
+import { useProjectStore } from 'src/store/useProjectStore'
+import { Project } from './types'
 
-interface ProjectData {
+interface TabularProjectData {
 	id: string
 	name: string
 	repositoryUrl: string
 	isRepositoryPublic: boolean
 	version: string
-}
-const getProjects = (): Promise<ProjectData[]> => {
-	return new Promise((resolve) => {
-		const projects = new Array(4).fill(0).map((_, index) => ({
-			id: index.toString(),
-			name: `Project Name ${index}`,
-			repositoryUrl: `https://github.com/ghana7989/intelops-genpod`,
-			isRepositoryPublic: Math.random() > 0.5,
-			version: '1.0.0',
-		}))
-		setTimeout(() => {
-			resolve(projects)
-		}, 1000)
-	})
 }
 
 const openDeleteProjectConfirmModal = (projectId: string) =>
@@ -49,16 +37,35 @@ const openDeleteProjectConfirmModal = (projectId: string) =>
 		onCancel: () => console.log('Cancel'),
 		onConfirm: () => console.log('Confirmed'),
 	})
+
+const convertProjectDataToTabularData = (projects: Project[]) => {
+	return projects.map((project) => {
+		const { id, displayName, gitPlatformName, isRepositoryPublic, version } =
+			project
+		return {
+			id,
+			name: displayName,
+			repositoryUrl: gitPlatformName,
+			isRepositoryPublic,
+			version,
+		}
+	})
+}
 export default function Projects() {
-	const [projects, setProjects] = useState<ProjectData[]>([])
+	const { getProjects } = useProjectOperations()
+	const { setProjects, projects } = useProjectStore()
 	useEffect(() => {
-		getProjects().then((data) => {
-			setProjects(data)
-		})
+		;(async function () {
+			const data = await getProjects()
+			if (!data) {
+				setProjects([])
+			}
+			console.log('data: ', data)
+		})()
 	}, [])
-	const rows = projects.map((project) => (
-		<TableRow {...project} key={project.id} />
-	))
+	const rows = convertProjectDataToTabularData(projects).map(
+		(project, index) => <TableRow {...project} key={project.id || index} />
+	)
 	return (
 		<ScrollArea h='100%'>
 			<Table
@@ -84,7 +91,7 @@ export default function Projects() {
 						<Table.Tr>
 							<Table.Td colSpan={6}>
 								<Center w='100%' h='100%'>
-									<Loader /> <Text ml='sm'>Loading projects...</Text>
+									<Text ml='sm'>No Projects</Text>
 								</Center>
 							</Table.Td>
 						</Table.Tr>
@@ -96,7 +103,7 @@ export default function Projects() {
 }
 
 const TableRow = memo(
-	(project: ProjectData) => {
+	(project: TabularProjectData) => {
 		return (
 			<Table.Tr key={project.id}>
 				<Table.Td>{project.id}</Table.Td>

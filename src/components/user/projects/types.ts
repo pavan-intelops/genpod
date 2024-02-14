@@ -1,7 +1,7 @@
 import { CompageJson } from 'src/canvas/store/types.store'
 
 export interface Project {
-	id?: string
+	id: string
 	displayName: string
 	version: string
 	json?: CompageJson
@@ -12,7 +12,7 @@ export interface Project {
 	isRepositoryPublic: boolean
 	repositoryUrl?: string
 	metadata?: Metadata
-	ownerEmail?: string
+	ownerEmail: string
 	oldVersions?: OldVersion[]
 	createdAt?: string
 	updatedAt?: string
