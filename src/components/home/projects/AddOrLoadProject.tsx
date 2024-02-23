@@ -1,9 +1,13 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Box, Button, Flex, Text, Tooltip } from '@mantine/core'
+import { Box, Button, Divider, Flex, Text, Tooltip } from '@mantine/core'
+import React from 'react'
 import { useForm } from 'react-hook-form'
 import { Checkbox, Select, TextInput } from 'react-hook-form-mantine'
 import { useNavigate } from 'react-router-dom'
 import { useProjectOperations } from 'src/api/useProjectOperations/useProjectOperations'
+import { Project } from 'src/components/user/projects/types'
+import { useSyncActions } from 'src/hooks/useSync'
+import { useProjectStore } from 'src/store/useProjectStore'
 import useUserStore from 'src/store/userStore'
 import { convertToSelectOptionItems } from 'src/utils/transformers'
 import * as z from 'zod'
@@ -24,6 +28,8 @@ export default function AddOrLoadProject() {
 		personalDetails: { email },
 	} = useUserStore()
 	const { postProject } = useProjectOperations()
+	const { projects } = useProjectStore()
+
 	const navigate = useNavigate()
 	const areGitPlatformsThere = gitPlatformStore.gitPlatforms.length > 0
 	const handleOnAddGitPlatformClick = () => {
@@ -40,27 +46,43 @@ export default function AddOrLoadProject() {
 		resolver: zodResolver(resolver),
 		mode: 'onChange',
 	})
+	const { syncProjects, syncGitPlatforms } = useSyncActions()
+	React.useEffect(() => {
+		;(async function () {
+			if (!projects) await syncProjects()
+			// as we need gitplatforms state to create projects we will sync it
+			if (!areGitPlatformsThere) await syncGitPlatforms()
+		})()
+	}, [])
 	const handleOnSubmit = addNewForm.handleSubmit(async (data) => {
-		const project = {
+		const username = gitPlatformStore.gitPlatforms.find(
+			(platform) => platform.gitPlatform === data.gitPlatform
+		)?.username as string
+		const project: Project = {
 			displayName: data.name,
 			gitPlatformName: data.gitPlatform,
 			isRepositoryPublic: data.isRepositoryPublic,
 			version: 'v1',
 			repositoryBranch: data.repositoryBranch,
-			gitPlatformUserName: gitPlatformStore.gitPlatforms.find(
-				(platform) => platform.gitPlatform === data.gitPlatform
-			)?.username as string,
+			repositoryName: data.repositoryName,
+			repositoryUrl: `https://www.github.com/${username}/${data.repositoryName}`,
+			gitPlatformUserName: username,
 			ownerEmail: email,
+			id: '',
+			json: {
+				edges: {},
+				nodes: {},
+			},
+			metadata: {},
 		}
-		const { data: res, error } = await postProject(project)
+		const { error } = await postProject(project)
 		if (error) {
-			console.error(error)
 			return
 		}
-		console.log('====================================')
-		console.log(res)
-		console.log('====================================')
+		// if post request is successfully completed, sync the projects
+		await syncProjects()
 	})
+
 	return (
 		<Box className={classes.container}>
 			<Text size='xl' fw='bolder'>
@@ -137,7 +159,20 @@ export default function AddOrLoadProject() {
 					</form>
 				</Box>
 				<Box w='50%' p='md' bg='dark' className={classes.form}>
-					<Text size='sm'>Load Project</Text>
+					<Text size='lg' fw='bold'>
+						Load Project
+					</Text>
+					<Text size='sm'>Click on the project to load</Text>
+					<Divider my='sm' />
+					<Flex direction='row' wrap='wrap' gap='lg'>
+						{projects.map((project, index) => (
+							<Box key={index}>
+								<Button variant='outline' size='sm'>
+									{project.displayName}
+								</Button>
+							</Box>
+						))}
+					</Flex>
 				</Box>
 			</Flex>
 		</Box>

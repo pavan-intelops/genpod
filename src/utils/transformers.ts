@@ -20,13 +20,6 @@ export function convertToSelectOptionItems<T>(
 	valueKey: keyof T,
 	labelKey: keyof T
 ): SelectOptionItem[] {
-	console.log('====================================')
-	console.log({
-		input,
-		valueKey,
-		labelKey,
-	})
-	console.log('====================================')
 	return input.map((item) =>
 		convertToSelectOptionItem(item, valueKey, labelKey)
 	)

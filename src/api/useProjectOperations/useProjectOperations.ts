@@ -1,6 +1,6 @@
+import { Project } from 'src/components/user/projects/types'
 import useUserStore from 'src/store/userStore'
 import axios from '../axios'
-import { Project } from 'src/components/user/projects/types'
 
 export const useProjectOperations = () => {
 	const {
@@ -28,7 +28,7 @@ export const useProjectOperations = () => {
 			return { error: new Error('User email is required') }
 		}
 		try {
-			const { data } = await axios.get(`/users/${email}/projects`)
+			const { data } = await axios.get(`/users/${email}/projects`, {})
 			return { data }
 		} catch (error) {
 			return { error }

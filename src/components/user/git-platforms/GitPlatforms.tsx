@@ -13,6 +13,7 @@ import { modals } from '@mantine/modals'
 import { IconTrash } from '@tabler/icons-react'
 import { useCallback, useEffect } from 'react'
 import { useGitPlatformOperations } from 'src/api/useGitPlatformOperations'
+import { useSyncActions } from 'src/hooks/useSync'
 import { GitPlatform } from 'src/store/types'
 import useUserStore from 'src/store/userStore'
 import AddGitPlatformModalContent from './AddGitPlatformModalContent'
@@ -23,19 +24,15 @@ export default function GitPlatforms() {
 		gitPlatformStore: { gitPlatforms, setGitPlatforms },
 	} = useUserStore()
 
-	const { postGitPlatform, deleteGitPlatform, getGitPlatforms } =
-		useGitPlatformOperations()
+	const { postGitPlatform, deleteGitPlatform } = useGitPlatformOperations()
 
-	const fetchAndSetGitPlatforms = useCallback(async () => {
-		const res = await getGitPlatforms()
-		res.data && setGitPlatforms(res.data, false)
-	}, [])
+	const { syncGitPlatforms } = useSyncActions()
 
 	useEffect(() => {
 		;(async function () {
-			await fetchAndSetGitPlatforms()
+			await syncGitPlatforms()
 		})()
-	}, [fetchAndSetGitPlatforms])
+	}, [syncGitPlatforms])
 
 	const handleOnButtonClick = useCallback(() => {
 		return open()
@@ -56,7 +53,7 @@ export default function GitPlatforms() {
 			confirmProps: { color: 'red.5' },
 			onConfirm: async () => {
 				await deleteGitPlatform(platform.gitPlatform)
-				await fetchAndSetGitPlatforms()
+				await syncGitPlatforms()
 			},
 		})
 	}
