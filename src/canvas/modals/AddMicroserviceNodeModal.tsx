@@ -1,10 +1,10 @@
 import { Box, Button, Group, TextInput, Textarea } from '@mantine/core'
 import { modals } from '@mantine/modals'
 import { getInitialMicroserviceNodeFormData } from 'src/canvas/nodes/microservice/Microservice.utils'
-import { useFlowStore } from 'src/canvas/store/flowstore'
 import { MicroServiceNode, NodeTypes } from 'src/canvas/store/types.store'
+import { useFlowsStore } from '../store/flowstore'
 export function AddMicroserviceNodeModal() {
-	const { addNode } = useFlowStore()
+	const { addNode } = useFlowsStore()
 	const handleAddNodeClick = (name: string, description: string) => {
 		const node: MicroServiceNode = {
 			data: {

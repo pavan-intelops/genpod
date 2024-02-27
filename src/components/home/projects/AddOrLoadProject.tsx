@@ -6,7 +6,7 @@ import { Checkbox, Select, TextInput } from 'react-hook-form-mantine'
 import { useNavigate } from 'react-router-dom'
 import { useProjectOperations } from 'src/api/useProjectOperations/useProjectOperations'
 import { Project } from 'src/components/user/projects/types'
-import { useSyncActions } from 'src/hooks/useSync'
+import { useSyncActions } from 'src/hooks/useSyncActions'
 import { useProjectStore } from 'src/store/useProjectStore'
 import useUserStore from 'src/store/userStore'
 import { convertToSelectOptionItems } from 'src/utils/transformers'
@@ -53,6 +53,7 @@ export default function AddOrLoadProject() {
 			// as we need gitplatforms state to create projects we will sync it
 			if (!areGitPlatformsThere) await syncGitPlatforms()
 		})()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 	const handleOnSubmit = addNewForm.handleSubmit(async (data) => {
 		const username = gitPlatformStore.gitPlatforms.find(
@@ -82,6 +83,10 @@ export default function AddOrLoadProject() {
 		// if post request is successfully completed, sync the projects
 		await syncProjects()
 	})
+	const handleOnLoadedProjectClick = (projectId: string) => {
+		// navigate to the project page
+		navigate(`/project/${projectId}`)
+	}
 
 	return (
 		<Box className={classes.container}>
@@ -167,7 +172,11 @@ export default function AddOrLoadProject() {
 					<Flex direction='row' wrap='wrap' gap='lg'>
 						{projects.map((project, index) => (
 							<Box key={index}>
-								<Button variant='outline' size='sm'>
+								<Button
+									variant='outline'
+									size='sm'
+									onClick={() => handleOnLoadedProjectClick(project.id)}
+								>
 									{project.displayName}
 								</Button>
 							</Box>

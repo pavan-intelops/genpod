@@ -4,14 +4,14 @@ import { IconEdit } from '@tabler/icons-react'
 import classNames from 'classnames'
 import { useEffect } from 'react'
 import { Handle, NodeProps, Position } from 'reactflow'
-import { useFlowStore } from 'src/canvas/store/flowstore'
+import { useFlowsStore } from 'src/canvas/store/flowstore'
 import { CustomNodeFormData, NodeTypes } from 'src/canvas/store/types.store'
 import DBNodeDrawerForm from './form/DBNode.drawer.form'
 import classes from './styles.module.css'
 
 export default function DBNode(props: NodeProps<CustomNodeFormData>) {
 	const { selected, id } = props
-	const { getNodeFormData, setActiveNode } = useFlowStore()
+	const { getNodeFormData, setActiveNode } = useFlowsStore()
 	const [opened, { open, close }] = useDisclosure(false)
 
 	useEffect(() => {

@@ -22,13 +22,27 @@ export type CustomNodeFormData =
 
 export type CustomEdge = Edge
 
-export interface FlowStore {
+interface FlowData {
 	flowKey: string
 	nodes: CustomNode[]
 	edges: CustomEdge[]
 	activeNode: CustomNode | null
+}
+export interface FlowStore {
+	flows: {
+		[key: string]: FlowData
+	} | null
+	addFlow: (flowKey: string) => void
+	removeFlow: (flowKey: string) => void
+	updateFlow: (flowKey: string, flow: FlowData) => void
+	activeFlow: string | null
+	setActiveFlow: (flowKey: string) => void
 	refreshActiveNode: () => void
 	setActiveNode: (nodeId: string) => void
+	getNodesAndEdges: (flowKey?: string) => {
+		nodes: CustomNode[]
+		edges: CustomEdge[]
+	}
 	addNode: (node: CustomNode) => void
 	setNodes: (nodes: CustomNode[]) => void
 	setEdges: (edges: Edge[]) => void
@@ -37,8 +51,6 @@ export interface FlowStore {
 	onNodesChange: OnNodesChange
 	onEdgesChange: OnEdgesChange
 	onConnect: OnConnect
-	isNodeEditDrawerOpen: boolean
-	toggleNodeEditDrawer: () => void
 }
 export type NodeConsumerData = MicroServiceNodeFormData
 export interface CompageJson {
@@ -52,4 +64,14 @@ export interface CompageJson {
 	plugins?: unknown
 	panels?: unknown
 	editor?: unknown
+}
+
+export interface ProjectStore {
+	projects: {
+		[key: string]: CompageJson
+	}
+	setProjects: (projects: { [key: string]: CompageJson }) => void
+	addProject: (projectKey: string, project: CompageJson) => void
+	updateProject: (projectKey: string, project: CompageJson) => void
+	deleteProject: (projectKey: string) => void
 }

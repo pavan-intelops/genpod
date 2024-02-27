@@ -1,13 +1,16 @@
 import { Project } from 'src/components/user/projects/types'
 import useUserStore from 'src/store/userStore'
 import axios from '../axios'
+import { UseOperationsReturnType } from '../api.types'
 
 export const useProjectOperations = () => {
 	const {
 		personalDetails: { email },
 	} = useUserStore()
 
-	const postProject = async (project: Project) => {
+	const postProject = async (
+		project: Project
+	): UseOperationsReturnType<Project> => {
 		if (!email) {
 			return { error: new Error('User email is required') }
 		}
@@ -23,19 +26,36 @@ export const useProjectOperations = () => {
 		}
 	}
 
-	const getProjects = async () => {
+	const getProjects = async (): UseOperationsReturnType<Project[]> => {
 		if (!email) {
 			return { error: new Error('User email is required') }
 		}
 		try {
-			const { data } = await axios.get(`/users/${email}/projects`, {})
+			const { data } = await axios.get(`/users/${email}/projects`)
 			return { data }
 		} catch (error) {
 			return { error }
 		}
 	}
 
-	const updateProject = async (projectId: string, projectDetails: Project) => {
+	const getProject = async (
+		projectId: string
+	): UseOperationsReturnType<Project> => {
+		if (!email) {
+			return { error: new Error('User email is required') }
+		}
+		try {
+			const { data } = await axios.get(`/users/${email}/projects/${projectId}`)
+			return { data: JSON.parse(data) }
+		} catch (error) {
+			return { error }
+		}
+	}
+
+	const updateProject = async (
+		projectId: string,
+		projectDetails: Project
+	): UseOperationsReturnType<Project> => {
 		if (!email) {
 			return { error: new Error('User email is required') }
 		}
@@ -47,7 +67,7 @@ export const useProjectOperations = () => {
 		}
 	}
 
-	const deleteProject = async (projectId: string) => {
+	const deleteProject = async (projectId: string): UseOperationsReturnType => {
 		if (!email) {
 			return { error: new Error('User email is required') }
 		}
@@ -62,6 +82,7 @@ export const useProjectOperations = () => {
 	return {
 		postProject,
 		getProjects,
+		getProject,
 		updateProject,
 		deleteProject,
 	}

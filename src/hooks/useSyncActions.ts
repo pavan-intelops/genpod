@@ -17,7 +17,7 @@ export const useSyncActions = () => {
 		if (getProjectsError) {
 			return
 		}
-		setProjects(JSON.parse(projects))
+		projects && setProjects(JSON.parse(projects as unknown as string))
 	}, [])
 
 	const syncGitPlatforms = useCallback(async () => {

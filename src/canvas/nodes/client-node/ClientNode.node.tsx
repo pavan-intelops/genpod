@@ -4,14 +4,14 @@ import { IconEdit } from '@tabler/icons-react'
 import classNames from 'classnames'
 import { useEffect } from 'react'
 import { Handle, NodeProps, Position } from 'reactflow'
-import { useFlowStore } from 'src/canvas/store/flowstore'
+import { useFlowsStore } from 'src/canvas/store/flowstore'
 import { CustomNodeFormData, NodeTypes } from 'src/canvas/store/types.store'
 import ClientNodeDrawerForm from './form/ClientNodeDrawerForm'
 import classes from './styles.module.css'
 
 export default function ClientNode(props: NodeProps<CustomNodeFormData>) {
 	const { selected, id } = props
-	const { getNodeFormData, setActiveNode } = useFlowStore()
+	const { setActiveNode, getNodeFormData } = useFlowsStore()
 	const [opened, { open, close }] = useDisclosure(false)
 
 	useEffect(() => {

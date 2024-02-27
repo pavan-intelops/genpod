@@ -15,7 +15,9 @@ import theme, { cssVariableResolver } from 'src/theme.ts'
 import Home from './pages/home/Home'
 import Login from './pages/login/Login'
 import Profile from './pages/profile/Profile'
+import Project from './pages/project/Project'
 import { runEnvVariablesCheck } from './utils/checkEnvVariables'
+import PageNotFound from './pages/404'
 
 const queryClient = new QueryClient()
 function App() {
@@ -36,7 +38,9 @@ function App() {
 							<Routes>
 								<Route path='/' element={<Home />} />
 								<Route path='/login' element={<Login />} />
+								<Route path='/project/:projectId' element={<Project />} />
 								<Route path='/profile' index element={<Profile />} />
+								<Route path='*' element={<PageNotFound />} />
 							</Routes>
 						</ModalsProvider>
 					</ReactFlowProvider>

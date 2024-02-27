@@ -1,6 +1,6 @@
 import { Center, Loader } from '@mantine/core'
-import { lazy, Suspense } from 'react'
-import { useFlowStore } from 'src/canvas/store/flowstore'
+import { Suspense, lazy } from 'react'
+import { useFlowsStore } from 'src/canvas/store/flowstore'
 
 const CodeHighlight = lazy(() =>
 	import('@mantine/code-highlight').then((module) => ({
@@ -9,7 +9,8 @@ const CodeHighlight = lazy(() =>
 )
 
 export default function CodeViewDrawer() {
-	const { nodes, edges } = useFlowStore()
+	const { getNodesAndEdges } = useFlowsStore()
+	const { nodes, edges } = getNodesAndEdges()
 	const code = {
 		nodes,
 		edges,

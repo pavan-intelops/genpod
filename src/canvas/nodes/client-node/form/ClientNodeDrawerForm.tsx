@@ -2,16 +2,16 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@mantine/core'
 import { useForm } from 'react-hook-form'
 import { NumberInput, TextInput, Textarea } from 'react-hook-form-mantine'
-import { useFlowStore } from 'src/canvas/store/flowstore'
 import { NodeTypes } from 'src/canvas/store/types.store'
 import { NodeDrawerFormProps } from 'src/canvas/types'
 import { schema } from '../../microservice/form/resolvers'
 import { ClientNodeFormData, ClientNodeFormDataUI } from '../ClientNode.types'
+import { useFlowsStore } from 'src/canvas/store/flowstore'
 
 export default function ClientNodeDrawerForm(
 	props: NodeDrawerFormProps<ClientNodeFormData>
 ) {
-	const { getNodeFormData, setNodeFormData } = useFlowStore()
+	const { getNodeFormData, setNodeFormData } = useFlowsStore()
 	const currentFormData = getNodeFormData(props.nodeId)
 
 	const form = useForm<ClientNodeFormDataUI>({
