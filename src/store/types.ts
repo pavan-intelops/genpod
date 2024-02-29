@@ -1,3 +1,5 @@
+import { Project } from 'src/components/user/projects/types'
+
 export interface GitPlatform {
 	gitPlatform: string
 	personalAccessToken: string
@@ -9,6 +11,7 @@ export interface UserStore {
 	personalDetails: PersonalDetails
 	setPersonalDetails: (personalDetails: PersonalDetails) => void
 	isUserLoggedIn: () => boolean
+	logout: () => void
 }
 
 export interface PersonalDetails {
@@ -21,4 +24,12 @@ export interface GitPlatformStore {
 		append?: boolean
 	) => void
 	removeGitPlatform: (gitPlatform: GitPlatform) => void
+}
+
+export interface ProjectStore {
+	projects: Project[]
+	activeProject: Project | null
+	setProjects: (projects: Project[], replace?: boolean) => void
+	setActiveProject: (projectId: string) => void
+	removeProject: (project: Project) => void
 }

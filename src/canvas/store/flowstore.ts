@@ -20,98 +20,182 @@ const getInitialNodes = () => {
 const getInitialEdges = () => {
 	return [] as Edge[]
 }
-export const useFlowStore = create<FlowStore>()(
+export const useFlowsStore = create<FlowStore>()(
 	devtools((set, get) => {
 		return {
-			flowKey: '',
-			nodes: getInitialNodes(),
-			edges: getInitialEdges(),
-			activeNode: null,
-			refreshActiveNode: () => {
-				const { activeNode } = get()
-				if (!activeNode) return
-				set({
-					activeNode: get().nodes.find((node) => node.id === activeNode.id),
-				})
-			},
-			addNode: (node) => {
-				set((state) => ({ nodes: state.nodes.concat(node) }))
-			},
-			setNodes: (nodes) => {
+			flows: {},
+			addFlow: (flowKey: string) => {
+				const currentFlows = get().flows
+				if (currentFlows && currentFlows[flowKey]) return
+				// if there is no active flow then set the newly added flow as active
+				if (!get().activeFlow) {
+					set({
+						activeFlow: flowKey,
+					})
+				}
 				set((state) => {
 					return {
 						...state,
-						nodes,
-					}
-				})
-			},
-			setEdges: (edges) => {
-				set((state) => {
-					return {
-						...state,
-						edges,
-					}
-				})
-			},
-			onEdgesChange: (changes: EdgeChange[]) => {
-				set({
-					edges: applyEdgeChanges(changes, get().edges),
-				})
-			},
-			onNodesChange: (changes: NodeChange[]) => {
-				set({
-					nodes: applyNodeChanges(
-						changes,
-						get().nodes as unknown as Node[]
-					) as CustomNode[],
-				})
-				get().refreshActiveNode()
-			},
-			onConnect: (connection: Connection) => {
-				set({
-					edges: addEdge(
-						{
-							...connection,
-							type: 'default',
-							markerStart: {
-								type: MarkerType.Arrow,
-								color: theme.colors?.orange?.[5],
-								strokeWidth: 2,
-								width: 20,
+						flows: {
+							...state.flows,
+							[flowKey]: {
+								flowKey,
+								nodes: getInitialNodes(),
+								edges: getInitialEdges(),
+								activeNode: null,
 							},
 						},
-						get().edges
-					),
+					}
 				})
 			},
-			toggleNodeEditDrawer: () => {
+			removeFlow: (flowKey: string) => {
+				set((state) => {
+					const flows = { ...state.flows }
+					delete flows[flowKey]
+					return {
+						flows,
+					}
+				})
+			},
+			updateFlow: (flowKey: string, flow) => {
 				set((state) => {
 					return {
 						...state,
-						isNodeEditDrawerOpen: !state.isNodeEditDrawerOpen,
+						flows: {
+							...state.flows,
+							[flowKey]: flow,
+						},
 					}
+				})
+			},
+			activeFlow: null,
+			setActiveFlow: (flowKey: string) => {
+				set({
+					activeFlow: flowKey,
+				})
+			},
+			refreshActiveNode: () => {
+				const flows = get().flows
+				if (!flows) return
+				const activeFlow = get().activeFlow || ''
+				if (!activeFlow) return
+				const { activeNode } = flows[activeFlow]
+				if (!activeNode) return
+				set({
+					flows: {
+						...flows,
+						[activeFlow]: {
+							...flows[activeFlow],
+							activeNode:
+								flows[activeFlow].nodes.find(
+									(node) => node.id === activeNode.id
+								) || null,
+						},
+					},
+				})
+			},
+			setActiveNode: (nodeId: string) => {
+				const flows = get().flows
+				if (!flows) return
+				const activeFlow = get().activeFlow || ''
+				if (!activeFlow) return
+				const { nodes } = flows[activeFlow]
+				const node = nodes.find((node) => node.id === nodeId)
+				if (!node) return
+				set({
+					flows: {
+						...flows,
+						[activeFlow]: {
+							...flows[activeFlow],
+							activeNode: node,
+						},
+					},
+				})
+			},
+			getNodesAndEdges: (flowKey?: string) => {
+				const flows = get().flows
+				if (!flows) return { nodes: [], edges: [] }
+				const activeFlow = flowKey || get().activeFlow || ''
+				if (!activeFlow) return { nodes: [], edges: [] }
+				return {
+					nodes: flows[activeFlow].nodes,
+					edges: flows[activeFlow].edges,
+				}
+			},
+			addNode: (node: CustomNode) => {
+				const flows = get().flows
+				if (!flows) return
+				const activeFlow = get().activeFlow || ''
+				if (!activeFlow) return
+				set({
+					flows: {
+						...flows,
+						[activeFlow]: {
+							...flows[activeFlow],
+							nodes: flows[activeFlow].nodes.concat(node),
+						},
+					},
+				})
+			},
+			setNodes: (nodes: CustomNode[]) => {
+				const flows = get().flows
+				if (!flows) return
+				const activeFlow = get().activeFlow || ''
+				if (!activeFlow) return
+				set({
+					flows: {
+						...flows,
+						[activeFlow]: {
+							...flows[activeFlow],
+							nodes,
+						},
+					},
+				})
+			},
+			setEdges: (edges: Edge[]) => {
+				const flows = get().flows
+				if (!flows) return
+				const activeFlow = get().activeFlow || ''
+				if (!activeFlow) return
+				set({
+					flows: {
+						...flows,
+						[activeFlow]: {
+							...flows[activeFlow],
+							edges,
+						},
+					},
 				})
 			},
 			setNodeFormData: (nodeFormData: CustomNodeFormData, nodeId?: string) => {
+				const flows = get().flows
+				if (!flows) return
+				const activeFlow = get().activeFlow || ''
+				if (!activeFlow) return
 				if (nodeId) {
 					set({
-						nodes: get().nodes.map((node) => {
-							if (node.id === nodeId) {
-								return {
-									...node,
-									data: {
-										...node.data,
-										...nodeFormData,
-									},
-								}
-							}
-							return node
-						}) as CustomNode[],
+						flows: {
+							...flows,
+							[activeFlow]: {
+								...flows[activeFlow],
+								nodes: flows[activeFlow].nodes.map((node) => {
+									if (node.id === nodeId) {
+										return {
+											...node,
+											data: {
+												...node.data,
+												...nodeFormData,
+											},
+										}
+									}
+									return node
+								}),
+							},
+						},
 					})
 				}
-				const { activeNode } = get()
+				const { activeNode } = flows[activeFlow]
 				if (!activeNode) return
-
 				const updatedNode = {
 					...activeNode,
 					data: {
@@ -120,24 +204,86 @@ export const useFlowStore = create<FlowStore>()(
 					},
 				}
 				set({
-					nodes: get().nodes.map((node) => {
-						if (node.id === activeNode.id) {
-							return updatedNode
-						}
-						return node
-					}) as CustomNode[],
+					flows: {
+						...flows,
+						[activeFlow]: {
+							...flows[activeFlow],
+							nodes: flows[activeFlow].nodes.map((node) => {
+								if (node.id === activeNode.id) {
+									return updatedNode
+								}
+								return node
+							}),
+						},
+					},
 				})
 			},
 			getNodeFormData: (nodeId: string) => {
-				return get().nodes.find((node) => node.id === nodeId)?.data
+				const flows = get().flows
+				if (!flows) return
+				const activeFlow = get().activeFlow || ''
+				if (!activeFlow) return
+				return flows[activeFlow].nodes.find((node) => node.id === nodeId)?.data
 			},
-			isNodeEditDrawerOpen: false,
-			setActiveNode: (nodeId: string) => {
-				const { nodes } = get()
-				const node = nodes.find((node) => node.id === nodeId)
-				if (!node) return
+			onNodesChange: (changes: NodeChange[]) => {
+				const flows = get().flows
+				if (!flows) return
+				const activeFlow = get().activeFlow || ''
+				if (!activeFlow) return
 				set({
-					activeNode: node,
+					flows: {
+						...flows,
+						[activeFlow]: {
+							...flows[activeFlow],
+							nodes: applyNodeChanges(
+								changes,
+								flows[activeFlow].nodes as unknown as Node[]
+							) as CustomNode[],
+						},
+					},
+				})
+				get().refreshActiveNode()
+			},
+			onEdgesChange: (changes: EdgeChange[]) => {
+				const flows = get().flows
+				if (!flows) return
+				const activeFlow = get().activeFlow || ''
+				if (!activeFlow) return
+				set({
+					flows: {
+						...flows,
+						[activeFlow]: {
+							...flows[activeFlow],
+							edges: applyEdgeChanges(changes, flows[activeFlow].edges),
+						},
+					},
+				})
+			},
+			onConnect: (connection: Connection) => {
+				const flows = get().flows
+				if (!flows) return
+				const activeFlow = get().activeFlow || ''
+				if (!activeFlow) return
+				set({
+					flows: {
+						...flows,
+						[activeFlow]: {
+							...flows[activeFlow],
+							edges: addEdge(
+								{
+									...connection,
+									type: 'default',
+									markerStart: {
+										type: MarkerType.Arrow,
+										color: theme.colors?.orange?.[5],
+										strokeWidth: 2,
+										width: 20,
+									},
+								},
+								flows[activeFlow].edges
+							),
+						},
+					},
 				})
 			},
 		}

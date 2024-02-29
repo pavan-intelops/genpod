@@ -41,7 +41,6 @@ export default function AddGitPlatformModalContent({
 			<form
 				onSubmitCapture={(e) => e.preventDefault()}
 				onSubmit={form.handleSubmit((data) => {
-					console.log(data)
 					onSubmit(data)
 				})}
 			>

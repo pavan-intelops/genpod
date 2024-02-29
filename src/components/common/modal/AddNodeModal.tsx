@@ -8,7 +8,7 @@ import {
 } from '@mantine/core'
 import { modals } from '@mantine/modals'
 import { getInitialNodeFormData } from 'src/canvas/nodes/utils'
-import { useFlowStore } from 'src/canvas/store/flowstore'
+import { useFlowsStore } from 'src/canvas/store/flowstore'
 import { CustomNode, NodeTypes } from 'src/canvas/store/types.store'
 
 interface AddNodeModalProps extends ButtonProps {
@@ -21,7 +21,7 @@ export default function AddNodeModal({
 	buttonText,
 	...props
 }: AddNodeModalProps) {
-	const { addNode } = useFlowStore()
+	const { addNode } = useFlowsStore()
 	const handleAddNodeClick = (name: string, description: string) => {
 		const node: CustomNode = {
 			data: {

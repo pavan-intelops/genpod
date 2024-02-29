@@ -7,14 +7,14 @@ import { Box, Drawer, Flex, Grid, Text } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { IconArrowForwardUp, IconEdit } from '@tabler/icons-react'
 
-import { useFlowStore } from '../../store/flowstore'
+import { useFlowsStore } from '../../store/flowstore'
 import { CustomNodeFormData, NodeTypes } from '../../store/types.store'
 import MicroServiceNodeDrawerForm from './form/MicroserviceNode.drawer.form'
 import classes from './styles.module.css'
 
 export default function MicroserviceNode(props: NodeProps<CustomNodeFormData>) {
 	const { selected, id } = props
-	const { getNodeFormData, setActiveNode } = useFlowStore()
+	const { getNodeFormData, setActiveNode } = useFlowsStore()
 	const [opened, { open, close }] = useDisclosure(false)
 
 	useEffect(() => {

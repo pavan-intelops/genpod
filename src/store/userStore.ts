@@ -1,4 +1,5 @@
 import { StoreApi, create } from 'zustand'
+import { devtools, persist } from 'zustand/middleware'
 import { UserStore } from './types'
 
 const gitPlatformStore = (
@@ -58,22 +59,51 @@ const gitPlatformStore = (
 	}
 }
 
-const useUserStore = create<UserStore>((set, get) => ({
-	personalDetails: {
-		email: '',
-	},
-	isUserLoggedIn: () => {
-		return !!get().personalDetails.email
-	},
-	setPersonalDetails: (personalDetails) => {
-		set(
+const useUserStore = create<UserStore>()(
+	devtools(
+		persist(
+			(set, get) => ({
+				personalDetails: {
+					email: '',
+				},
+				isUserLoggedIn: () => {
+					return !!get().personalDetails.email
+				},
+				logout: () => {
+					localStorage.removeItem('user-store')
+					set(
+						{
+							personalDetails: {
+								email: '',
+							},
+						},
+						false
+					)
+				},
+				setPersonalDetails: (personalDetails) => {
+					set(
+						{
+							personalDetails,
+						},
+						false
+					)
+				},
+				...gitPlatformStore(set, get),
+			}),
 			{
-				personalDetails,
-			},
-			false
+				name: 'user-store',
+				partialize: (state) => {
+					// only storing personalDetails in localStorage
+					return {
+						personalDetails: state.personalDetails,
+						gitPlatformStore: {
+							gitPlatforms: state.gitPlatformStore.gitPlatforms,
+						},
+					}
+				},
+			}
 		)
-	},
-	...gitPlatformStore(set, get),
-}))
+	)
+)
 
 export default useUserStore

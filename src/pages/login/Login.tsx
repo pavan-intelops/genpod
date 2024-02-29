@@ -22,17 +22,17 @@ export default function Login() {
 		shouldUseNativeValidation: false,
 	})
 	const { setPersonalDetails } = useUserStore()
+	const { getUser } = useUserOperations()
 	const navigate = useNavigate()
-	const { postUser } = useUserOperations()
+
 	const handleSubmit = form.handleSubmit(async (data) => {
-		setPersonalDetails({
-			email: data.email,
-		})
-		const res = postUser.mutate({
-			email: data.email,
-		})
-		console.log('data: ', res)
-		postUser.isSuccess && navigate('/')
+		const user = await getUser(data.email)
+		if (user) {
+			setPersonalDetails({
+				email: data.email,
+			})
+			navigate('/')
+		}
 	})
 	return (
 		<Container
