@@ -30,6 +30,6 @@ export interface ProjectStore {
 	projects: Project[]
 	activeProject: Project | null
 	setProjects: (projects: Project[], replace?: boolean) => void
-	setActiveProject: (project: Project) => void
+	setActiveProject: (projectId: string) => void
 	removeProject: (project: Project) => void
 }

@@ -9,8 +9,13 @@ export const useProjectStore = create<ProjectStore>()(
 				return {
 					activeProject: null,
 					projects: [],
-					setActiveProject: (project) => {
-						set({ activeProject: project })
+					setActiveProject: (projectId) => {
+						set((state) => {
+							const activeProject = state.projects.find(
+								(p) => p.id === projectId
+							)
+							return { activeProject }
+						})
 					},
 					setProjects: (projects, replace = true) => {
 						set({ projects }, replace)

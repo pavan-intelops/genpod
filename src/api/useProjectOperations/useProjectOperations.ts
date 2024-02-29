@@ -60,7 +60,8 @@ export const useProjectOperations = () => {
 			return { error: new Error('User email is required') }
 		}
 		try {
-			await axios.put(`/users/${email}/projects/${projectId}`, projectDetails)
+			const transformedData = JSON.stringify(projectDetails)
+			await axios.put(`/users/${email}/projects/${projectId}`, transformedData)
 			return { data: projectDetails } // Assuming the backend doesn't return the updated project
 		} catch (error) {
 			return { error }
