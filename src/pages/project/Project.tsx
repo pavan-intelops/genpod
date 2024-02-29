@@ -1,5 +1,5 @@
-import { Anchor, Breadcrumbs, Button, Grid } from '@mantine/core'
-import { useEffect } from 'react'
+import { Anchor, Breadcrumbs, Grid } from '@mantine/core'
+import { useCallback, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useProjectOperations } from 'src/api/useProjectOperations/useProjectOperations'
 import Flow from 'src/canvas/Flow'
@@ -9,9 +9,9 @@ import Layout from 'src/components/common/layout/Layout'
 import SideNavbar from 'src/components/common/side-nav/SideNavbar'
 import { sideNavData } from 'src/components/common/side-nav/data'
 import type { Project } from 'src/components/user/projects/types'
+import { emitter } from 'src/emitter'
 import Protected from 'src/hoc/protected'
 import { useProjectStore } from 'src/store/useProjectStore'
-
 interface ProjectParams {
 	projectId: string
 }
@@ -67,10 +67,10 @@ export default function Project() {
 	const { addFlow, flows, activeFlow, setNodes, setEdges } = useFlowsStore()
 	const { setActiveProject, projects } = useProjectStore()
 
-	const getFlow = () => {
+	const getFlow = useCallback(() => {
 		if (!flows || !activeFlow) return
 		return flows[activeFlow]
-	}
+	}, [flows, activeFlow])
 
 	useEffect(() => {
 		addFlow('flow' + params.projectId)
@@ -78,7 +78,7 @@ export default function Project() {
 		;(async function () {
 			const { data } = await getProject(params.projectId)
 			if (!data) return
-			console.log('res: ', data)
+
 			const { nodes, edges } = convertProjectToFlowData(data)
 			setNodes(nodes)
 			setEdges(edges)
@@ -86,11 +86,26 @@ export default function Project() {
 	}, [])
 
 	useEffect(() => {
-		// const syncTimer = setInterval(() => {}, 100000)
-		// return () => {
-		// 	clearInterval(syncTimer)
-		// }
-	}, [])
+		const handleSaveToServer = async () => {
+			const currentFlow = getFlow()
+
+			if (!currentFlow) return
+			const projectDetails = projects.find(
+				(project) => project.id === params.projectId
+			)
+			if (!projectDetails) return
+			const formattedProject = convertFlowDataToProject({
+				...projectDetails,
+				nodes: currentFlow.nodes,
+				edges: currentFlow.edges,
+				project: {
+					...projectDetails,
+				},
+			})
+			updateProject(params.projectId, formattedProject)
+		}
+		emitter.on('nodesChange', handleSaveToServer)
+	}, [getFlow, params.projectId, projects, updateProject])
 
 	const items = [
 		{ title: 'Home', href: '/' },
@@ -119,27 +134,7 @@ export default function Project() {
 					</Grid.Col>
 					<Grid.Col span={10}>
 						<Breadcrumbs separator='>'>{items}</Breadcrumbs>
-						<Button
-							onClick={async () => {
-								const currentFlow = getFlow()
-								if (!currentFlow) return
-								const projectDetails = projects.find(
-									(project) => project.id === params.projectId
-								)
-								if (!projectDetails) return
-								const formattedProject = convertFlowDataToProject({
-									...projectDetails,
-									nodes: currentFlow.nodes,
-									edges: currentFlow.edges,
-									project: {
-										...projectDetails,
-									},
-								})
-								await updateProject(params.projectId, formattedProject)
-							}}
-						>
-							Save
-						</Button>
+						{/* <Button onClick={handleSaveToServer}>Save</Button> */}
 						<Flow />
 					</Grid.Col>
 				</Grid>
