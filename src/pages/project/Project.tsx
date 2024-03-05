@@ -1,6 +1,7 @@
-import { Anchor, Breadcrumbs, Grid } from '@mantine/core'
+import { Anchor, Breadcrumbs, Button, Grid } from '@mantine/core'
 import { useCallback, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import useCodeOperations from 'src/api/useCodeOperations/useCodeOperations'
 import { useProjectOperations } from 'src/api/useProjectOperations/useProjectOperations'
 import Flow from 'src/canvas/Flow'
 import { useFlowsStore } from 'src/canvas/store/flowstore'
@@ -9,7 +10,6 @@ import Layout from 'src/components/common/layout/Layout'
 import SideNavbar from 'src/components/common/side-nav/SideNavbar'
 import { sideNavData } from 'src/components/common/side-nav/data'
 import type { Project } from 'src/components/user/projects/types'
-import { emitter } from 'src/emitter'
 import Protected from 'src/hoc/protected'
 import { useProjectStore } from 'src/store/useProjectStore'
 interface ProjectParams {
@@ -84,7 +84,7 @@ export default function Project() {
 			setEdges(edges)
 		})()
 	}, [])
-
+	const { generateCode } = useCodeOperations()
 	useEffect(() => {
 		const handleSaveToServer = async () => {
 			const currentFlow = getFlow()
@@ -104,7 +104,12 @@ export default function Project() {
 			})
 			updateProject(params.projectId, formattedProject)
 		}
-		emitter.on('nodesChange', handleSaveToServer)
+
+		const interval = setInterval(() => {
+			handleSaveToServer()
+		}, 3000)
+		return () => clearInterval(interval)
+		// emitter.on('nodesChange', handleSaveToServer)
 	}, [getFlow, params.projectId, projects, updateProject])
 
 	const items = [
@@ -134,7 +139,16 @@ export default function Project() {
 					</Grid.Col>
 					<Grid.Col span={10}>
 						<Breadcrumbs separator='>'>{items}</Breadcrumbs>
-						{/* <Button onClick={handleSaveToServer}>Save</Button> */}
+						<Button
+							onClick={async () => {
+								const data = await generateCode()
+								console.log('====================================')
+								console.log(data)
+								console.log('====================================')
+							}}
+						>
+							Generate
+						</Button>
 						<Flow />
 					</Grid.Col>
 				</Grid>

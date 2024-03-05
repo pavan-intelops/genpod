@@ -13,6 +13,7 @@ import DBNode from './nodes/db-node/DBNode.node'
 import MicroserviceNode from './nodes/microservice/MicroserviceNode.node'
 import { useFlowsStore } from './store/flowstore'
 import { NodeTypes } from './store/types.store'
+import { IconEyeCode } from '@tabler/icons-react'
 
 const nodeTypes = {
 	[NodeTypes.MICROSERVICE]: MicroserviceNode,
@@ -59,7 +60,12 @@ export default function Flow() {
 							buttonText='Add Client Node'
 							mx='sm'
 						/>
-						<Button bg='blue.4' ml='sm' onClick={() => openCodeViewDrawer()}>
+						<Button
+							bg='blue.4'
+							ml='sm'
+							leftSection={<IconEyeCode />}
+							onClick={() => openCodeViewDrawer()}
+						>
 							View Code
 						</Button>
 					</Panel>
