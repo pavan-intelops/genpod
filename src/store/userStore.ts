@@ -96,9 +96,6 @@ const useUserStore = create<UserStore>()(
 					// only storing personalDetails in localStorage
 					return {
 						personalDetails: state.personalDetails,
-						gitPlatformStore: {
-							gitPlatforms: state.gitPlatformStore.gitPlatforms,
-						},
 					}
 				},
 			}
