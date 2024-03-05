@@ -8,14 +8,14 @@ import {
 	Tooltip,
 } from '@mantine/core'
 import { modals } from '@mantine/modals'
-import { IconRefresh, IconTrash } from '@tabler/icons-react'
+import { IconNavigation, IconTrash } from '@tabler/icons-react'
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useProjectOperations } from 'src/api/useProjectOperations/useProjectOperations'
 import { useSyncActions } from 'src/hooks/useSyncActions'
+import { showSuccessfullyDeletedProjectNotification } from 'src/notifications/project.notifications'
 import { useProjectStore } from 'src/store/useProjectStore'
 import { Project } from './types'
-import { showSuccessfullyDeletedProjectNotification } from 'src/notifications/project.notifications'
-import { useNavigate } from 'react-router-dom'
 
 interface TabularProjectData {
 	id: string
@@ -89,7 +89,7 @@ export default function Projects() {
 					<SimpleGrid cols={2}>
 						<Tooltip label='Load'>
 							<ActionIcon p={2}>
-								<IconRefresh
+								<IconNavigation
 									onClick={() => handleOnLoadProjectClick(project.id)}
 								/>
 							</ActionIcon>

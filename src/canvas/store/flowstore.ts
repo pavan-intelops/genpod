@@ -1,3 +1,4 @@
+import { debounce } from 'lodash'
 import {
 	Connection,
 	Edge,
@@ -9,6 +10,7 @@ import {
 	applyEdgeChanges,
 	applyNodeChanges,
 } from 'reactflow'
+import { emitter } from 'src/emitter'
 import theme from 'src/theme'
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
@@ -19,6 +21,9 @@ const getInitialNodes = () => {
 }
 const getInitialEdges = () => {
 	return [] as Edge[]
+}
+function emitNodesChange() {
+	emitter.emit('nodesChange')
 }
 export const useFlowsStore = create<FlowStore>()(
 	devtools((set, get) => {
@@ -136,6 +141,7 @@ export const useFlowsStore = create<FlowStore>()(
 						},
 					},
 				})
+				// emitter.emit('nodesChange')
 			},
 			setNodes: (nodes: CustomNode[]) => {
 				const flows = get().flows
@@ -182,7 +188,7 @@ export const useFlowsStore = create<FlowStore>()(
 									if (node.id === nodeId) {
 										return {
 											...node,
-											data: {
+											consumerData: {
 												...node.data,
 												...nodeFormData,
 											},
@@ -243,6 +249,11 @@ export const useFlowsStore = create<FlowStore>()(
 					},
 				})
 				get().refreshActiveNode()
+				// We are emitting nodesChange event here to listen this in the parent component and trigger the save flow function
+				// to check where the emitted events are consumed search for 'nodesChange' in the codebase
+				debounce(emitNodesChange, 5000, {
+					maxWait: 1,
+				})()
 			},
 			onEdgesChange: (changes: EdgeChange[]) => {
 				const flows = get().flows
