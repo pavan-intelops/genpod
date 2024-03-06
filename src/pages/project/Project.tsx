@@ -115,6 +115,10 @@ export default function Project() {
     return () => clearInterval(interval);
   }, [getFlow, params.projectId, projects, updateProject]);
 
+  const handleGenerateClick = async () => {
+    await generateCode();
+  };
+
   const items = [
     { title: 'Home', href: '/' },
     {
@@ -142,13 +146,7 @@ export default function Project() {
           </Grid.Col>
           <Grid.Col span={10}>
             <Breadcrumbs separator=">">{items}</Breadcrumbs>
-            <Button
-              onClick={async () => {
-                await generateCode();
-              }}
-            >
-              Generate
-            </Button>
+            <Button onClick={handleGenerateClick}>Generate</Button>
             <Flow />
           </Grid.Col>
         </Grid>

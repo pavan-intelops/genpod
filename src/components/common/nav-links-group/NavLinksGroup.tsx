@@ -28,24 +28,29 @@ export function NavBarLinksGroup({
 }: NavBarLinksGroupProps) {
   const hasLinks = Array.isArray(links);
   const [opened, setOpened] = useState<boolean>(!!initiallyOpened);
-  const items = (hasLinks ? links : []).map(link => (
+
+  const toggleOpen = () => setOpened(o => !o);
+
+  const preventDefault = (event: React.MouseEvent<HTMLAnchorElement>) =>
+    event.preventDefault();
+
+  const renderLink = (link: { label: string; link: string }) => (
     <Text<'a'>
       component="a"
       className={classes.link}
       href={link.link}
       key={link.label}
-      onClick={event => event.preventDefault()}
+      onClick={preventDefault}
     >
       {link.label}
     </Text>
-  ));
+  );
+
+  const items = hasLinks ? links.map(renderLink) : [];
 
   return (
     <>
-      <UnstyledButton
-        onClick={() => setOpened(o => !o)}
-        className={classes.control}
-      >
+      <UnstyledButton onClick={toggleOpen} className={classes.control}>
         <Group justify="space-between" gap={0}>
           <Box style={{ display: 'flex', alignItems: 'center' }}>
             <ThemeIcon variant="dark" size={30}>

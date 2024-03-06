@@ -54,6 +54,29 @@ export default function GRPCConfigForm({ form }: GRPCConfigFormProps) {
     control: form.control,
     name: 'grpcConfig.server.resources'
   });
+  const handleAddResourceClick = () => {
+    openAddResourceModal();
+  };
+
+  const handleEditIconClick = (index: number) => {
+    setEditResourceIndex(index);
+    openEditResourceModal();
+  };
+
+  const handleTrashIconClick = (index: number) => {
+    removeResource(index);
+  };
+
+  const handleResourceAdd = (resource: Resource) => {
+    appendResource(resource);
+    closeAddResourceModal();
+  };
+
+  const handleResourceUpdate = (resource: Resource, index: number) => {
+    updateResource(index, resource);
+    closeEditResourceModal();
+  };
+
   return (
     <>
       <Flex direction="column" className={classes.group} mt="md" gap="md">
@@ -136,12 +159,7 @@ export default function GRPCConfigForm({ form }: GRPCConfigFormProps) {
             </Group>
           </Grid.Col>
           <Grid.Col span={6}>
-            <Button
-              onClick={() => {
-                openAddResourceModal();
-              }}
-              variant="outline"
-            >
+            <Button onClick={handleAddResourceClick} variant="outline">
               Add Resources
             </Button>
           </Grid.Col>
@@ -169,10 +187,7 @@ export default function GRPCConfigForm({ form }: GRPCConfigFormProps) {
                           <ActionIcon
                             variant="transparent"
                             c="white"
-                            onClick={() => {
-                              setEditResourceIndex(index);
-                              openEditResourceModal();
-                            }}
+                            onClick={() => handleEditIconClick(index)}
                           >
                             <IconEdit />
                           </ActionIcon>
@@ -180,9 +195,7 @@ export default function GRPCConfigForm({ form }: GRPCConfigFormProps) {
                             variant="transparent"
                             c="red"
                             ml="xs"
-                            onClick={() => {
-                              removeResource(index);
-                            }}
+                            onClick={() => handleTrashIconClick(index)}
                           >
                             <IconTrashFilled />
                           </ActionIcon>
@@ -202,12 +215,7 @@ export default function GRPCConfigForm({ form }: GRPCConfigFormProps) {
         size="lg"
         closeOnEscape={false}
       >
-        <AddResourceModalContent
-          onResourceAdd={resource => {
-            appendResource(resource);
-            closeAddResourceModal();
-          }}
-        />
+        <AddResourceModalContent onResourceAdd={handleResourceAdd} />
       </Modal>
       <Modal
         closeOnEscape={false}
@@ -217,10 +225,7 @@ export default function GRPCConfigForm({ form }: GRPCConfigFormProps) {
         size="lg"
       >
         <UpdateResourceModalContent
-          onResourceUpdate={(resource, index) => {
-            updateResource(index, resource);
-            closeEditResourceModal();
-          }}
+          onResourceUpdate={handleResourceUpdate}
           resourceIndex={editResourceIndex}
           initialData={
             form.getValues('grpcConfig.server.resources')?.[

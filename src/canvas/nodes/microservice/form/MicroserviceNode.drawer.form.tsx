@@ -46,20 +46,22 @@ export default function MicroServiceNodeDrawerForm(
     },
     [props.nodeId]
   );
+  const handleSubmitCapture = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
+
+  const handleSubmit = form.handleSubmit(() => {
+    const transformedData = transformToNodeFormData(form.getValues());
+    setNodeFormData(transformedData, props.nodeId);
+    props.onSubmit(transformedData);
+  });
+
+  const handleLanguageChange = () => {
+    handleResets(form);
+  };
   return (
     <>
-      <form
-        onSubmitCapture={e => {
-          e.preventDefault();
-        }}
-        onSubmit={form.handleSubmit(data => {
-          setNodeFormData(
-            transformToNodeFormData(form.getValues()),
-            props.nodeId
-          );
-          props.onSubmit(transformToNodeFormData(data));
-        })}
-      >
+      <form onSubmitCapture={handleSubmitCapture} onSubmit={handleSubmit}>
         <TextInput
           control={form.control}
           withAsterisk
@@ -80,9 +82,7 @@ export default function MicroServiceNodeDrawerForm(
           label="Language"
           placeholder="Language"
           data={getLanguageOptions()}
-          onChange={() => {
-            handleResets(form);
-          }}
+          onChange={handleLanguageChange}
         />
         {!!form.watch('language') && (
           <>

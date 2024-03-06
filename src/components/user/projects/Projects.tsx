@@ -53,7 +53,8 @@ export default function Projects() {
   const handleOnLoadProjectClick = (projectId: string) => {
     return navigate(`/project/${projectId}`);
   };
-  const openDeleteProjectConfirmModal = (projectId: string) =>
+
+  const openDeleteProjectConfirmModal = (projectId: string) => {
     modals.openConfirmModal({
       title: 'Delete your profile',
       centered: true,
@@ -72,6 +73,7 @@ export default function Projects() {
         return;
       }
     });
+  };
 
   useEffect(() => {
     (async function () {
@@ -83,6 +85,14 @@ export default function Projects() {
   }, []);
 
   const TableRow = (project: TabularProjectData) => {
+    const handleLoadProjectClick = () => {
+      handleOnLoadProjectClick(project.id);
+    };
+
+    const handleDeleteProjectClick = () => {
+      openDeleteProjectConfirmModal(project.id);
+    };
+
     return (
       <Table.Tr key={project.id}>
         <Table.Td>{project.id}</Table.Td>
@@ -93,18 +103,12 @@ export default function Projects() {
         <Table.Td>
           <SimpleGrid cols={2}>
             <Tooltip label="Load">
-              <ActionIcon p={2}>
-                <IconNavigation
-                  onClick={() => handleOnLoadProjectClick(project.id)}
-                />
+              <ActionIcon p={2} onClick={handleLoadProjectClick}>
+                <IconNavigation />
               </ActionIcon>
             </Tooltip>
             <Tooltip label="Delete Project">
-              <ActionIcon
-                p={2}
-                onClick={() => openDeleteProjectConfirmModal(project.id)}
-                bg="red.7"
-              >
+              <ActionIcon p={2} onClick={handleDeleteProjectClick} bg="red.7">
                 <IconTrash />
               </ActionIcon>
             </Tooltip>
