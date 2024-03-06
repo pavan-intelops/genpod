@@ -15,15 +15,6 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { CustomNode, CustomNodeFormData, FlowStore } from './types.store';
 
-const getInitialNodes = () => {
-  return [] as CustomNode[];
-};
-const getInitialEdges = () => {
-  return [] as Edge[];
-};
-function emitNodesChange() {
-  emitter.emit('nodesChange');
-}
 export const useFlowsStore = create<FlowStore>()(
   devtools((set, get) => {
     return {
@@ -44,8 +35,8 @@ export const useFlowsStore = create<FlowStore>()(
               ...state.flows,
               [flowKey]: {
                 flowKey,
-                nodes: getInitialNodes(),
-                edges: getInitialEdges(),
+                nodes: [] as CustomNode[],
+                edges: [] as Edge[],
                 activeNode: null
               }
             }
