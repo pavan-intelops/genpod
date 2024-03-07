@@ -30,19 +30,19 @@ export default function MicroServiceNodeDrawerForm(
   });
   const transformToNodeFormData = useCallback(
     (data: MicroServiceNodeFormDataUI): MicroServiceNodeFormData => {
-      const t: MicroServiceNodeFormData = {
+      const formData: MicroServiceNodeFormData = {
         name: data.name,
         description: data.description,
         language: data.language,
         restConfig: data.restConfig,
         grpcConfig: data.grpcConfig,
         annotations: {},
-        id: 'form' + props.nodeId,
+        id: `form${props.nodeId}`,
         metadata: {},
         type: NodeTypes.MICROSERVICE,
         wsConfig: undefined
       };
-      return t;
+      return formData;
     },
     [props.nodeId]
   );

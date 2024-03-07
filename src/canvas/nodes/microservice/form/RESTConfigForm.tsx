@@ -132,14 +132,12 @@ export default function RestConfigForm({ form }: RestConfigFormProps) {
           <Grid.Col span={12}>
             {form.watch('restConfig.template') ===
               SupportedTemplates.OPEN_API && (
-              <>
-                <FileInput
-                  accept=".yaml,.yml,.json"
-                  control={form.control}
-                  name="restConfig.server.openApiFileYamlContent"
-                  label="Upload YAML file"
-                />
-              </>
+              <FileInput
+                accept=".yaml,.yml,.json"
+                control={form.control}
+                name="restConfig.server.openApiFileYamlContent"
+                label="Upload YAML file"
+              />
             )}
           </Grid.Col>
           {form.watch('restConfig.template') === SupportedTemplates.COMPAGE && (
