@@ -3,7 +3,6 @@ import { UserDTO } from './useUserOperations.types';
 
 export function useUserOperations() {
   const postUser = async (user: UserDTO): Promise<UserDTO> => {
-    console.log('user: ', user);
     const { data } = await axios.post('/users', JSON.stringify(user));
     return data;
   };

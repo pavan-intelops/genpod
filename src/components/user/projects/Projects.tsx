@@ -15,7 +15,6 @@ import { useProjectOperations } from 'src/api/useProjectOperations/useProjectOpe
 import { useSyncActions } from 'src/hooks/useSyncActions';
 import { showSuccessfullyDeletedProjectNotification } from 'src/notifications/project.notifications';
 import { useProjectStore } from 'src/store/useProjectStore';
-import useUserStore from 'src/store/userStore';
 import { Project } from './types';
 
 interface TabularProjectData {
@@ -43,10 +42,7 @@ const convertProjectDataToTabularData = (projects: Project[]) => {
 export default function Projects() {
   const { getProjects, deleteProject } = useProjectOperations();
   const { setProjects, projects } = useProjectStore();
-  const {
-    gitPlatformStore: { gitPlatforms }
-  } = useUserStore();
-  console.log('gitPlatforms: ', gitPlatforms);
+
   const { syncProjects } = useSyncActions();
   const navigate = useNavigate();
 

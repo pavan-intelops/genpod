@@ -21,7 +21,7 @@ const useCodeOperations = () => {
         email,
         projectId: activeProject?.id
       });
-      console.log('transformedData: ', transformedData);
+      
       const { data } = await axios.post('/code/generate', transformedData);
       return { data };
     } catch (error) {
