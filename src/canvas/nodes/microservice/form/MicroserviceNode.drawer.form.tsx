@@ -25,9 +25,14 @@ export default function MicroServiceNodeDrawerForm(
   const form = useForm<MicroServiceNodeFormDataUI>({
     defaultValues: structuredClone(currentFormData),
     resolver: zodResolver(schema),
-    reValidateMode: 'onBlur',
+    reValidateMode: 'onChange',
     criteriaMode: 'all'
   });
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const updatedName = e.target.value.replace(/\s+/g, '_');
+    form.setValue('name', updatedName, { shouldValidate: true });
+  };
+
   const transformToNodeFormData = useCallback(
     (data: MicroServiceNodeFormDataUI): MicroServiceNodeFormData => {
       const formData: MicroServiceNodeFormData = {
@@ -68,6 +73,7 @@ export default function MicroServiceNodeDrawerForm(
           label="Name"
           placeholder="Name"
           name="name"
+          onChange={handleNameChange}
         />
         <Textarea
           name="description"

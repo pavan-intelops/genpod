@@ -134,7 +134,6 @@ export default function GRPCConfigForm({ form }: GRPCConfigFormProps) {
           <Grid.Col span={6}>
             <NumberInput
               control={form.control}
-              valueIsNumericString
               name="grpcConfig.server.port"
               label="Port"
               placeholder="Port"
