@@ -1,7 +1,12 @@
 import { useProjectStore } from 'src/store/useProjectStore';
 import useUserStore from 'src/store/userStore';
-import { UseOperationsReturnType } from '../api.types';
+import { genericError } from 'src/utils/genericError';
+import { UseOperationsOptions, UseOperationsReturnType } from '../api.types';
 import axios from '../axios';
+import {
+  GenerateCodeFailed,
+  GenerateCodeSuccess
+} from './useCodeOperations.types';
 
 const useCodeOperations = () => {
   const {
@@ -10,7 +15,12 @@ const useCodeOperations = () => {
 
   const { activeProject } = useProjectStore();
 
-  const generateCode = async (): UseOperationsReturnType => {
+  const generateCode = async ({
+    onFail
+  }: UseOperationsOptions<
+    GenerateCodeSuccess,
+    GenerateCodeFailed
+  >): UseOperationsReturnType => {
     try {
       if (!activeProject || !email) {
         return {
@@ -21,13 +31,20 @@ const useCodeOperations = () => {
         email,
         projectId: activeProject?.id
       });
-      
+
       const { data } = await axios.post('/code/generate', transformedData);
-      return { data };
-    } catch (error) {
-      return { error };
+      const parsedData = JSON.parse(data) as GenerateCodeSuccess;
+      if (!parsedData.projectId) {
+        onFail?.({
+          message: parsedData.message
+        });
+      }
+      return { data: parsedData };
+    } catch (error: unknown) {
+      return genericError(error);
     }
   };
+
   return {
     generateCode
   };

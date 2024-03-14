@@ -53,16 +53,16 @@ export default function Flow() {
               buttonText="Add Microservice Node"
               mx="sm"
             />
-            <AddNodeModal
+            {/* <AddNodeModal
               type={NodeTypes.DB_NODE}
               buttonText="Add DB Node"
               mx="sm"
-            />
-            <AddNodeModal
+            /> */}
+            {/* <AddNodeModal
               type={NodeTypes.CLIENT_NODE}
               buttonText="Add Client Node"
               mx="sm"
-            />
+            /> */}
             <Button
               bg="blue.4"
               ml="sm"

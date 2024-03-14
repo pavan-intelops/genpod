@@ -1,5 +1,5 @@
-import { Anchor, Breadcrumbs, Button, Grid } from '@mantine/core';
-import { useCallback, useEffect } from 'react';
+import { Anchor, Breadcrumbs, Button, Flex, Grid } from '@mantine/core';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useCodeOperations from 'src/api/useCodeOperations/useCodeOperations';
 import { useProjectOperations } from 'src/api/useProjectOperations/useProjectOperations';
@@ -11,7 +11,9 @@ import SideNavbar from 'src/components/common/side-nav/SideNavbar';
 import { sideNavData } from 'src/components/common/side-nav/data';
 import type { Project } from 'src/components/user/projects/types';
 import { emitter } from 'src/emitter';
+import HydrationZustand from 'src/hoc/hydrationZustand';
 import Protected from 'src/hoc/protected';
+import { showFailedToGenerateCodeNotification } from 'src/notifications/project.notifications';
 import { useProjectStore } from 'src/store/useProjectStore';
 interface ProjectParams {
   projectId: string;
@@ -39,7 +41,7 @@ const convertFlowDataToProject = ({
       data: node.data
     };
   });
-  edges.map(edge => {
+  edges.forEach(edge => {
     json.edges[edge.id] = {
       id: edge.id,
       source: edge.source,
@@ -53,6 +55,11 @@ const convertFlowDataToProject = ({
     json
   };
 };
+/**
+ * Converts a project object to flow data.
+ * @param {Project} project - The project object.
+ * @returns {Object} - The converted flow data.
+ */
 const convertProjectToFlowData = (project: Project) => {
   if (project.json === undefined) return { nodes: [], edges: [] };
   const nodes = Object.values(project.json.nodes);
@@ -62,11 +69,16 @@ const convertProjectToFlowData = (project: Project) => {
     edges
   };
 };
+
+/**
+ * Renders the Project component.
+ */
 export default function Project() {
   const params = useParams() as unknown as ProjectParams;
   const { getProject, updateProject } = useProjectOperations();
   const { addFlow, flows, activeFlow, setNodes, setEdges } = useFlowsStore();
   const { setActiveProject, projects } = useProjectStore();
+  const [fetchProjectCompleted, setFetchProjectCompleted] = useState(false);
 
   const getFlow = useCallback(() => {
     if (!flows || !activeFlow) return;
@@ -75,10 +87,11 @@ export default function Project() {
 
   useEffect(() => {
     addFlow('flow' + params.projectId);
-    setActiveProject(params.projectId);
+    setActiveProject && setActiveProject(params.projectId);
     (async function () {
       const { data } = await getProject(params.projectId);
       if (!data) return;
+      setFetchProjectCompleted(true);
       const { nodes, edges } = convertProjectToFlowData(data);
       setNodes(nodes);
       setEdges(edges);
@@ -87,6 +100,7 @@ export default function Project() {
 
   const { generateCode } = useCodeOperations();
   useEffect(() => {
+    if (!fetchProjectCompleted) return;
     const handleSaveToServer = async () => {
       const currentFlow = getFlow();
 
@@ -113,10 +127,15 @@ export default function Project() {
     }, 3000);
     emitter.on('nodesChange', handleSaveToServer);
     return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getFlow, params.projectId, projects, updateProject]);
 
   const handleGenerateClick = async () => {
-    await generateCode();
+    await generateCode({
+      onFail(args) {
+        showFailedToGenerateCodeNotification(args?.message);
+      }
+    });
   };
 
   const items = [
@@ -131,7 +150,6 @@ export default function Project() {
       {item.title}
     </Anchor>
   ));
-
   return (
     <Protected>
       <Layout>
@@ -144,10 +162,14 @@ export default function Project() {
           <Grid.Col span={2}>
             <SideNavbar data={sideNavData} />
           </Grid.Col>
-          <Grid.Col span={10}>
-            <Breadcrumbs separator=">">{items}</Breadcrumbs>
-            <Button onClick={handleGenerateClick}>Generate</Button>
-            <Flow />
+          <Grid.Col span={9.8}>
+            <Flex justify="space-between" p="xs" align="center">
+              <Breadcrumbs separator=">">{items}</Breadcrumbs>
+              <Button onClick={handleGenerateClick}>Generate</Button>
+            </Flex>
+            <HydrationZustand>
+              <Flow />
+            </HydrationZustand>
           </Grid.Col>
         </Grid>
       </Layout>
