@@ -8,7 +8,7 @@ import './App.css';
 
 import { ModalsProvider } from '@mantine/modals';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import { ReactFlowProvider } from 'reactflow';
 import PageNotFound from './pages/404';
 import Home from './pages/home/Home';
@@ -18,6 +18,7 @@ import Project from './pages/project/Project';
 import { runEnvVariablesCheck } from './utils/checkEnvVariables';
 
 const queryClient = new QueryClient();
+
 function App() {
   useEffect(() => {
     runEnvVariablesCheck();
@@ -42,4 +43,4 @@ function App() {
   );
 }
 
-export default App;
+export default memo(App);
