@@ -69,7 +69,7 @@ export default function Flow() {
               leftSection={<IconEyeCode />}
               onClick={handleViewCodeClick}
             >
-              View Code
+              View Generated Config
             </Button>
           </Panel>
           <Controls />
