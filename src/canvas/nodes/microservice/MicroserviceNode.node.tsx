@@ -33,6 +33,7 @@ export default function MicroserviceNode(props: NodeProps<CustomNodeFormData>) {
             [classes['node_selected']]: selected
           })}
           gap={0}
+          h="min-content"
         >
           <Grid className={classes.node__header}>
             <Grid.Col span={8}>
@@ -61,7 +62,6 @@ export default function MicroserviceNode(props: NodeProps<CustomNodeFormData>) {
           <Box
             bg="gray.4"
             w="100%"
-            h="min-content"
             style={{
               flex: 1
             }}
