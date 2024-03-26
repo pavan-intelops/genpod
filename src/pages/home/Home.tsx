@@ -14,12 +14,12 @@ const Home = React.memo(() => {
           style={{
             width: '100vw'
           }}
-          gutter={0}
+          gutter="xl"
         >
-          <Grid.Col span={2}>
+          <Grid.Col span="content">
             <SideNavbar data={sideNavData} />
           </Grid.Col>
-          <Grid.Col span={10}>
+          <Grid.Col span="auto">
             <AddOrLoadProject />
           </Grid.Col>
         </Grid>

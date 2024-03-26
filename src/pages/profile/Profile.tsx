@@ -10,6 +10,7 @@ import Protected from 'src/hoc/protected';
 interface ProfileProps {}
 const Profile: React.FC<ProfileProps> = () => {
   const [searchParams] = useSearchParams();
+  const defaultActiveTabName = searchParams.get('activeTab') || 'projects';
   return (
     <Protected>
       <Layout>
@@ -18,7 +19,7 @@ const Profile: React.FC<ProfileProps> = () => {
             Profile
           </Text>
           <Tabs
-            defaultValue={searchParams.get('activeTab')}
+            defaultValue={defaultActiveTabName}
             orientation="vertical"
             activateTabWithKeyboard
             classNames={{

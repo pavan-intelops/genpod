@@ -159,11 +159,11 @@ export default function Project() {
           }}
           gutter="sm"
         >
-          <Grid.Col span={2}>
+          <Grid.Col span="content">
             <SideNavbar data={sideNavData} />
           </Grid.Col>
-          <Grid.Col span={9.8}>
-            <Flex justify="space-between" p="xs" align="center">
+          <Grid.Col span="auto">
+            <Flex justify="space-between" align="center">
               <Breadcrumbs separator=">">{items}</Breadcrumbs>
               <Button onClick={handleGenerateClick}>Generate</Button>
             </Flex>

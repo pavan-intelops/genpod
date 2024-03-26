@@ -52,7 +52,7 @@ export default function MicroserviceNode(props: NodeProps<CustomNodeFormData>) {
               <Link to={`/node/${id}`}>
                 <IconArrowForwardUp
                   onClick={() => {
-                    // addInitialNode(id)
+                    // TODO: Implement Nested nodes
                   }}
                 />
               </Link>
@@ -61,6 +61,7 @@ export default function MicroserviceNode(props: NodeProps<CustomNodeFormData>) {
           <Box
             bg="gray.4"
             w="100%"
+            h="min-content"
             style={{
               flex: 1
             }}

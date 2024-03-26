@@ -1,18 +1,18 @@
 .container {
-	background-color: light-dark(
-		var(--mantine-color-gray-0),
-		var(--mantine-color-dark-6)
-	);
-	width: 100%;
-	padding: 1rem;
+  background-color: light-dark(
+    var(--mantine-color-gray-0),
+    var(--mantine-color-dark-6)
+  );
+  width: 100%;
+  padding: 1rem;
 }
 
 .formContainer {
-	flex-direction: row;
-	width: 100%;
-	column-gap: var(--mantine-spacing-lg);
+  flex-direction: row;
+  width: 100%;
+  column-gap: var(--mantine-spacing-lg);
 }
 
-.form{
+.form {
   border-radius: var(--mantine-radius-md);
 }
