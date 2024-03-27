@@ -10,56 +10,19 @@ import ReactFlow, {
 } from 'reactflow';
 import { useProjectOperations } from 'src/api/useProjectOperations/useProjectOperations';
 import AddNodeModal from 'src/components/common/modal/AddNodeModal';
-import { Project } from 'src/components/user/projects/types';
 import { useProjectStore } from 'src/store/useProjectStore';
 import CodeViewDrawer from './drawers/code-view/CodeViewDrawer';
 import ClientNode from './nodes/client-node/ClientNode.node';
 import DBNode from './nodes/db-node/DBNode.node';
 import MicroserviceNode from './nodes/microservice/MicroserviceNode.node';
 import { useFlowsStore } from './store/flowstore';
-import { CustomEdge, CustomNode, NodeTypes } from './store/types.store';
+import { NodeTypes } from './store/types.store';
+import { convertFlowDataToProject } from './utils';
 
 const nodeTypes = {
   [NodeTypes.MICROSERVICE]: MicroserviceNode,
   [NodeTypes.DB_NODE]: DBNode,
   [NodeTypes.CLIENT_NODE]: ClientNode
-};
-
-interface ConvertFlowDataToProjectProps {
-  nodes: CustomNode[];
-  edges: CustomEdge[];
-  project: Project;
-}
-const convertFlowDataToProject = ({
-  edges,
-  nodes,
-  project
-}: ConvertFlowDataToProjectProps) => {
-  const json = {
-    nodes: {} as Record<string, CustomNode>,
-    edges: {} as Record<string, CustomEdge>
-  };
-  nodes.forEach(node => {
-    json.nodes[node.id] = {
-      id: node.id,
-      type: node.type,
-      position: node.position,
-      data: node.data
-    };
-  });
-  edges.forEach(edge => {
-    json.edges[edge.id] = {
-      id: edge.id,
-      source: edge.source,
-      target: edge.target,
-      type: edge.type,
-      data: edge.data
-    };
-  });
-  return {
-    ...project,
-    json
-  };
 };
 
 // interface FlowProps extends Partial<ReactFlowProps> {}
@@ -77,11 +40,14 @@ export default function Flow() {
     isCodeViewDrawerOpen,
     { close: closeCodeViewDrawer, open: openCodeViewDrawer }
   ] = useDisclosure(false);
+
   const projects = useProjectStore(state => state.projects);
   const { updateProject } = useProjectOperations();
+
   const handleViewCodeClick = () => {
     openCodeViewDrawer();
   };
+
   const getFlow = useCallback(() => {
     if (!flows || !activeFlow) return;
     return flows[activeFlow];
