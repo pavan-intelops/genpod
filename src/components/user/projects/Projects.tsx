@@ -13,7 +13,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProjectOperations } from 'src/api/useProjectOperations/useProjectOperations';
 import { useSyncActions } from 'src/hooks/useSyncActions';
-import { showSuccessfullyDeletedProjectNotification } from 'src/notifications/project.notifications';
+import { InAppNotifications } from 'src/notifications';
 import { useProjectStore } from 'src/store/useProjectStore';
 import { Project } from './types';
 
@@ -64,7 +64,7 @@ export default function Projects() {
       confirmProps: { color: 'red' },
       onConfirm: async () => {
         await deleteProject(projectId);
-        showSuccessfullyDeletedProjectNotification(projectId);
+        InAppNotifications.project.deletedSuccessfully(projectId);
         await syncProjects();
         return;
       }

@@ -26,12 +26,12 @@ export interface GitPlatformStore {
   removeGitPlatform: (gitPlatform: GitPlatform) => void;
 }
 
-export interface ProjectStore {
+export type ProjectStoreState = {
   projects: Project[];
   activeProject: Project | null;
-  setProjects: (projects: Project[], replace?: boolean) => void;
+};
+export type ProjectStoreActions = {
+  setProjects: (projects: Project[]) => void;
   setActiveProject: (projectId: string) => void;
   removeProject: (project: Project) => void;
-  _hasHydrated: boolean;
-  _setHasHydrated: (hasHydrated: boolean) => void;
-}
+};

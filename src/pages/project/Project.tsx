@@ -13,7 +13,7 @@ import type { Project } from 'src/components/user/projects/types';
 import { emitter } from 'src/emitter';
 import HydrationZustand from 'src/hoc/hydrationZustand';
 import Protected from 'src/hoc/protected';
-import { showFailedToGenerateCodeNotification } from 'src/notifications/project.notifications';
+import { InAppNotifications } from 'src/notifications';
 import { useProjectStore } from 'src/store/useProjectStore';
 interface ProjectParams {
   projectId: string;
@@ -77,7 +77,9 @@ export default function Project() {
   const params = useParams() as unknown as ProjectParams;
   const { getProject, updateProject } = useProjectOperations();
   const { addFlow, flows, activeFlow, setNodes, setEdges } = useFlowsStore();
-  const { setActiveProject, projects } = useProjectStore();
+  const setActiveProject = useProjectStore(state => state.setActiveProject);
+  const projects = useProjectStore(state => state.projects);
+
   const [fetchProjectCompleted, setFetchProjectCompleted] = useState(false);
 
   const getFlow = useCallback(() => {
@@ -96,7 +98,7 @@ export default function Project() {
       setNodes(nodes);
       setEdges(edges);
     })();
-  }, []);
+  }, [setActiveProject]);
 
   const { generateCode } = useCodeOperations();
   useEffect(() => {
@@ -122,18 +124,24 @@ export default function Project() {
       updateProject(params.projectId, formattedProject);
     };
 
-    const interval = setInterval(() => {
-      handleSaveToServer();
-    }, 3000);
+    // const interval = setInterval(() => {
+    //   handleSaveToServer();
+    // }, 3000);
     emitter.on('nodesChange', handleSaveToServer);
-    return () => clearInterval(interval);
+    // return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getFlow, params.projectId, projects, updateProject]);
 
   const handleGenerateClick = async () => {
+    console.log('====================================');
+    console.log('Generating code');
+    console.log('====================================');
     await generateCode({
       onFail(args) {
-        showFailedToGenerateCodeNotification(args?.message);
+        InAppNotifications.code.failedToGenerate(args?.message);
+      },
+      onSuccess() {
+        InAppNotifications.code.generatedSuccessfully(params.projectId);
       }
     });
   };

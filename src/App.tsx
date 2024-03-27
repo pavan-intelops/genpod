@@ -8,8 +8,9 @@ import './App.css';
 
 import { ModalsProvider } from '@mantine/modals';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { memo, useEffect } from 'react';
+import { useEffect } from 'react';
 import { ReactFlowProvider } from 'reactflow';
+import { useSyncActions } from './hooks/useSyncActions';
 import PageNotFound from './pages/404';
 import Home from './pages/home/Home';
 import Login from './pages/login/Login';
@@ -20,8 +21,12 @@ import { runEnvVariablesCheck } from './utils/checkEnvVariables';
 const queryClient = new QueryClient();
 
 function App() {
+  const { syncProjects, syncGitPlatforms } = useSyncActions();
+
   useEffect(() => {
     runEnvVariablesCheck();
+    syncProjects();
+    syncGitPlatforms();
   }, []);
   return (
     <BrowserRouter>
@@ -43,4 +48,4 @@ function App() {
   );
 }
 
-export default memo(App);
+export default App;

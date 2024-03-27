@@ -5,21 +5,22 @@ import { useProjectStore } from 'src/store/useProjectStore';
 import useUserStore from 'src/store/userStore';
 
 export const useSyncActions = () => {
-  const {
-    gitPlatformStore: { setGitPlatforms }
-  } = useUserStore();
+  const setGitPlatforms = useUserStore(state => {
+    return state.gitPlatformStore.setGitPlatforms;
+  });
+  const setProjects = useProjectStore(state => state.setProjects);
+
   const { getGitPlatforms } = useGitPlatformOperations();
   const { getProjects } = useProjectOperations();
-  const { setProjects } = useProjectStore();
 
   const syncProjects = useCallback(async () => {
     const { data: projects, error: getProjectsError } = await getProjects();
     if (getProjectsError) {
       return;
     }
-    projects &&
-      projects?.length > 0 &&
+    if (projects && projects?.length > 0) {
       setProjects(JSON.parse(projects as unknown as string));
+    }
   }, []);
 
   const syncGitPlatforms = useCallback(async () => {

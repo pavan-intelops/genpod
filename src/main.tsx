@@ -6,17 +6,20 @@ import App from './App.tsx';
 import { MantineProvider } from '@mantine/core';
 import './index.css';
 import theme, { cssVariableResolver } from './theme.ts';
+import { initStores } from './store/initStores.ts';
+
+initStores();
 
 const rootElement = document.getElementById('root');
 if (rootElement)
   createRoot(rootElement).render(
-    <React.StrictMode>
-      <MantineProvider
-        theme={theme}
-        defaultColorScheme="dark"
-        cssVariablesResolver={cssVariableResolver}
-      >
-        <App />
-      </MantineProvider>
-    </React.StrictMode>
+    // <React.StrictMode>
+    <MantineProvider
+      theme={theme}
+      defaultColorScheme="dark"
+      cssVariablesResolver={cssVariableResolver}
+    >
+      <App />
+    </MantineProvider>
+    // </React.StrictMode>
   );

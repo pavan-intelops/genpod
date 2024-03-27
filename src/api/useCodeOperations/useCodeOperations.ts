@@ -9,14 +9,15 @@ import {
 } from './useCodeOperations.types';
 
 const useCodeOperations = () => {
-  const {
-    personalDetails: { email }
-  } = useUserStore();
+  const email = useUserStore(state => {
+    return state.personalDetails.email;
+  });
 
-  const { activeProject } = useProjectStore();
+  const activeProject = useProjectStore(state => state.activeProject);
 
   const generateCode = async ({
-    onFail
+    onFail,
+    onSuccess
   }: UseOperationsOptions<
     GenerateCodeSuccess,
     GenerateCodeFailed
@@ -38,9 +39,14 @@ const useCodeOperations = () => {
         onFail?.({
           message: parsedData.message
         });
+      } else {
+        onSuccess?.();
       }
       return { data: parsedData };
     } catch (error: unknown) {
+      onFail?.({
+        message: 'Failed to generate code for the project.'
+      });
       return genericError(error);
     }
   };

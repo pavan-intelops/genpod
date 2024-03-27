@@ -1,6 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Box, Button, Divider, Flex, Text, Tooltip } from '@mantine/core';
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Checkbox, Select, TextInput } from 'react-hook-form-mantine';
 import { useNavigate } from 'react-router-dom';
@@ -14,6 +13,7 @@ import { convertToSelectOptionItems } from 'src/utils/transformers';
 import * as z from 'zod';
 import classes from './AddOrLoadProject.module.css';
 import { AddNewForm } from './AddOrLoadProject.types';
+import { useEffect } from 'react';
 
 const resolver = z.object({
   name: z.string().min(1, 'Project Name is required'),
@@ -29,7 +29,10 @@ export default function AddOrLoadProject() {
     personalDetails: { email }
   } = useUserStore();
   const { postProject } = useProjectOperations();
-  const { projects } = useProjectStore();
+
+  const setActiveProject = useProjectStore(state => state.setActiveProject);
+
+  const projects = useProjectStore(state => state.projects);
 
   const navigate = useNavigate();
   const areGitPlatformsThere = gitPlatformStore.gitPlatforms.length > 0;
@@ -48,15 +51,12 @@ export default function AddOrLoadProject() {
     mode: 'onChange'
   });
   const { syncProjects, syncGitPlatforms } = useSyncActions();
-  React.useEffect(() => {
-    // skipcq: JS-0328
-    (async function () {
-      await syncProjects();
-      // as we need gitplatforms state to create projects we will sync it
-      if (!areGitPlatformsThere) await syncGitPlatforms();
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    syncGitPlatforms();
+    syncProjects();
   }, []);
+
   const handleOnSubmit = addNewForm.handleSubmit(async data => {
     const username = gitPlatformStore.gitPlatforms.find(
       platform => platform.gitPlatform === data.gitPlatform
@@ -85,11 +85,12 @@ export default function AddOrLoadProject() {
     // if post request is successfully completed, sync the projects
     await syncProjects();
   });
+
   const handleOnLoadedProjectClick = (projectId: string) => {
+    setActiveProject(projectId);
     // navigate to the project page
     navigate(`/project/${projectId}`);
   };
-
   return (
     <Box className={classes.container}>
       <Text size="xl" fw="bolder">

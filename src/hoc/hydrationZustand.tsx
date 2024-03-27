@@ -4,7 +4,6 @@ const HydrationZustand = ({ children }: { children: React.ReactNode }) => {
   const [isHydrated, setIsHydrated] = useState(false);
   console.log('isHydrated: ', isHydrated);
 
-  // Wait till Next.js rehydration completes
   useEffect(() => {
     setIsHydrated(true);
   }, []);
