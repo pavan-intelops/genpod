@@ -10,7 +10,7 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconEdit, IconTrashFilled } from '@tabler/icons-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { UseFormReturn, useFieldArray } from 'react-hook-form';
 import { FileInput, NumberInput, Select } from 'react-hook-form-mantine';
 import {
@@ -27,6 +27,10 @@ import {
 import classes from '../styles.module.css';
 import AddResourceModalContent from './AddResourceModalContent';
 import UpdateResourceModalContent from './UpdateResourceModalContent';
+import { useProjectOperations } from 'src/api/useProjectOperations/useProjectOperations';
+import { useFlowsStore } from 'src/canvas/store/flowstore';
+import { useProjectStore } from 'src/store/useProjectStore';
+import { InAppNotifications } from 'src/notifications';
 interface RestConfigFormProps {
   form: UseFormReturn<MicroServiceNodeFormDataUI>;
 }
@@ -45,6 +49,8 @@ export default function RestConfigForm({ form }: RestConfigFormProps) {
     number | undefined
   >(undefined);
 
+  const { postYamlContent } = useProjectOperations();
+
   const {
     append: appendResource,
     update: updateResource,
@@ -53,6 +59,48 @@ export default function RestConfigForm({ form }: RestConfigFormProps) {
     control: form.control,
     name: 'restConfig.server.resources'
   });
+  const { activeProject } = useProjectStore();
+  const { flows, activeFlow } = useFlowsStore();
+
+  console.log('form: ', form.getValues());
+  useEffect(() => {
+    if (
+      !form.formState.touchedFields.restConfig?.server
+        ?.openApiFileYamlContent &&
+      form.getValues('restConfig.server.openApiFileYamlContent') === ''
+    )
+      return;
+
+    (async function () {
+      if (form.watch('restConfig.server.openApiFileYamlContent')) {
+        const file = form.getValues('restConfig.server.openApiFileYamlContent');
+        if (
+          file &&
+          activeProject &&
+          flows &&
+          activeFlow &&
+          flows[activeFlow]?.activeNode
+        ) {
+          const { data, error } = await postYamlContent(
+            flows[activeFlow].activeNode!.id,
+            activeProject.id,
+            file
+          );
+          if (error || !data) {
+            InAppNotifications.project.uploadYamlFailed(
+              activeProject.id,
+              flows[activeFlow].activeNode!.id
+            );
+          } else {
+            InAppNotifications.project.uploadedYamlSuccessfully(
+              activeProject.id,
+              flows[activeFlow].activeNode!.id
+            );
+          }
+        }
+      }
+    })();
+  }, [form.watch('restConfig.server.openApiFileYamlContent')]);
 
   const handleAddResourceClick = () => {
     openAddResourceModal();

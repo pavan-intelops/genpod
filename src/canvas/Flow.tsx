@@ -18,6 +18,7 @@ import MicroserviceNode from './nodes/microservice/MicroserviceNode.node';
 import { useFlowsStore } from './store/flowstore';
 import { NodeTypes } from './store/types.store';
 import { convertFlowDataToProject } from './utils';
+import { InAppNotifications } from 'src/notifications';
 
 const nodeTypes = {
   [NodeTypes.MICROSERVICE]: MicroserviceNode,
@@ -35,6 +36,7 @@ export default function Flow() {
     flows,
     activeFlow
   } = useFlowsStore();
+  const projectId = activeFlow?.slice(4);
   const { nodes, edges } = getNodesAndEdges();
   const [
     isCodeViewDrawerOpen,
@@ -60,14 +62,13 @@ export default function Flow() {
       return;
     }
 
-    const projectDetails = projects.find(
-      project => project.id === activeFlow?.slice(4)
-    );
+    const projectDetails = projects.find(project => project.id === projectId);
 
-    if (!projectDetails || !activeFlow) {
+    if (!projectDetails || !activeFlow || !projectId) {
       console.error({
         projectDetails,
-        activeFlow
+        activeFlow,
+        projectId
       });
       return;
     }
@@ -79,7 +80,12 @@ export default function Flow() {
         ...projectDetails
       }
     });
-    updateProject(activeFlow!.slice(4), formattedProject);
+    const { data, error } = await updateProject(projectId, formattedProject);
+    if (error || !data) {
+      InAppNotifications.project.failedToSync(projectId);
+    } else {
+      InAppNotifications.project.syncedSuccessfully(projectId);
+    }
   };
   return (
     <>
