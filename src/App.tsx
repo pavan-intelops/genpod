@@ -28,6 +28,7 @@ function App() {
     syncProjects();
     syncGitPlatforms();
   }, []);
+
   return (
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
