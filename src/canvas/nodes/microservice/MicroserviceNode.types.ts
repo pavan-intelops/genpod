@@ -101,7 +101,7 @@ export enum SupportedServers {
 }
 export enum SupportedTemplates {
   COMPAGE = 'compage',
-  OPEN_API = 'openapi'
+  OPEN_API = 'openAPI'
 }
 export enum SupportedFrameworks {
   GO_SERVER = 'go-server',

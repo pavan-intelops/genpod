@@ -10,9 +10,13 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconEdit, IconTrashFilled } from '@tabler/icons-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { UseFormReturn, useFieldArray } from 'react-hook-form';
 import { FileInput, NumberInput, Select } from 'react-hook-form-mantine';
+import { useProjectOperations } from 'src/api/useProjectOperations/useProjectOperations';
+import { useFlowsStore } from 'src/canvas/store/flowstore';
+import { InAppNotifications } from 'src/notifications';
+import { useProjectStore } from 'src/store/useProjectStore';
 import {
   getDBOptions,
   getFrameworkOptions,
@@ -27,10 +31,6 @@ import {
 import classes from '../styles.module.css';
 import AddResourceModalContent from './AddResourceModalContent';
 import UpdateResourceModalContent from './UpdateResourceModalContent';
-import { useProjectOperations } from 'src/api/useProjectOperations/useProjectOperations';
-import { useFlowsStore } from 'src/canvas/store/flowstore';
-import { useProjectStore } from 'src/store/useProjectStore';
-import { InAppNotifications } from 'src/notifications';
 interface RestConfigFormProps {
   form: UseFormReturn<MicroServiceNodeFormDataUI>;
 }
@@ -62,45 +62,45 @@ export default function RestConfigForm({ form }: RestConfigFormProps) {
   const { activeProject } = useProjectStore();
   const { flows, activeFlow } = useFlowsStore();
 
-  console.log('form: ', form.getValues());
-  useEffect(() => {
-    if (
-      !form.formState.touchedFields.restConfig?.server
-        ?.openApiFileYamlContent &&
-      form.getValues('restConfig.server.openApiFileYamlContent') === ''
-    )
-      return;
-
-    (async function () {
-      if (form.watch('restConfig.server.openApiFileYamlContent')) {
-        const file = form.getValues('restConfig.server.openApiFileYamlContent');
-        if (
-          file &&
-          activeProject &&
-          flows &&
-          activeFlow &&
-          flows[activeFlow]?.activeNode
-        ) {
-          const { data, error } = await postYamlContent(
-            flows[activeFlow].activeNode!.id,
+  const handleFileUpload = async () => {
+    if (form.watch('restConfig.server.openApiFileYamlContent')) {
+      const file = form.getValues('restConfig.server.openApiFileYamlContent');
+      if (
+        file &&
+        activeProject &&
+        flows &&
+        activeFlow &&
+        flows[activeFlow]?.activeNode
+      ) {
+        const { data, error } = await postYamlContent(
+          flows[activeFlow].activeNode!.id,
+          activeProject.id,
+          file
+        );
+        if (error || !data) {
+          InAppNotifications.project.uploadYamlFailed(
             activeProject.id,
-            file
+            flows[activeFlow].activeNode!.id
           );
-          if (error || !data) {
-            InAppNotifications.project.uploadYamlFailed(
-              activeProject.id,
-              flows[activeFlow].activeNode!.id
-            );
-          } else {
-            InAppNotifications.project.uploadedYamlSuccessfully(
-              activeProject.id,
-              flows[activeFlow].activeNode!.id
-            );
-          }
+        } else {
+          InAppNotifications.project.uploadedYamlSuccessfully(
+            activeProject.id,
+            flows[activeFlow].activeNode!.id
+          );
         }
       }
-    })();
-  }, [form.watch('restConfig.server.openApiFileYamlContent')]);
+      const reader = new FileReader();
+      reader.readAsText(file as File);
+      reader.addEventListener('load', () => {
+        console.log('reader.result: ', reader.result);
+        form.setValue(
+          'restConfig.server.openApiFileYamlContent',
+          reader.result?.toString()
+        );
+        form.setValue('restConfig.server.port', '8080');
+      });
+    }
+  };
 
   const handleAddResourceClick = () => {
     openAddResourceModal();
@@ -180,12 +180,18 @@ export default function RestConfigForm({ form }: RestConfigFormProps) {
           <Grid.Col span={12}>
             {form.watch('restConfig.template') ===
               SupportedTemplates.OPEN_API && (
-              <FileInput
-                accept=".yaml,.yml,.json"
-                control={form.control}
-                name="restConfig.server.openApiFileYamlContent"
-                label="Upload YAML file"
-              />
+              <Flex align="end" gap="md">
+                <FileInput
+                  flex={1}
+                  accept=".yaml,.yml,.json"
+                  control={form.control}
+                  name="restConfig.server.openApiFileYamlContent"
+                  label="Upload YAML file"
+                />
+                <Button onClick={handleFileUpload} variant="outline">
+                  Upload File
+                </Button>
+              </Flex>
             )}
           </Grid.Col>
           {form.watch('restConfig.template') === SupportedTemplates.COMPAGE && (
