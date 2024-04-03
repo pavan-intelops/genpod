@@ -10,3 +10,19 @@ describe('App', () => {
     );
   });
 });
+
+describe('App Navigation', () => {
+  it('navigates to the login page', () => {
+    mount(
+      <MantineProvider>
+        <App />
+      </MantineProvider>
+    );
+    cy.get('button').contains('Login').click();
+    cy.url().should('include', '/login');
+  });
+});
+
+/**
+ * Add more tests
+ */

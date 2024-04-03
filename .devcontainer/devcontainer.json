@@ -1,60 +1,63 @@
 {
-	"name": "intelops-genpod",
-	"dockerFile": "Dockerfile",
-	"settings": {
-		"terminal.integrated.shell.linux": "/bin/bash"
-	},
-	"extensions": [
-		"meganrogge.template-string-converter",
-		"vunguyentuan.vscode-css-variables",
-		"ChakrounAnas.turbo-console-log",
-		"christian-kohler.npm-intellisense",
-		"christian-kohler.path-intellisense",
-		"cmstead.js-codeformer",
-		"cmstead.jsrefactor",
-		"dbaeumer.vscode-eslint",
-		"dsznajder.es7-react-js-snippets",
-		"eamodio.gitlens",
-		"esbenp.prettier-vscode",
-		"firsttris.vscode-jest-runner",
-		"formulahendry.auto-close-tag",
-		"formulahendry.auto-rename-tag",
-		"GitHub.copilot",
-		"GitHub.copilot-chat",
-		"GitHub.vscode-pull-request-github",
-		"jkjustjoshing.vscode-text-pastry",
-		"jock.svg",
-		"jrebocho.vscode-random",
-		"kaiwood.center-editor-window",
-		"kisstkondoros.vscode-gutter-preview",
-		"MariusAlchimavicius.json-to-ts",
-		"mike-co.import-sorter",
-		"mikestead.dotenv",
-		"ms-azuretools.vscode-docker",
-		"ms-vscode.vscode-typescript-next",
-		"ms-vscode.vscode-typescript-tslint-plugin",
-		"naumovs.color-highlight",
-		"nick-lvov-dev.typescript-explicit-types",
-		"pflannery.vscode-versionlens",
-		"redhat.vscode-yaml",
-		"rvest.vs-code-prettier-eslint",
-		"ryanlaws.toggle-case",
-		"sburg.vscode-javascript-booster",
-		"skyran.js-jsx-snippets",
-		"streetsidesoftware.code-spell-checker",
-		"styled-components.vscode-styled-components",
-		"vincaslt.highlight-matching-tag",
-		"whtouche.vscode-js-console-utils",
-		"wix.vscode-import-cost",
-		"xabikos.JavaScriptSnippets"
-	],
-	"forwardPorts": [
-		3000, // Vite
-		6006 // Storybook
-	],
-	"remoteUser": "node",
-	"mounts": [
-		"source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
-	],
-	"postCreateCommand": "yarn install"
+  "name": "intelops-genpod",
+  "dockerFile": "Dockerfile",
+
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash"
+  },
+  "extensions": [
+    "meganrogge.template-string-converter",
+    "vunguyentuan.vscode-css-variables",
+    "ChakrounAnas.turbo-console-log",
+    "christian-kohler.npm-intellisense",
+    "christian-kohler.path-intellisense",
+    "cmstead.js-codeformer",
+    "cmstead.jsrefactor",
+    "dbaeumer.vscode-eslint",
+    "dsznajder.es7-react-js-snippets",
+    "eamodio.gitlens",
+    "esbenp.prettier-vscode",
+    "firsttris.vscode-jest-runner",
+    "formulahendry.auto-close-tag",
+    "formulahendry.auto-rename-tag",
+    "GitHub.copilot",
+    "GitHub.copilot-chat",
+    "GitHub.vscode-pull-request-github",
+    "jkjustjoshing.vscode-text-pastry",
+    "jock.svg",
+    "jrebocho.vscode-random",
+    "kaiwood.center-editor-window",
+    "kisstkondoros.vscode-gutter-preview",
+    "MariusAlchimavicius.json-to-ts",
+    "mike-co.import-sorter",
+    "mikestead.dotenv",
+    "ms-azuretools.vscode-docker",
+    "ms-vscode.vscode-typescript-next",
+    "ms-vscode.vscode-typescript-tslint-plugin",
+    "naumovs.color-highlight",
+    "nick-lvov-dev.typescript-explicit-types",
+    "pflannery.vscode-versionlens",
+    "redhat.vscode-yaml",
+    "rvest.vs-code-prettier-eslint",
+    "ryanlaws.toggle-case",
+    "sburg.vscode-javascript-booster",
+    "skyran.js-jsx-snippets",
+    "streetsidesoftware.code-spell-checker",
+    "styled-components.vscode-styled-components",
+    "vincaslt.highlight-matching-tag",
+    "whtouche.vscode-js-console-utils",
+    "wix.vscode-import-cost",
+    "xabikos.JavaScriptSnippets"
+  ],
+  "forwardPorts": [
+    3000, // Vite
+    6006, // Storybook
+    8080 // cypress
+  ],
+  "dockerComposeFile": "docker-compose.yml",
+  "remoteUser": "node",
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
+  ],
+  "postCreateCommand": "yarn install"
 }

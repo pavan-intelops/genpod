@@ -56,7 +56,9 @@ export function NavBarLinksGroup({
             <ThemeIcon variant="dark" size={30}>
               <Icon style={{ width: rem(18), height: rem(18) }} />
             </ThemeIcon>
-            <Box ml="md">{label}</Box>
+            <Box ml="md" w={rem(150)}>
+              {label}
+            </Box>
           </Box>
           {hasLinks && (
             <IconChevronRight
