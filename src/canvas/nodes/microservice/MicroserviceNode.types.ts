@@ -79,6 +79,7 @@ export type MicroServiceNodeFormData = Partial<{
   id: string;
   name: string;
   description: string;
+  prompt: string;
   language: SupportedLanguages;
   restConfig?: RESTConfig;
   grpcConfig?: GRPCConfig;

@@ -45,7 +45,8 @@ export default function MicroServiceNodeDrawerForm(
         id: `form${props.nodeId}`,
         metadata: {},
         type: NodeTypes.MICROSERVICE,
-        wsConfig: undefined
+        wsConfig: undefined,
+        prompt: data.prompt
       };
       return formData;
     },
@@ -96,6 +97,13 @@ export default function MicroServiceNodeDrawerForm(
             <GRPCConfigForm form={form} />
           </>
         )}
+        <Textarea
+          name="prompt"
+          rows={4}
+          label="Enter Prompt"
+          placeholder="Enter Prompt"
+          control={form.control}
+        />
         <Button type="submit" mt="lg">
           Submit
         </Button>
