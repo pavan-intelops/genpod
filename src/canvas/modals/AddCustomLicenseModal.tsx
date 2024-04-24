@@ -16,21 +16,7 @@ const AddCustomLicenseForm = () => {
 
   const { control, handleSubmit, watch } = useForm<LicenseFormInput>({
     defaultValues: {
-      licenses: [
-        {
-          type: 'link',
-          value: 'www.google.com',
-          tag: 'MIT',
-          id: '1'
-        },
-        {
-          type: 'path',
-          value: '/doc/cert.pem',
-          tag: 'APACHE',
-          id: '2'
-        }
-      ]
-      // licenses: getActiveFlow()?.licenses || []
+      licenses: getActiveFlow()?.licenses || []
     }
   });
   const { fields, append, remove } = useFieldArray({
@@ -48,17 +34,30 @@ const AddCustomLicenseForm = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         {fields.map((field, index) => (
           <Group key={field.id} align="end">
-            <Select
+            {/* <Select
               allowDeselect={false}
               label="Type"
               control={control}
               name={`licenses.${index}.type`}
               data={[
-                { value: 'file', label: 'File' },
-                { value: 'link', label: 'Link' },
-                { value: 'path', label: 'Path' }
+                { value: 'link', label: 'Link' }
+                // These will be supported in future but not now
+                // { value: 'file', label: 'File' },
+                // { value: 'path', label: 'Path' }
               ]}
               disabled={!!watch(`licenses.${index}.value`)}
+            /> */}
+            <Select
+              label="Type"
+              control={control}
+              name={`licenses.${index}.type`}
+              data={[
+                { value: 'link', label: 'Link' }
+                // These will be supported in future but not now
+                // { value: 'file', label: 'File' },
+                // { value: 'path', label: 'Path' }
+              ]}
+              disabled
             />
             {watch(`licenses.${index}.type` as const) === 'file' ? (
               <FileInput
