@@ -1,27 +1,28 @@
-import { CompageJson } from 'src/canvas/store/types.store'
+import { CompageJson, License } from 'src/canvas/store/types.store';
 
 export interface Project {
-	id: string
-	displayName: string
-	version: string
-	json?: CompageJson
-	gitPlatformUserName: string
-	gitPlatformName: string
-	repositoryName?: string
-	repositoryBranch?: string
-	isRepositoryPublic: boolean
-	repositoryUrl?: string
-	metadata?: Metadata
-	ownerEmail: string
-	oldVersions?: OldVersion[]
-	createdAt?: string
-	updatedAt?: string
+  id: string;
+  displayName: string;
+  version: string;
+  json?: CompageJson;
+  gitPlatformUserName: string;
+  gitPlatformName: string;
+  repositoryName?: string;
+  repositoryBranch?: string;
+  isRepositoryPublic: boolean;
+  repositoryUrl?: string;
+  metadata?: Metadata;
+  ownerEmail: string;
+  oldVersions?: OldVersion[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 interface OldVersion {
-	[key: string]: string
+  [key: string]: string;
 }
 
 interface Metadata {
-	[key: string]: string
+  licenses: License[];
+  [key: string]: unknown;
 }

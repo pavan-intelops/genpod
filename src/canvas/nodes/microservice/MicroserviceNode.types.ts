@@ -1,4 +1,4 @@
-import { NodeTypes } from 'src/canvas/store/types.store';
+import { License, NodeTypes } from 'src/canvas/store/types.store';
 
 export interface FieldMetadata {
   datatype: string;
@@ -80,6 +80,7 @@ export type MicroServiceNodeFormData = Partial<{
   name: string;
   description: string;
   prompt: string;
+  license: License;
   language: SupportedLanguages;
   restConfig?: RESTConfig;
   grpcConfig?: GRPCConfig;

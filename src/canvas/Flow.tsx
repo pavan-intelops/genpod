@@ -10,6 +10,7 @@ import ReactFlow, {
 } from 'reactflow';
 import { useProjectOperations } from 'src/api/useProjectOperations/useProjectOperations';
 import AddNodeModal from 'src/components/common/modal/AddNodeModal';
+import { InAppNotifications } from 'src/notifications';
 import { useProjectStore } from 'src/store/useProjectStore';
 import CodeViewDrawer from './drawers/code-view/CodeViewDrawer';
 import ClientNode from './nodes/client-node/ClientNode.node';
@@ -18,7 +19,7 @@ import MicroserviceNode from './nodes/microservice/MicroserviceNode.node';
 import { useFlowsStore } from './store/flowstore';
 import { NodeTypes } from './store/types.store';
 import { convertFlowDataToProject } from './utils';
-import { InAppNotifications } from 'src/notifications';
+import AddCustomLicenseModal from './modals/AddCustomLicenseModal';
 
 const nodeTypes = {
   [NodeTypes.MICROSERVICE]: MicroserviceNode,
@@ -26,7 +27,6 @@ const nodeTypes = {
   [NodeTypes.CLIENT_NODE]: ClientNode
 };
 
-// interface FlowProps extends Partial<ReactFlowProps> {}
 export default function Flow() {
   const {
     onNodesChange,
@@ -57,6 +57,7 @@ export default function Flow() {
 
   const handleSyncClick = async () => {
     const currentFlow = getFlow();
+
     if (!currentFlow) {
       console.error('No flow found');
       return;
@@ -77,7 +78,11 @@ export default function Flow() {
       nodes: currentFlow.nodes,
       edges: currentFlow.edges,
       project: {
-        ...projectDetails
+        ...projectDetails,
+        metadata: {
+          ...projectDetails.metadata,
+          licenses: currentFlow.licenses
+        }
       }
     });
     const { data, error } = await updateProject(projectId, formattedProject);
@@ -133,11 +138,13 @@ export default function Flow() {
             >
               Sync Code
             </Button>
+            <AddCustomLicenseModal />
           </Panel>
           <Controls />
           <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
         </ReactFlow>
       </Box>
+
       <Drawer
         size="xl"
         position="right"

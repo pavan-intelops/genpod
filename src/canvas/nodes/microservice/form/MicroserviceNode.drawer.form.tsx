@@ -1,4 +1,4 @@
-import { Button } from '@mantine/core';
+import { Button, ComboboxData } from '@mantine/core';
 import { useForm } from 'react-hook-form';
 import { Select, TextInput, Textarea } from 'react-hook-form-mantine';
 import { useFlowsStore } from 'src/canvas/store/flowstore';
@@ -28,6 +28,12 @@ export default function MicroServiceNodeDrawerForm(
     reValidateMode: 'onChange',
     criteriaMode: 'all'
   });
+  const licenseOptions: ComboboxData = useFlowsStore(
+    state => state.getActiveFlow()!.licenses
+  )?.map(license => ({
+    label: license.tag,
+    value: license.id
+  }));
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const updatedName = e.target.value.replace(/\s+/g, '_');
     form.setValue('name', updatedName, { shouldValidate: true });
@@ -46,7 +52,8 @@ export default function MicroServiceNodeDrawerForm(
         metadata: {},
         type: NodeTypes.MICROSERVICE,
         wsConfig: undefined,
-        prompt: data.prompt
+        prompt: data.prompt,
+        license: data.license
       };
       return formData;
     },
@@ -82,6 +89,13 @@ export default function MicroServiceNodeDrawerForm(
           label="Description"
           placeholder="Description"
           control={form.control}
+        />
+        <Select
+          control={form.control}
+          name="license"
+          label="License"
+          placeholder="License"
+          data={licenseOptions}
         />
         <Select
           control={form.control}
