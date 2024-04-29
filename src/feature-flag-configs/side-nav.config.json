@@ -1,0 +1,21 @@
+{
+  "id": "side-nav",
+  "featureFlags": {
+    "arch-diagrams": "visible",
+    "compage": "coming-soon",
+    "networking": "visible",
+    "k8s-lac": "visible",
+    "ci-tekton": "visible",
+    "cd-git-ops": "visible",
+    "sec-ops": "visible",
+    "network-policies-lac": "visible",
+    "security-lac": "visible",
+    "compliance": "visible",
+    "optimization-policies-lac": "visible",
+    "access-control-user-management": "visible",
+    "on-boarding": "visible",
+    "labels": "visible",
+    "data-ops": "visible",
+    "ml-ops": "visible"
+  }
+}

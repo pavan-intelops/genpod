@@ -1,4 +1,8 @@
 import { Project } from 'src/components/user/projects/types';
+import {
+  FEATURE_FLAG,
+  FeatureFlagsState
+} from 'src/feature-flag-configs/types';
 
 export interface GitPlatform {
   gitPlatform: string;
@@ -34,4 +38,22 @@ export type ProjectStoreActions = {
   setProjects: (projects: Project[]) => void;
   setActiveProject: (projectId: string) => void;
   removeProject: (project: Project) => void;
+};
+// Feature Flags Store
+type FeatureFlagsList = {
+  [keyName: string]: FeatureFlagsState;
+};
+export type FeatureFlagConfig = {
+  [configName: string | FEATURE_FLAG]: FeatureFlagsList;
+};
+export type FeatureFlagStoreState = {
+  featureFlags: FeatureFlagConfig;
+  areFeatureFlagsLoaded: boolean;
+};
+export type FeatureFlagStoreActions = {
+  setFeatureFlag: (featureFlag: FeatureFlagConfig) => void;
+  updateFeatureFlag: (id: FEATURE_FLAG, featureFlag: FeatureFlagConfig) => void;
+  getFeatureFlag: (id: FEATURE_FLAG) => FeatureFlagsList;
+  removeFeatureFlag: (id: FEATURE_FLAG) => void;
+  fetchAllFeatureFlags: () => void;
 };

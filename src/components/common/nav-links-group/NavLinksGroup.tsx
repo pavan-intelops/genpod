@@ -18,6 +18,7 @@ interface NavBarLinksGroupProps {
   label: string;
   initiallyOpened?: boolean;
   links?: { label: string; link: string }[];
+  disableClickActions?: boolean;
 }
 
 export function NavBarLinksGroup({

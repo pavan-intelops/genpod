@@ -63,5 +63,5 @@
   "mounts": [
     "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
   ],
-  "postCreateCommand": "yarn install"
+  "postCreateCommand": "yarn install && yarn dev"
 }

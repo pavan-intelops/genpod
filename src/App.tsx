@@ -18,13 +18,16 @@ import Profile from './pages/profile/Profile';
 import Project from './pages/project/Project';
 import { runEnvVariablesCheck } from './utils/checkEnvVariables';
 import { pingCheckServer } from './utils/pingCheckServer';
+import { useFeatureFlagStore } from './store/useFeatureFlagStore';
 
 function App() {
   const { syncProjects, syncGitPlatforms } = useSyncActions();
+  const { fetchAllFeatureFlags, areFeatureFlagsLoaded } = useFeatureFlagStore();
   useEffect(() => {
     runEnvVariablesCheck();
     syncProjects();
     syncGitPlatforms();
+    fetchAllFeatureFlags();
     (async function () {
       const res = await pingCheckServer();
       if (!res) {
@@ -33,6 +36,7 @@ function App() {
     })();
   }, []);
 
+  if (!areFeatureFlagsLoaded) return null;
   return (
     <BrowserRouter>
       <Notifications />
