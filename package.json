@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "yarn cy-install && npx concurrently \"vite --host\" \"yarn coverage-open\"",
+    "dev-cy": "yarn cy-install && npx concurrently \"vite --host\" \"yarn coverage-open\"",
+    "dev": "vite --host",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "clean-dev": "rm -rf node_modules/ && yarn && yarn dev",
