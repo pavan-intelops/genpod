@@ -1,4 +1,4 @@
-import { Button } from '@mantine/core';
+import { Button, ComboboxData } from '@mantine/core';
 import { useForm } from 'react-hook-form';
 import { Select, TextInput, Textarea } from 'react-hook-form-mantine';
 import { useFlowsStore } from 'src/canvas/store/flowstore';
@@ -28,6 +28,12 @@ export default function MicroServiceNodeDrawerForm(
     reValidateMode: 'onChange',
     criteriaMode: 'all'
   });
+  const licenseOptions: ComboboxData = useFlowsStore(
+    state => state.getActiveFlow()!.licenses
+  )?.map(license => ({
+    label: license.tag,
+    value: license.id
+  }));
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const updatedName = e.target.value.replace(/\s+/g, '_');
     form.setValue('name', updatedName, { shouldValidate: true });
@@ -45,7 +51,9 @@ export default function MicroServiceNodeDrawerForm(
         id: `form${props.nodeId}`,
         metadata: {},
         type: NodeTypes.MICROSERVICE,
-        wsConfig: undefined
+        wsConfig: undefined,
+        prompt: data.prompt,
+        license: data.license
       };
       return formData;
     },
@@ -84,6 +92,13 @@ export default function MicroServiceNodeDrawerForm(
         />
         <Select
           control={form.control}
+          name="license"
+          label="License"
+          placeholder="License"
+          data={licenseOptions}
+        />
+        <Select
+          control={form.control}
           name="language"
           label="Language"
           placeholder="Language"
@@ -96,6 +111,13 @@ export default function MicroServiceNodeDrawerForm(
             <GRPCConfigForm form={form} />
           </>
         )}
+        <Textarea
+          name="prompt"
+          rows={4}
+          label="Enter Prompt"
+          placeholder="Enter Prompt"
+          control={form.control}
+        />
         <Button type="submit" mt="lg">
           Submit
         </Button>

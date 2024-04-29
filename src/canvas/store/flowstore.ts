@@ -15,9 +15,20 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { CustomNode, CustomNodeFormData, FlowStore } from './types.store';
 
+function defaultFlow(flowKey: string) {
+  return {
+    flowKey,
+    nodes: [] as CustomNode[],
+    edges: [] as Edge[],
+    activeNode: null,
+    licenses: []
+  };
+}
+
 export const useFlowsStore = create<FlowStore>()(
   devtools((set, get) => {
     return {
+      // Flow Actions
       flows: {},
       addFlow: (flowKey: string) => {
         const currentFlows = get().flows;
@@ -33,12 +44,7 @@ export const useFlowsStore = create<FlowStore>()(
             ...state,
             flows: {
               ...state.flows,
-              [flowKey]: {
-                flowKey,
-                nodes: [] as CustomNode[],
-                edges: [] as Edge[],
-                activeNode: null
-              }
+              [flowKey]: defaultFlow(flowKey)
             }
           };
         });
@@ -63,12 +69,20 @@ export const useFlowsStore = create<FlowStore>()(
           };
         });
       },
+      // Active Flow Actions
       activeFlow: null,
+      getActiveFlow: () => {
+        const flows = get().flows;
+        if (!flows) return null;
+        const activeFlow = get().activeFlow || '';
+        return flows[activeFlow]!;
+      },
       setActiveFlow: (flowKey: string) => {
         set({
           activeFlow: flowKey
         });
       },
+      // Active Node Actions
       refreshActiveNode: () => {
         const flows = get().flows;
         if (!flows) return;
@@ -117,6 +131,23 @@ export const useFlowsStore = create<FlowStore>()(
           edges: flows[activeFlow].edges
         };
       },
+      updateLicenses: (flowKey: string, licenses) => {
+        set(state => {
+          if (!state.flows) return state;
+          return {
+            ...state,
+            flows: {
+              ...state.flows,
+              [flowKey]: {
+                ...state.flows[flowKey],
+                licenses
+              }
+            }
+          };
+        });
+        return get().flows?.[flowKey]?.licenses || [];
+      },
+      // React Flow Actions
       addNode: (node: CustomNode) => {
         const flows = get().flows;
         if (!flows) return;
