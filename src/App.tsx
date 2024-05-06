@@ -19,6 +19,7 @@ import Project from './pages/project/Project';
 import { runEnvVariablesCheck } from './utils/checkEnvVariables';
 import { pingCheckServer } from './utils/pingCheckServer';
 import { useFeatureFlagStore } from './store/useFeatureFlagStore';
+import ComingSoon from './pages/coming-soon/ComingSoon';
 
 function App() {
   const { syncProjects, syncGitPlatforms } = useSyncActions();
@@ -44,6 +45,7 @@ function App() {
         <ModalsProvider>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/coming-soon" element={<ComingSoon />} />
             <Route path="/login" element={<Login />} />
             <Route path="/project/:projectId" element={<Project />} />
             <Route path="/profile" index element={<Profile />} />

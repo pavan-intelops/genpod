@@ -1,16 +1,15 @@
-import React from 'react';
+import { Image } from '@mantine/core';
+import { useLocation } from 'react-router-dom';
 import LayoutWithSideBar from 'src/components/common/layout/LayoutWithSideBar';
-import AddOrLoadProject from 'src/components/home/projects/AddOrLoadProject';
 import Protected from 'src/hoc/protected';
 
-const Home = React.memo(() => {
+export default function ComingSoon() {
+  const loc = useLocation();
   return (
     <Protected>
       <LayoutWithSideBar>
-        <AddOrLoadProject />
+        <Image src={loc.state?.variant?.url} />
       </LayoutWithSideBar>
     </Protected>
   );
-});
-
-export default Home;
+}

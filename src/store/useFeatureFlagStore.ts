@@ -28,10 +28,18 @@ export const useFeatureFlagStore = create<
           set({
             featureFlags: {
               [SideNavConfig.id]: {
-                ...(SideNavConfig.featureFlags as Record<
-                  string,
-                  FeatureFlagsState
-                >)
+                features: {
+                  ...(SideNavConfig.featureFlags as Record<
+                    string,
+                    FeatureFlagsState
+                  >)
+                },
+                variants: {
+                  ...(SideNavConfig.variants as Record<
+                    string,
+                    { type: 'IMAGE' | 'PAGE'; url: string }
+                  >)
+                }
               }
             }
           });

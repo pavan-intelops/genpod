@@ -26,7 +26,7 @@ export const sideNavData: SideNavData = [
   },
   {
     id: 'compage',
-    label: 'compage',
+    label: 'Compage',
     icon: IconCode,
     links: [
       {

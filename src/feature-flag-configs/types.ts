@@ -1,13 +1,15 @@
-export type FeatureFlagsState =
-  | 'visible'
-  | 'hidden'
-  | 'presenting-teaser'
-  | 'coming-soon';
+export type FeatureFlagsState = 'visible' | 'hidden' | 'coming-soon';
 
 export interface ConfigJson {
   id: string;
   featureFlags: {
     [key: string]: FeatureFlagsState;
+  };
+  variants?: {
+    [key: string]: {
+      type: 'IMAGE' | 'PAGE';
+      url: string;
+    };
   };
   misc?: {
     [key: string]: unknown;

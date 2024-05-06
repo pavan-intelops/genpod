@@ -3,7 +3,7 @@
   "featureFlags": {
     "arch-diagrams": "visible",
     "compage": "coming-soon",
-    "networking": "visible",
+    "networking": "coming-soon",
     "k8s-lac": "visible",
     "ci-tekton": "visible",
     "cd-git-ops": "visible",
@@ -17,5 +17,15 @@
     "labels": "visible",
     "data-ops": "visible",
     "ml-ops": "visible"
+  },
+  "variants": {
+    "compage": {
+      "type": "IMAGE",
+      "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZquEwLz2vvTDz1OnSAUD8_ke1K0EmMNcl9FHtcKSMtA&s"
+    },
+    "networking": {
+      "type": "PAGE",
+      "url": "/profile"
+    }
   }
 }

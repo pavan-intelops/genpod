@@ -6,6 +6,8 @@ import classes from './SideNavbar.module.css';
 import { SideNavData } from './data';
 import { useFeatureFlagStore } from 'src/store/useFeatureFlagStore';
 import { FEATURE_FLAG } from 'src/feature-flag-configs/types';
+import { NavBarLinksGroupForComingSoon } from '../nav-links-group/NavLinksGroupForComingSoon';
+import { FeatureFlagVariant } from 'src/store/types';
 
 interface SideNavbarProps {
   data: SideNavData;
@@ -15,24 +17,25 @@ export default function SideNavbar({ data }: SideNavbarProps) {
   const [isNavOpen, setIsNavOpen] = useState(true);
   const { getFeatureFlag } = useFeatureFlagStore();
   const flagConfig = getFeatureFlag(FEATURE_FLAG.SIDE_NAV);
-  console.log(data);
   const handleNavToggle = () => {
     setIsNavOpen(!isNavOpen);
   };
 
   const links = data.map(item => {
-    if (flagConfig[item.id] === 'hidden') return null;
-    if (flagConfig[item.id] === 'coming-soon') {
+    if (flagConfig.features[item.id] === 'hidden') return null;
+    if (flagConfig.features[item.id] === 'coming-soon') {
+      const variant: FeatureFlagVariant =
+        flagConfig.variants && flagConfig.variants[item.id];
+
       return (
-        <NavBarLinksGroup
+        <NavBarLinksGroupForComingSoon
           {...item}
           key={item.label}
-          links={[
-            {
-              label: 'Coming Soon',
-              link: '#'
-            }
-          ]}
+          links={item.links?.map(() => ({
+            label: 'Coming Soon',
+            link: variant.url
+          }))}
+          variant={variant}
         />
       );
     }

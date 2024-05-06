@@ -40,8 +40,17 @@ export type ProjectStoreActions = {
   removeProject: (project: Project) => void;
 };
 // Feature Flags Store
+export type FeatureFlagVariant = {
+  type: 'IMAGE' | 'PAGE';
+  url: string;
+};
 type FeatureFlagsList = {
-  [keyName: string]: FeatureFlagsState;
+  variants: {
+    [keyName: string]: FeatureFlagVariant;
+  };
+  features: {
+    [keyName: string]: FeatureFlagsState;
+  };
 };
 export type FeatureFlagConfig = {
   [configName: string | FEATURE_FLAG]: FeatureFlagsList;
