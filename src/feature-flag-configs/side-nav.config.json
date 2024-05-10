@@ -3,6 +3,7 @@
   "featureFlags": {
     "arch-diagrams": "visible",
     "compage": "coming-soon",
+    "genval": "visible",
     "networking": "coming-soon",
     "k8s-lac": "visible",
     "ci-tekton": "visible",

@@ -1,4 +1,5 @@
 import {
+  IconAugmentedReality,
   IconBrandGit,
   IconCloudComputing,
   IconCloudLock,
@@ -32,6 +33,17 @@ export const sideNavData: SideNavData = [
       {
         label: 'compage',
         link: '/compage'
+      }
+    ]
+  },
+  {
+    id: 'genval',
+    label: 'Genval',
+    icon: IconAugmentedReality,
+    links: [
+      {
+        label: 'genval',
+        link: '/genval'
       }
     ]
   },
