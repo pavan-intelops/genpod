@@ -20,21 +20,14 @@ import { TbCloudLock } from 'react-icons/tb';
 
 export const sideNavData: SideNavData = [
   {
+    id: 'arch-diagrams',
     label: 'Arch Diagrams',
     icon: IconSitemap
   },
   {
-    label: 'compage',
+    id: 'compage',
+    label: 'Compage',
     icon: IconCode,
-    // icon: props => {
-    //   return (
-    //     <CompageIcon
-    //       style={{ width: 20, height: 20 }}
-    //       fill="var(--mantine-color-orange-5)"
-    //       {...props}
-    //     />
-    //   );
-    // },
     links: [
       {
         label: 'compage',
@@ -43,6 +36,7 @@ export const sideNavData: SideNavData = [
     ]
   },
   {
+    id: 'networking',
     label: 'Networking',
     icon: IconCloudComputing,
     links: [
@@ -53,6 +47,7 @@ export const sideNavData: SideNavData = [
     ]
   },
   {
+    id: 'k8s-lac',
     label: 'K8s (lac)',
     // @ts-expect-error SiKubernetes is from a different Icon Library which doesn't have the same props as TablerIconsProps which is Okay
     icon: SiKubernetes,
@@ -64,6 +59,7 @@ export const sideNavData: SideNavData = [
     ]
   },
   {
+    id: 'ci-tekton',
     label: 'CI (Tekton)',
     // @ts-expect-error IconCode is from a different Icon Library which doesn't have the same props as TablerIconsProps which is Okay
     icon: PiGithubLogo,
@@ -75,6 +71,7 @@ export const sideNavData: SideNavData = [
     ]
   },
   {
+    id: 'cd-git-ops',
     label: 'CD (GitOps)',
     icon: IconBrandGit,
     links: [
@@ -85,6 +82,7 @@ export const sideNavData: SideNavData = [
     ]
   },
   {
+    id: 'sec-ops',
     label: 'SecOps',
     icon: IconShieldCode,
     links: [
@@ -95,6 +93,7 @@ export const sideNavData: SideNavData = [
     ]
   },
   {
+    id: 'network-policies-lac',
     label: 'Network Policies (lac)',
     // @ts-expect-error FaNetworkWired is from a different Icon Library which doesn't have the same props as TablerIconsProps which is Okay
     icon: FaNetworkWired,
@@ -106,6 +105,7 @@ export const sideNavData: SideNavData = [
     ]
   },
   {
+    id: 'security-lac',
     label: 'Security (lac)',
     icon: IconCloudLock,
     links: [
@@ -116,6 +116,7 @@ export const sideNavData: SideNavData = [
     ]
   },
   {
+    id: 'compliance',
     label: 'Compliance',
     // @ts-expect-error GrCompliance is from a different Icon Library which doesn't have the same props as TablerIconsProps which is Okay
     icon: GrCompliance,
@@ -127,6 +128,7 @@ export const sideNavData: SideNavData = [
     ]
   },
   {
+    id: 'optimization-policies-lac',
     label: 'Optimization Policies (lac)',
     // @ts-expect-error MdOutlinePolicy is from a different Icon Library which doesn't have the same props as TablerIconsProps which is Okay
     icon: MdOutlinePolicy,
@@ -138,6 +140,7 @@ export const sideNavData: SideNavData = [
     ]
   },
   {
+    id: 'access-control-user-management',
     label: 'Access Controls (User Management)',
     // @ts-expect-error TbCloudLock is from a different Icon Library which doesn't have the same props as TablerIconsProps which is Okay
     icon: TbCloudLock,
@@ -149,6 +152,7 @@ export const sideNavData: SideNavData = [
     ]
   },
   {
+    id: 'on-boarding',
     label: 'OnBoarding',
     // @ts-expect-error FaChalkboardTeacher is from a different Icon Library which doesn't have the same props as TablerIconsProps which is Okay
     icon: FaChalkboardTeacher,
@@ -160,6 +164,7 @@ export const sideNavData: SideNavData = [
     ]
   },
   {
+    id: 'labels',
     label: 'Labels',
     icon: IconTag,
     links: [
@@ -170,6 +175,7 @@ export const sideNavData: SideNavData = [
     ]
   },
   {
+    id: 'data-ops',
     label: 'DataOps',
     icon: IconServer2,
     links: [
@@ -180,6 +186,7 @@ export const sideNavData: SideNavData = [
     ]
   },
   {
+    id: 'ml-ops',
     label: 'MLOps',
     // @ts-expect-error LuBrainCircuit is from a different Icon Library which doesn't have the same props as TablerIconsProps which is Okay
     icon: LuBrainCircuit,
@@ -193,6 +200,7 @@ export const sideNavData: SideNavData = [
 ];
 
 export type SideNavData = {
+  id: string;
   label: string;
   icon: (props: TablerIconsProps) => JSX.Element;
   initiallyOpened?: boolean;

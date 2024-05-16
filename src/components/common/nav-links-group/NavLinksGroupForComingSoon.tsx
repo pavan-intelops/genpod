@@ -13,21 +13,23 @@ import { IconChevronRight, TablerIconsProps } from '@tabler/icons-react';
 
 import classes from './NavLinksGroup.module.css';
 import { useNavigate } from 'react-router-dom';
+import { FeatureFlagVariant } from 'src/store/types';
 
-interface NavBarLinksGroupProps {
+interface NavBarLinksGroupForComingSoonProps {
   icon: React.FC<TablerIconsProps>;
   label: string;
   initiallyOpened?: boolean;
   links?: { label: string; link: string }[];
-  isComingSoon?: boolean;
+  variant?: FeatureFlagVariant;
 }
 
-export function NavBarLinksGroup({
+export function NavBarLinksGroupForComingSoon({
   icon: Icon,
   label,
   initiallyOpened,
-  links
-}: NavBarLinksGroupProps) {
+  links,
+  variant
+}: NavBarLinksGroupForComingSoonProps) {
   const hasLinks = Array.isArray(links);
   const [opened, setOpened] = useState<boolean>(!!initiallyOpened);
   const navigate = useNavigate();
@@ -38,6 +40,13 @@ export function NavBarLinksGroup({
     link: string
   ) => {
     event.preventDefault();
+    if (variant?.type === 'IMAGE') {
+      return navigate('/coming-soon', {
+        state: {
+          variant
+        }
+      });
+    }
     return navigate(link);
   };
 
