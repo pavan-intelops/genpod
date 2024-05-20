@@ -20,6 +20,7 @@ import { runEnvVariablesCheck } from './utils/checkEnvVariables';
 import { pingCheckServer } from './utils/pingCheckServer';
 import { useFeatureFlagStore } from './store/useFeatureFlagStore';
 import ComingSoon from './pages/coming-soon/ComingSoon';
+import Testing from './pages/testing/Testing';
 
 function App() {
   const { syncProjects, syncGitPlatforms } = useSyncActions();
@@ -46,6 +47,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/coming-soon" element={<ComingSoon />} />
+            <Route path="/test" element={<Testing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/project/:projectId" element={<Project />} />
             <Route path="/profile" index element={<Profile />} />
