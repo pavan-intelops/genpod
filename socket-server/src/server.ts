@@ -5,6 +5,7 @@ import { Server as SocketIOServer } from 'socket.io';
 import { createServer } from 'http';
 import { spawn } from 'node-pty';
 import cors from 'cors';
+import logger from './logger';
 const app = express();
 
 function bootstrap() {
@@ -27,8 +28,7 @@ function bootstrap() {
 
   // Socket.IO connection
   io.on('connection', socket => {
-    console.log('A user connected');
-
+    logger.info('User connected');
     const ptyProcess = spawn(
       process.platform === 'win32' ? 'cmd.exe' : 'bash',
       [],
@@ -42,7 +42,6 @@ function bootstrap() {
     );
 
     ptyProcess.onData(data => {
-      console.log('data: ', data);
       socket.emit('output', data);
     });
 
@@ -52,16 +51,25 @@ function bootstrap() {
 
     socket.on('disconnect', () => {
       ptyProcess.kill();
-      console.log('User disconnected');
+      logger.info('User disconnected');
     });
   });
 
   // Start server
-  console.log('Starting Socket Server...');
+  logger.warn('Starting server...');
   const PORT = process.env.PORT || process.env.SOCKET_PORT || 3000;
   server.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    logger.info(`Server started on port ${PORT}`);
+  });
+
+  // if sigterm close the port and server
+  process.on('SIGTERM', () => {
+    logger.warn('SIGTERM received, closing server');
+    server.close(() => {
+      logger.info('Server closed');
+    });
   });
 }
+
 bootstrap();
 export default bootstrap;
