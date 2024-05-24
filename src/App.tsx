@@ -23,6 +23,9 @@ import Layout from './pages/testing/Layout';
 import { useFeatureFlagStore } from './store/useFeatureFlagStore';
 import { runEnvVariablesCheck } from './utils/checkEnvVariables';
 import { pingCheckServer } from './utils/pingCheckServer';
+import { useFeatureFlagStore } from './store/useFeatureFlagStore';
+import ComingSoon from './pages/coming-soon/ComingSoon';
+import Genval from './pages/genval/Genval';
 
 function App() {
   const { syncProjects, syncGitPlatforms } = useSyncActions();
@@ -48,6 +51,7 @@ function App() {
         <ModalsProvider>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/genval" element={<Genval />} />
             <Route path="/coming-soon" element={<ComingSoon />} />
             <Route path="/test" element={<Layout />} />
             <Route path="/login" element={<Login />} />
