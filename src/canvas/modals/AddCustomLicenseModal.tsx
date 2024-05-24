@@ -57,7 +57,6 @@ const AddCustomLicenseForm = () => {
                 // { value: 'file', label: 'File' },
                 // { value: 'path', label: 'Path' }
               ]}
-              disabled
             />
             {watch(`licenses.${index}.type` as const) === 'file' ? (
               <FileInput
