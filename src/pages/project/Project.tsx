@@ -1,4 +1,3 @@
-import { Anchor, Breadcrumbs, Button, Flex, Grid } from '@mantine/core';
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useCodeOperations from 'src/api/useCodeOperations/useCodeOperations';
@@ -7,14 +6,27 @@ import Flow from 'src/canvas/Flow';
 import { useFlowsStore } from 'src/canvas/store/flowstore';
 import { CustomEdge, CustomNode } from 'src/canvas/store/types.store';
 import Layout from 'src/components/common/layout/Layout';
-import SideNavbar from 'src/components/common/side-nav/SideNavbar';
 import { sideNavData } from 'src/components/common/side-nav/data';
-import type { Project } from 'src/components/user/projects/types';
+import SideNavbar from 'src/components/common/side-nav/SideNavbar';
 import { emitter } from 'src/emitter';
 import HydrationZustand from 'src/hoc/hydrationZustand';
 import Protected from 'src/hoc/protected';
 import { InAppNotifications } from 'src/notifications';
 import { useProjectStore } from 'src/store/useProjectStore';
+
+import {
+  Anchor,
+  Breadcrumbs,
+  Button,
+  Flex,
+  Grid,
+  rem,
+  Tabs
+} from '@mantine/core';
+
+import type { Project } from 'src/components/user/projects/types';
+import TerminalComponent from '../testing/Testing';
+import { IconHttpConnect, IconPhoto } from '@tabler/icons-react';
 interface ProjectParams {
   projectId: string;
 }
@@ -124,18 +136,10 @@ export default function Project() {
       updateProject(params.projectId, formattedProject);
     };
 
-    // const interval = setInterval(() => {
-    //   handleSaveToServer();
-    // }, 3000);
     emitter.on('nodesChange', handleSaveToServer);
-    // return () => clearInterval(interval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getFlow, params.projectId, projects, updateProject]);
 
   const handleGenerateClick = async () => {
-    console.log('====================================');
-    console.log('Generating code');
-    console.log('====================================');
     await generateCode({
       onFail(args) {
         InAppNotifications.code.failedToGenerate(args?.message);
@@ -158,6 +162,7 @@ export default function Project() {
       {item.title}
     </Anchor>
   ));
+  const iconStyle = { width: rem(12), height: rem(12) };
   return (
     <Protected>
       <Layout>
@@ -176,7 +181,39 @@ export default function Project() {
               <Button onClick={handleGenerateClick}>Generate</Button>
             </Flex>
             <HydrationZustand>
-              <Flow />
+              <Tabs variant="outline" defaultValue="terminal">
+                <Tabs.List>
+                  <Tabs.Tab
+                    value="flow"
+                    leftSection={<IconHttpConnect style={iconStyle} />}
+                  >
+                    Flow
+                  </Tabs.Tab>
+                  <Tabs.Tab
+                    value="terminal"
+                    leftSection={<IconPhoto style={iconStyle} />}
+                  >
+                    Terminal
+                  </Tabs.Tab>
+                </Tabs.List>
+
+                <Tabs.Panel
+                  value="terminal"
+                  style={{
+                    height: 'calc(98vh - 120px)'
+                  }}
+                >
+                  <TerminalComponent />
+                </Tabs.Panel>
+                <Tabs.Panel
+                  value="flow"
+                  style={{
+                    height: 'calc(100vh - 120px)'
+                  }}
+                >
+                  <Flow />
+                </Tabs.Panel>
+              </Tabs>
             </HydrationZustand>
           </Grid.Col>
         </Grid>

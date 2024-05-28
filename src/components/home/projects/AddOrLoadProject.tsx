@@ -76,7 +76,9 @@ export default function AddOrLoadProject() {
         edges: {},
         nodes: {}
       },
-      metadata: {}
+      metadata: {
+        licenses: []
+      }
     };
     const { error } = await postProject(project);
     if (error) {

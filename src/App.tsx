@@ -15,6 +15,7 @@ import { useSyncActions } from './hooks/useSyncActions';
 import { InAppNotifications } from './notifications';
 import PageNotFound from './pages/404';
 import ComingSoon from './pages/coming-soon/ComingSoon';
+import Genval from './pages/genval/Genval';
 import Home from './pages/home/Home';
 import Login from './pages/login/Login';
 import Profile from './pages/profile/Profile';
@@ -23,9 +24,6 @@ import Layout from './pages/testing/Layout';
 import { useFeatureFlagStore } from './store/useFeatureFlagStore';
 import { runEnvVariablesCheck } from './utils/checkEnvVariables';
 import { pingCheckServer } from './utils/pingCheckServer';
-import { useFeatureFlagStore } from './store/useFeatureFlagStore';
-import ComingSoon from './pages/coming-soon/ComingSoon';
-import Genval from './pages/genval/Genval';
 
 function App() {
   const { syncProjects, syncGitPlatforms } = useSyncActions();

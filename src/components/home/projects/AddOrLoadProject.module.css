@@ -3,8 +3,9 @@
     var(--mantine-color-gray-0),
     var(--mantine-color-dark-6)
   );
-  width: 100%;
   padding: 1rem;
+  margin-top: var(--mantine-spacing-xl);
+  margin-right: var(--mantine-spacing-xl);
 }
 
 .formContainer {
