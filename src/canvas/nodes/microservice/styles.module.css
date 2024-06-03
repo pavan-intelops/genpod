@@ -21,3 +21,7 @@
 	border: 1px solid var(--mantine-color-gray-4);
 	border-radius: var(--mantine-radius-md);
 }
+
+.codeEditor{
+  flex-grow:var(--tabs-panel-grow)
+}

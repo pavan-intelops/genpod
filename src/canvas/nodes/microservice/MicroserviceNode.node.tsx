@@ -11,6 +11,7 @@ import { useFlowsStore } from '../../store/flowstore';
 import { CustomNodeFormData, NodeTypes } from '../../store/types.store';
 import MicroServiceNodeDrawerForm from './form/MicroserviceNode.drawer.form';
 import classes from './styles.module.css';
+import MicroserviceDrawer from './Microservice.drawer';
 
 export default function MicroserviceNode(props: NodeProps<CustomNodeFormData>) {
   const { selected, id } = props;
@@ -70,18 +71,7 @@ export default function MicroserviceNode(props: NodeProps<CustomNodeFormData>) {
             <Text c="gray.0">{getNodeFormData(id)?.description}</Text>
           </Box>
         </Flex>
-        <Drawer
-          closeOnClickOutside={false}
-          closeOnEscape={false}
-          opened={opened}
-          onClose={close}
-          title="Fill Node Form Details"
-          position="right"
-          size="lg"
-          overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
-        >
-          <MicroServiceNodeDrawerForm nodeId={id} onSubmit={() => {}} />
-        </Drawer>
+        <MicroserviceDrawer opened={opened} close={close} nodeId={id} />
         <Handle type="source" position={Position.Left} id="a" />
       </>
     );
