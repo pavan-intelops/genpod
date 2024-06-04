@@ -2,6 +2,7 @@ import { autocompletion, CompletionContext } from '@codemirror/autocomplete';
 import { langs } from '@uiw/codemirror-extensions-langs';
 import CodeMirror, { basicSetup, ViewUpdate } from '@uiw/react-codemirror';
 import React from 'react';
+import CodeEditor from 'src/components/common/code-editor';
 import LayoutWithSideBar from 'src/components/common/layout/LayoutWithSideBar';
 import Protected from 'src/hoc/protected';
 
@@ -34,26 +35,7 @@ version: 3.0.0
   return (
     <Protected>
       <LayoutWithSideBar>
-        <CodeMirror
-          value={value.trim()}
-          height="700px"
-          extensions={[
-            basicSetup({
-              autocompletion: true,
-              bracketMatching: true,
-              closeBrackets: true,
-              defaultKeymap: true
-            }),
-            langs.yaml().data.of({
-              autocomplete: myCompletions
-            }),
-            autocompletion({
-              override: [myCompletions]
-            })
-          ]}
-          onChange={onChange}
-          theme="dark"
-        />
+        <CodeEditor />
       </LayoutWithSideBar>
     </Protected>
   );
