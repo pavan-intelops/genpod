@@ -3,6 +3,8 @@ import { IconCloudDataConnection, IconCode } from '@tabler/icons-react';
 import CodeEditor from 'src/components/common/code-editor';
 import MicroServiceNodeDrawerForm from './form/MicroserviceNode.drawer.form';
 import styles from './styles.module.css';
+import { useState } from 'react';
+import axiosFileServer from 'src/api/axiosFileServer';
 
 interface MicroserviceDrawerProps {
   opened: boolean;
@@ -15,6 +17,19 @@ export default function MicroserviceDrawer({
   close
 }: MicroserviceDrawerProps) {
   const iconStyle = { width: rem(12), height: rem(12) };
+
+  const [value, setValue] = useState('');
+  const onCodeChange = (content: string) => {
+    setValue(content);
+    axiosFileServer.post(
+      '/create-file',
+      JSON.stringify({
+        fileName: 'microservice/bla',
+        fileType: 'yaml',
+        content
+      })
+    );
+  };
 
   return (
     <Drawer
@@ -49,7 +64,7 @@ export default function MicroserviceDrawer({
 
         <Tabs.Panel value="code-editor">
           <div className={styles.codeEditor}>
-            <CodeEditor />
+            <CodeEditor onChange={onCodeChange} value={value} />
           </div>
         </Tabs.Panel>
       </Tabs>

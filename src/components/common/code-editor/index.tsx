@@ -1,10 +1,13 @@
 import { autocompletion, CompletionContext } from '@codemirror/autocomplete';
 import { langs } from '@uiw/codemirror-extensions-langs';
 import CodeMirror, { basicSetup, ViewUpdate } from '@uiw/react-codemirror';
-import React from 'react';
 
-export default function CodeEditor() {
-  const [value, setValue] = React.useState('');
+interface CodeEditorProps {
+  value: string;
+  onChange: (value: string, viewUpdate: ViewUpdate) => void;
+}
+
+export default function CodeEditor({ value, onChange }: CodeEditorProps) {
   const myCompletions = (context: CompletionContext) => {
     const word = context.matchBefore(/\w*/);
     if (!word) return null;
@@ -21,9 +24,7 @@ export default function CodeEditor() {
       ]
     };
   };
-  const onChange = React.useCallback((val: string, viewUpdate: ViewUpdate) => {
-    setValue(val);
-  }, []);
+
   return (
     <>
       <CodeMirror
