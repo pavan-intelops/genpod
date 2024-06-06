@@ -6,7 +6,7 @@ const logger = pino({
       colorize: true
     }
   },
-  name: 'file-server'
+  name: 'middleware'
 });
 
 export default logger;

@@ -1,5 +1,4 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Box, Button, Divider, Flex, Text, Tooltip } from '@mantine/core';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Checkbox, Select, TextInput } from 'react-hook-form-mantine';
 import { useNavigate } from 'react-router-dom';
@@ -9,11 +8,13 @@ import { useSyncActions } from 'src/hooks/useSyncActions';
 import { useProjectStore } from 'src/store/useProjectStore';
 import useUserStore from 'src/store/userStore';
 import { convertToSelectOptionItems } from 'src/utils/transformers';
-// skipcq: JS-C1003
 import * as z from 'zod';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Box, Button, Divider, Flex, Text, Tooltip } from '@mantine/core';
+
 import classes from './AddOrLoadProject.module.css';
 import { AddNewForm } from './AddOrLoadProject.types';
-import { useEffect } from 'react';
 
 const resolver = z.object({
   name: z.string().min(1, 'Project Name is required'),
