@@ -23,10 +23,11 @@ import {
   rem,
   Tabs
 } from '@mantine/core';
+import { IconHttpConnect, IconPhoto } from '@tabler/icons-react';
 
 import type { Project } from 'src/components/user/projects/types';
-import TerminalComponent from '../testing/Testing';
-import { IconHttpConnect, IconPhoto } from '@tabler/icons-react';
+import TerminalComponent from 'src/components/common/terminal/Terminal';
+import { initSocket } from 'src/utils/socket';
 interface ProjectParams {
   projectId: string;
 }
@@ -181,7 +182,7 @@ export default function Project() {
               <Button onClick={handleGenerateClick}>Generate</Button>
             </Flex>
             <HydrationZustand>
-              <Tabs variant="outline" defaultValue="terminal">
+              <Tabs variant="outline" defaultValue="flow">
                 <Tabs.List>
                   <Tabs.Tab
                     value="flow"

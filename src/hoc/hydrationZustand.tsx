@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 
 const HydrationZustand = ({ children }: { children: React.ReactNode }) => {
   const [isHydrated, setIsHydrated] = useState(false);
-  console.log('isHydrated: ', isHydrated);
 
   useEffect(() => {
     setIsHydrated(true);

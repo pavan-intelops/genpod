@@ -24,6 +24,7 @@ import Layout from './pages/testing/Layout';
 import { useFeatureFlagStore } from './store/useFeatureFlagStore';
 import { runEnvVariablesCheck } from './utils/checkEnvVariables';
 import { pingCheckServer } from './utils/pingCheckServer';
+import { initSocket } from './utils/socket';
 
 function App() {
   const { syncProjects, syncGitPlatforms } = useSyncActions();
@@ -33,6 +34,7 @@ function App() {
     syncProjects();
     syncGitPlatforms();
     fetchAllFeatureFlags();
+    initSocket();
     (async function () {
       const res = await pingCheckServer();
       if (!res) {
