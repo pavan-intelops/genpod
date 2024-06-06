@@ -119,7 +119,7 @@ export default function MicroServiceNodeDrawerForm(
           control={form.control}
         />
         <Button type="submit" mt="lg">
-          Submit
+          Save
         </Button>
       </form>
     </>

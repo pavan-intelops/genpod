@@ -24,8 +24,8 @@ export default function MicroserviceDrawer({
     axiosFileServer.post(
       '/create-file',
       JSON.stringify({
-        fileName: 'microservice/bla',
-        fileType: 'yaml',
+        fileName: 'folder/config',
+        fileType: 'json',
         content
       })
     );
@@ -54,7 +54,7 @@ export default function MicroserviceDrawer({
             value="code-editor"
             leftSection={<IconCode style={iconStyle} />}
           >
-            Code Editor
+            Requirements
           </Tabs.Tab>
         </Tabs.List>
 

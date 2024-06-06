@@ -136,7 +136,7 @@ export default function Flow() {
               leftSection={<IconCircleArrowUp />}
               onClick={handleSyncClick}
             >
-              Sync Code
+              Save Config
             </Button>
             <AddCustomLicenseModal />
           </Panel>
