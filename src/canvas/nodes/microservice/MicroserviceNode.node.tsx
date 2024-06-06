@@ -3,15 +3,14 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Handle, NodeProps, Position } from 'reactflow';
 
-import { Box, Drawer, Flex, Grid, Text } from '@mantine/core';
+import { Box, Flex, Grid, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconArrowForwardUp, IconEdit } from '@tabler/icons-react';
 
 import { useFlowsStore } from '../../store/flowstore';
 import { CustomNodeFormData, NodeTypes } from '../../store/types.store';
-import MicroServiceNodeDrawerForm from './form/MicroserviceNode.drawer.form';
-import classes from './styles.module.css';
 import MicroserviceDrawer from './Microservice.drawer';
+import classes from './styles.module.css';
 
 export default function MicroserviceNode(props: NodeProps<CustomNodeFormData>) {
   const { selected, id } = props;

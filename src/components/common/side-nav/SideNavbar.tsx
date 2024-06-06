@@ -1,3 +1,11 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import GenPodLogo from 'src/assets/logos/GenpodLogo';
+import { FEATURE_FLAG } from 'src/feature-flag-configs/types';
+import { FeatureFlagVariant } from 'src/store/types';
+import { useFeatureFlagStore } from 'src/store/useFeatureFlagStore';
+import useUserStore from 'src/store/userStore';
+
 import {
   ActionIcon,
   Autocomplete,
@@ -14,21 +22,14 @@ import {
   IconMoon,
   IconSearch,
   IconSun,
-  IconSwitchHorizontal,
   IconUser,
   IconX
 } from '@tabler/icons-react';
-import { useState } from 'react';
+
 import { NavBarLinksGroup } from '../nav-links-group/NavLinksGroup';
-import classes from './SideNavbar.module.css';
-import { SideNavData } from './data';
-import { useFeatureFlagStore } from 'src/store/useFeatureFlagStore';
-import { FEATURE_FLAG } from 'src/feature-flag-configs/types';
 import { NavBarLinksGroupForComingSoon } from '../nav-links-group/NavLinksGroupForComingSoon';
-import { FeatureFlagVariant } from 'src/store/types';
-import GenPodLogo from 'src/assets/logos/GenpodLogo';
-import useUserStore from 'src/store/userStore';
-import { Link, useNavigate } from 'react-router-dom';
+import { SideNavData } from './data';
+import classes from './SideNavbar.module.css';
 
 interface SideNavbarProps {
   data: SideNavData;
@@ -45,7 +46,6 @@ export default function SideNavbar({ data }: SideNavbarProps) {
     setIsNavOpen(!isNavOpen);
   };
   const { logout } = useUserStore();
-  const navigate = useNavigate();
 
   const links = data.map(item => {
     if (flagConfig.features[item.id] === 'hidden') return null;

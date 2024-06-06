@@ -27,7 +27,6 @@ import { IconHttpConnect, IconPhoto } from '@tabler/icons-react';
 
 import type { Project } from 'src/components/user/projects/types';
 import TerminalComponent from 'src/components/common/terminal/Terminal';
-import { initSocket } from 'src/utils/socket';
 interface ProjectParams {
   projectId: string;
 }
