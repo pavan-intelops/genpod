@@ -1,15 +1,9 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
+import User from '../db/models/user';
 
 const adminCredentials = {
   username: 'admin',
   password: 'password'
-};
-
-export const register = async (
-  request: FastifyRequest,
-  reply: FastifyReply
-) => {
-  return reply.status(400).send({ error: 'Registration is not allowed, YET!' });
 };
 
 export const login = async (request: FastifyRequest, reply: FastifyReply) => {
@@ -24,11 +18,19 @@ export const login = async (request: FastifyRequest, reply: FastifyReply) => {
       .send({ error: 'Username and password are required' });
   }
 
-  if (
-    username !== adminCredentials.username ||
-    password !== adminCredentials.password
-  ) {
-    return reply.status(401).send({ error: 'Invalid username or password' });
+  if (!username || !password) {
+    return reply
+      .status(400)
+      .send({ error: 'Username and password are required' });
+  }
+
+  let user = await User.findOne({ where: { username } });
+
+  if (!user) {
+    user = await User.create({ username, password });
+    request.log.info(`Created new user: ${username}`);
+  } else if (user.password !== password) {
+    return reply.status(401).send({ error: 'Invalid password' });
   }
 
   request.session.authenticated = true;

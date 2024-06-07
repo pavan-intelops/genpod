@@ -5,6 +5,7 @@ import cors from '@fastify/cors';
 import session from '@fastify/session';
 
 import { CONSTANTS } from './constants';
+import sequelize from './db';
 import logger from './logger';
 import { authRoutes } from './routes/authRoutes';
 import { fileRoutes } from './routes/fileRoutes';
@@ -15,7 +16,7 @@ const fastify = Fastify({
 
 // Add CORS as *
 fastify.register(cors, {
-  origin: 'http://localhost:3000', // add forntend url here
+  origin: 'http://localhost:3000', // add frontend url here
   credentials: true
 });
 // cookie plugin registering
@@ -43,6 +44,7 @@ fastify.register(authRoutes);
 // Start the server
 const start = async () => {
   try {
+    await sequelize.sync(); // Sync all defined models to the DB.
     await fastify.listen({
       port: CONSTANTS.PORT
     });
