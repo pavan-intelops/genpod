@@ -27,12 +27,11 @@ import { pingCheckServer } from './utils/pingCheckServer';
 import { initSocket } from './utils/socket';
 
 function App() {
-  const { syncProjects, syncGitPlatforms } = useSyncActions();
+  const { syncProjects } = useSyncActions();
   const { fetchAllFeatureFlags, areFeatureFlagsLoaded } = useFeatureFlagStore();
   useEffect(() => {
     runEnvVariablesCheck();
     syncProjects();
-    syncGitPlatforms();
     fetchAllFeatureFlags();
     initSocket();
     (async function () {

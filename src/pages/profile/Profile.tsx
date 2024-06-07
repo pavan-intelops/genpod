@@ -1,11 +1,11 @@
 import { Box, Tabs, Text } from '@mantine/core';
-import { IconFileSettings, IconGitBranch } from '@tabler/icons-react';
+import { IconFileSettings } from '@tabler/icons-react';
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Layout from 'src/components/common/layout/Layout';
 import User from 'src/components/user';
-import classes from './profile.module.css';
 import Protected from 'src/hoc/protected';
+import classes from './profile.module.css';
 
 interface ProfileProps {}
 const Profile: React.FC<ProfileProps> = () => {
@@ -32,16 +32,10 @@ const Profile: React.FC<ProfileProps> = () => {
               <Tabs.Tab value="projects" leftSection={<IconFileSettings />}>
                 Projects
               </Tabs.Tab>
-              <Tabs.Tab value="gitPlatforms" leftSection={<IconGitBranch />}>
-                GIT Platforms
-              </Tabs.Tab>
             </Tabs.List>
 
             <Tabs.Panel value="projects">
               <User.Projects />
-            </Tabs.Panel>
-            <Tabs.Panel value="gitPlatforms">
-              <User.GitPlatforms />
             </Tabs.Panel>
           </Tabs>
         </Box>

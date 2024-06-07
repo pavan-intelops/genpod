@@ -34,7 +34,15 @@ export const login = async (request: FastifyRequest, reply: FastifyReply) => {
   request.session.authenticated = true;
   request.session.user = username;
 
-  reply.status(200).send({ message: 'Logged in successfully' });
+  reply.status(200).send({
+    message: 'Logged in successfully',
+    data: {
+      user: {
+        id: username,
+        username: username
+      }
+    }
+  });
 };
 
 export const logout = async (request: FastifyRequest, reply: FastifyReply) => {

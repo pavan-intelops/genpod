@@ -33,10 +33,9 @@ export default function AddOrLoadProject() {
     resolver: zodResolver(resolver),
     mode: 'onChange'
   });
-  const { syncProjects, syncGitPlatforms } = useSyncActions();
+  const { syncProjects } = useSyncActions();
 
   useEffect(() => {
-    syncGitPlatforms();
     syncProjects();
   }, []);
 

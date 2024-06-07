@@ -13,7 +13,8 @@ export interface UserStore {
 }
 
 export interface PersonalDetails {
-  email: string;
+  username: string;
+  id: string;
 }
 
 export type ProjectStoreState = {

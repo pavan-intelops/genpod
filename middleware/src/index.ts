@@ -15,33 +15,21 @@ const fastify = Fastify({
 
 // Add CORS as *
 fastify.register(cors, {
-  origin: '*'
+  origin: 'http://localhost:3000', // add forntend url here
+  credentials: true
 });
 // cookie plugin registering
 fastify.register(cookie);
 
 // Register session plugin
 fastify.register(session, {
-  secret: 'dfsfds',
+  secret: CONSTANTS.SESSION_SECRET,
   cookieName: 'sessionId',
   cookie: {
-    secure: false
+    secure: false,
+    httpOnly: true
   }
 });
-
-fastify.addContentTypeParser(
-  'application/json',
-  { parseAs: 'string' },
-  function (req, body, done) {
-    try {
-      var json = JSON.parse(body as string);
-      done(null, json);
-    } catch (err: any) {
-      err.statusCode = 400;
-      done(err, undefined);
-    }
-  }
-);
 
 fastify.get('/', async (request, reply) => {
   reply.status(200).send({ message: 'File Server is running' });

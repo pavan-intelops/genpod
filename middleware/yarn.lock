@@ -34,11 +34,6 @@
     fastify-plugin "^4.0.0"
     mnemonist "0.39.6"
 
-"@fastify/csrf@^6.3.0":
-  version "6.3.0"
-  resolved "https://registry.yarnpkg.com/@fastify/csrf/-/csrf-6.3.0.tgz#6ba7b157089269614808c939ffa985abb6e9028b"
-  integrity sha512-6w0gZZf4an8SGRYUS0nECTJb8eI45h/YIFkf2GJnba+mS+aJg0ArpS6Y8HXgLVvPxUGtQZYNB2z+UpISJ3v3Ug==
-
 "@fastify/error@^3.3.0", "@fastify/error@^3.4.0":
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/@fastify/error/-/error-3.4.1.tgz#b14bb4cac3dd4ec614becbc643d1511331a6425c"

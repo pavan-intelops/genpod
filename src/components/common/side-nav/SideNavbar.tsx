@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useUserOperations } from 'src/api/useUserOperations';
 import GenPodLogo from 'src/assets/logos/GenpodLogo';
 import { FEATURE_FLAG } from 'src/feature-flag-configs/types';
 import { FeatureFlagVariant } from 'src/store/types';
@@ -45,7 +46,8 @@ export default function SideNavbar({ data }: SideNavbarProps) {
   const handleNavToggle = () => {
     setIsNavOpen(!isNavOpen);
   };
-  const { logout } = useUserStore();
+  const { logout: clearLocalStorageToLogout } = useUserStore();
+  const { logout: networkCallToLogout } = useUserOperations();
 
   const links = data.map(item => {
     if (flagConfig.features[item.id] === 'hidden') return null;
@@ -132,7 +134,8 @@ export default function SideNavbar({ data }: SideNavbarProps) {
                 to="/login"
                 className={classes.link}
                 onClick={() => {
-                  logout();
+                  clearLocalStorageToLogout();
+                  networkCallToLogout();
                 }}
               >
                 <IconLogout className={classes.linkIcon} stroke={1.5} />

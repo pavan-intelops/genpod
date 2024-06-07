@@ -4,7 +4,7 @@ import CodeEditor from 'src/components/common/code-editor';
 import MicroServiceNodeDrawerForm from './form/MicroserviceNode.drawer.form';
 import styles from './styles.module.css';
 import { useState } from 'react';
-import axiosFileServer from 'src/api/axiosFileServer';
+import axiosMiddleware from 'src/api/axiosFileServer';
 
 interface MicroserviceDrawerProps {
   opened: boolean;
@@ -21,7 +21,7 @@ export default function MicroserviceDrawer({
   const [value, setValue] = useState('');
   const onCodeChange = (content: string) => {
     setValue(content);
-    axiosFileServer.post(
+    axiosMiddleware.post(
       '/create-file',
       JSON.stringify({
         fileName: 'folder/config',
