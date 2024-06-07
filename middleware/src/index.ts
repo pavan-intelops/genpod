@@ -1,8 +1,13 @@
 import Fastify from 'fastify';
+
+import cookie from '@fastify/cookie';
 import cors from '@fastify/cors';
-import { fileRoutes } from './routes/fileRoutes';
+import session from '@fastify/session';
+
 import { CONSTANTS } from './constants';
 import logger from './logger';
+import { authRoutes } from './routes/authRoutes';
+import { fileRoutes } from './routes/fileRoutes';
 
 const fastify = Fastify({
   logger: logger
@@ -11,6 +16,17 @@ const fastify = Fastify({
 // Add CORS as *
 fastify.register(cors, {
   origin: '*'
+});
+// cookie plugin registering
+fastify.register(cookie);
+
+// Register session plugin
+fastify.register(session, {
+  secret: 'dfsfds',
+  cookieName: 'sessionId',
+  cookie: {
+    secure: false
+  }
 });
 
 fastify.addContentTypeParser(
@@ -33,6 +49,8 @@ fastify.get('/', async (request, reply) => {
 
 // Register routes
 fastify.register(fileRoutes);
+// Register auth routes
+fastify.register(authRoutes);
 
 // Start the server
 const start = async () => {

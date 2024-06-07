@@ -7,7 +7,9 @@
     "dev": "npx nodemon src/index.ts "
   },
   "dependencies": {
+    "@fastify/cookie": "^9.3.1",
     "@fastify/cors": "^9.0.1",
+    "@fastify/session": "^10.9.0",
     "fastify": "^4.27.0",
     "pino": "^9.1.0",
     "pino-pretty": "^11.1.0",
