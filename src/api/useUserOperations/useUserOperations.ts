@@ -1,4 +1,4 @@
-import axiosMiddleware from '../axiosFileServer';
+import axiosMiddleware from '../axiosMiddleware';
 import { UserDTO } from './useUserOperations.types';
 
 export function useUserOperations() {
@@ -7,13 +7,10 @@ export function useUserOperations() {
     password: string
   ): Promise<UserDTO | null> => {
     try {
-      const response = await axiosMiddleware.post(
-        '/login',
-        JSON.stringify({
-          username,
-          password
-        })
-      );
+      const response = await axiosMiddleware.post('/login', {
+        username,
+        password
+      });
 
       if (response.status === 200) {
         const parsedData = JSON.parse(response.data) as {

@@ -113,16 +113,15 @@ export default function Project() {
   }, [setActiveProject]);
 
   const { generateCode } = useCodeOperations();
+  const projectDetails = projects.find(
+    project => project.id == params.projectId
+  );
   useEffect(() => {
     if (!fetchProjectCompleted) return;
     const handleSaveToServer = async () => {
       const currentFlow = getFlow();
 
       if (!currentFlow) return;
-
-      const projectDetails = projects.find(
-        project => project.id === params.projectId
-      );
 
       if (!projectDetails) return;
       const formattedProject = convertFlowDataToProject({
@@ -150,11 +149,12 @@ export default function Project() {
     });
   };
 
+  console.log('projectDetails: ', projectDetails);
   const items = [
     { title: 'Home', href: '/' },
     {
-      title: params.projectId,
-      href: `/project/${params.projectId}`,
+      title: projectDetails?.name,
+      href: `/project/${projectDetails?.id}`,
       active: false
     }
   ].map((item, index) => (

@@ -9,6 +9,7 @@ import sequelize from './db';
 import logger from './logger';
 import { authRoutes } from './routes/authRoutes';
 import { fileRoutes } from './routes/fileRoutes';
+import { projectRoutes } from './routes/projectRoutes';
 
 const fastify = Fastify({
   logger: logger
@@ -31,20 +32,24 @@ fastify.register(session, {
     httpOnly: true
   }
 });
-
 fastify.get('/', async (request, reply) => {
-  reply.status(200).send({ message: 'File Server is running' });
+  reply.status(200).send({ message: 'Middleware Server is running' });
 });
 
 // Register routes
 fastify.register(fileRoutes);
+// Register routes
+fastify.register(projectRoutes);
 // Register auth routes
 fastify.register(authRoutes);
 
 // Start the server
 const start = async () => {
   try {
-    await sequelize.sync(); // Sync all defined models to the DB.
+    await sequelize.sync({
+      alter: true,
+      force: true
+    }); // Sync all defined models to the DB.
     await fastify.listen({
       port: CONSTANTS.PORT
     });

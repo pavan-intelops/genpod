@@ -7,5 +7,5 @@ export interface Project {
     nodes: CustomNode[];
     edges: CustomEdge[];
   };
-  requirements: string; // basically a string version of json or yaml
+  requirements?: string; // basically a string version of json or yaml
 }

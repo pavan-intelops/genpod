@@ -1,11 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import User from '../db/models/user';
 
-const adminCredentials = {
-  username: 'admin',
-  password: 'password'
-};
-
 export const login = async (request: FastifyRequest, reply: FastifyReply) => {
   const { username, password } = request.body as {
     username: string;

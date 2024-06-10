@@ -40,14 +40,14 @@ export default function AddOrLoadProject() {
   }, []);
 
   const handleOnSubmit = addNewForm.handleSubmit(async data => {
+    console.log('data: ', data);
     const project: Project = {
       id: '',
       name: data.name,
       flowData: {
         nodes: [],
         edges: []
-      },
-      requirements: ''
+      }
     };
     const { error } = await postProject(project);
     if (error) {

@@ -1,10 +1,12 @@
-import { Box, Tabs, Text } from '@mantine/core';
-import { IconFileSettings } from '@tabler/icons-react';
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Layout from 'src/components/common/layout/Layout';
 import User from 'src/components/user';
 import Protected from 'src/hoc/protected';
+
+import { Box, Tabs, Text } from '@mantine/core';
+import { IconFileSettings } from '@tabler/icons-react';
+
 import classes from './profile.module.css';
 
 interface ProfileProps {}

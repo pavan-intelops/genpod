@@ -4,7 +4,7 @@ import CodeEditor from 'src/components/common/code-editor';
 import MicroServiceNodeDrawerForm from './form/MicroserviceNode.drawer.form';
 import styles from './styles.module.css';
 import { useState } from 'react';
-import axiosMiddleware from 'src/api/axiosFileServer';
+import axiosMiddleware from 'src/api/axiosMiddleware';
 
 interface MicroserviceDrawerProps {
   opened: boolean;
