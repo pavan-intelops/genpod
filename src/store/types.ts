@@ -1,9 +1,9 @@
+import { CustomEdge, CustomNode } from 'src/canvas/store/types.store';
 import { Project } from 'src/components/user/projects/types';
 import {
   FEATURE_FLAG,
   FeatureFlagsState
 } from 'src/feature-flag-configs/types';
-
 
 export interface UserStore {
   personalDetails: PersonalDetails;
@@ -52,4 +52,17 @@ export type FeatureFlagStoreActions = {
   getFeatureFlag: (id: FEATURE_FLAG) => FeatureFlagsList;
   removeFeatureFlag: (id: FEATURE_FLAG) => void;
   fetchAllFeatureFlags: () => void;
+};
+
+export type ProjectSnapshot = {
+  createdAt: string;
+  id: number;
+  projectId: number;
+  userId: number;
+  flow: {
+    nodes: CustomNode[];
+    edges: CustomEdge[];
+  };
+  name: string;
+  updatedAt: string;
 };

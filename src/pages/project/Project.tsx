@@ -7,12 +7,13 @@ import Layout from 'src/components/common/layout/Layout';
 import { sideNavData } from 'src/components/common/side-nav/data';
 import SideNavbar from 'src/components/common/side-nav/SideNavbar';
 import TerminalComponent from 'src/components/common/terminal/Terminal';
+import Snapshots from 'src/components/home/projects/Snapshots';
 import HydrationZustand from 'src/hoc/hydrationZustand';
 import Protected from 'src/hoc/protected';
 import { useProjectStore } from 'src/store/useProjectStore';
 
 import { Anchor, Breadcrumbs, Flex, Grid, rem, Tabs } from '@mantine/core';
-import { IconHttpConnect, IconPhoto } from '@tabler/icons-react';
+import { IconHttpConnect, IconList, IconPhoto } from '@tabler/icons-react';
 
 interface ProjectParams {
   projectId: string;
@@ -23,30 +24,22 @@ interface ProjectParams {
  */
 export default function Project() {
   const params = useParams() as unknown as ProjectParams;
-  const { getProject, updateProject } = useProjectOperations();
-  const { addFlow, flows, activeFlow, setNodes, setEdges } = useFlowsStore();
+  const { getProject } = useProjectOperations();
+  const { addFlow, setNodes, setEdges } = useFlowsStore();
   const setActiveProject = useProjectStore(state => state.setActiveProject);
   const projects = useProjectStore(state => state.projects);
 
-  const [fetchProjectCompleted, setFetchProjectCompleted] = useState(false);
-
-  const getFlow = useCallback(() => {
-    if (!flows || !activeFlow) return;
-    return flows[activeFlow];
-  }, [flows, activeFlow]);
-
   useEffect(() => {
     addFlow('flow' + params.projectId);
-    setActiveProject && setActiveProject(params.projectId);
+    setActiveProject(params.projectId);
     (async function () {
       const { data } = await getProject(params.projectId);
       if (!data) return;
-      setFetchProjectCompleted(true);
       const { edges, nodes } = data.flow;
       setNodes(nodes);
       setEdges(edges);
     })();
-  }, [setActiveProject]);
+  }, []);
 
   const projectDetails = projects.find(
     project => project.id == params.projectId
@@ -97,6 +90,12 @@ export default function Project() {
                   >
                     Terminal
                   </Tabs.Tab>
+                  <Tabs.Tab
+                    value="snapshots"
+                    leftSection={<IconList style={iconStyle} />}
+                  >
+                    Snapshots
+                  </Tabs.Tab>
                 </Tabs.List>
 
                 <Tabs.Panel
@@ -114,6 +113,14 @@ export default function Project() {
                   }}
                 >
                   <Flow />
+                </Tabs.Panel>
+                <Tabs.Panel
+                  value="snapshots"
+                  style={{
+                    height: 'calc(100vh - 120px)'
+                  }}
+                >
+                  <Snapshots />
                 </Tabs.Panel>
               </Tabs>
             </HydrationZustand>

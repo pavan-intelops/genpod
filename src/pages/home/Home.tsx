@@ -1,5 +1,4 @@
 import { Text } from '@mantine/core';
-import React from 'react';
 import LayoutWithSideBar from 'src/components/common/layout/LayoutWithSideBar';
 import AddOrLoadProject from 'src/components/home/projects/AddOrLoadProject';
 import Protected from 'src/hoc/protected';

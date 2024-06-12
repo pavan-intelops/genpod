@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from 'fastify';
-import User from '../db/models/user';
+import User from 'src/db/models/user';
 
 export const attachUser = async (
   request: FastifyRequest,

@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-
-import Project from '../db/models/project';
+import Project from 'src/db/models/project';
+import { ProjectSnapshotQuery } from './types';
+import ProjectSnapshot from 'src/db/models/projectSnapshot';
 
 export const createProject = async (
   request: FastifyRequest,
@@ -65,4 +66,29 @@ export const getAllProjects = async (
 ) => {
   const projects = await Project.findAll();
   reply.status(200).send(projects);
+};
+
+export const getProjectSnapshots = async (
+  request: FastifyRequest,
+  reply: FastifyReply
+) => {
+  const userId = request.user?.id!;
+  const projectId = (request.params as { id: string }).id;
+  const count = (request.query as ProjectSnapshotQuery).count || '10';
+  const orderBy =
+    (request.query as ProjectSnapshotQuery).orderBy === 'asc' ? 'ASC' : 'DESC';
+
+  try {
+    const snapshots = await ProjectSnapshot.findAll({
+      where: { userId, projectId },
+      order: [['createdAt', orderBy]],
+      limit: parseInt(count)
+    });
+    reply.status(200).send({
+      message: 'Snapshots fetched successfully',
+      snapshots
+    });
+  } catch (error) {
+    reply.status(500).send({ error: 'Failed to fetch snapshots' });
+  }
 };

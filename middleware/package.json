@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "npx nodemon src/index.ts "
+    "dev": "npx nodemon --config nodemon.json"
   },
   "dependencies": {
     "@fastify/cookie": "^9.3.1",
@@ -17,6 +17,7 @@
     "sequelize": "^6.37.3",
     "sqlite3": "^5.1.7",
     "ts-node": "^10.9.2",
+    "tsx": "^4.15.2",
     "typescript": "^5.4.5"
   },
   "devDependencies": {

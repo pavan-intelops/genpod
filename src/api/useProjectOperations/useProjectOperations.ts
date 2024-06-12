@@ -1,6 +1,7 @@
 import { Project } from 'src/components/user/projects/types';
 import { UseOperationsOptions, UseOperationsReturnType } from '../api.types';
 import axiosMiddleware from '../axiosMiddleware';
+import { ProjectSnapshot } from 'src/store/types';
 
 export const useProjectOperations = () => {
   const postProject = async (
@@ -75,11 +76,39 @@ export const useProjectOperations = () => {
       return { error };
     }
   };
+
+  const getProjectSnapshots = async (
+    projectId: string,
+    params?: { count: string; orderBy: string },
+    options?: UseOperationsOptions<ProjectSnapshot[]>
+  ): UseOperationsReturnType<{
+    message: string;
+    snapshots: ProjectSnapshot[];
+  }> => {
+    try {
+      const { data } = await axiosMiddleware.get(
+        `/projects/${projectId}/snapshots`,
+        {
+          params: {
+            projectId,
+            count: params?.count || '10',
+            orderBy: params?.orderBy || 'asc'
+          }
+        }
+      );
+      options?.onSuccess?.(data);
+      return { data: JSON.parse(data) };
+    } catch (error) {
+      options?.onFail?.(error);
+      return { error };
+    }
+  };
   return {
     postProject,
     getProjects,
     getProject,
     updateProject,
-    deleteProject
+    deleteProject,
+    getProjectSnapshots
   };
 };
