@@ -1,6 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../index';
 import User from './user';
+import ProjectSnapshot from './projectSnapshot';
 
 interface ProjectAttributes {
   id: number;
@@ -52,7 +53,18 @@ Project.init(
   },
   {
     sequelize,
-    tableName: 'projects'
+    tableName: 'projects',
+    hooks: {
+      afterUpdate: async (project: Project, options) => {
+        await ProjectSnapshot.create({
+          projectId: project.id,
+          name: project.name,
+          flow: project.flow,
+          userId: project.userId,
+          createdAt: new Date()
+        });
+      }
+    }
   }
 );
 
