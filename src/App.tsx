@@ -11,7 +11,6 @@ import { ReactFlowProvider } from 'reactflow';
 import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
 
-import { useSyncActions } from './hooks/useSyncActions';
 import { InAppNotifications } from './notifications';
 import PageNotFound from './pages/404';
 import ComingSoon from './pages/coming-soon/ComingSoon';
@@ -27,11 +26,9 @@ import { pingCheckServer } from './utils/pingCheckServer';
 import { initSocket } from './utils/socket';
 
 function App() {
-  const { syncProjects } = useSyncActions();
   const { fetchAllFeatureFlags, areFeatureFlagsLoaded } = useFeatureFlagStore();
   useEffect(() => {
     runEnvVariablesCheck();
-    syncProjects();
     fetchAllFeatureFlags();
     initSocket();
     (async function () {

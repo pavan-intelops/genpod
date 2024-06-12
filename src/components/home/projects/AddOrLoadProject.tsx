@@ -44,7 +44,7 @@ export default function AddOrLoadProject() {
     const project: Project = {
       id: '',
       name: data.name,
-      flowData: {
+      flow: {
         nodes: [],
         edges: []
       }
@@ -89,17 +89,18 @@ export default function AddOrLoadProject() {
           <Text size="sm">Click on the project to load</Text>
           <Divider my="sm" />
           <Flex direction="row" wrap="wrap" gap="lg">
-            {projects.map((project, index) => (
-              <Box key={index}>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleOnLoadedProjectClick(project.id)}
-                >
-                  {project.name}
-                </Button>
-              </Box>
-            ))}
+            {projects.length > 0 &&
+              projects.map((project, index) => (
+                <Box key={index}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleOnLoadedProjectClick(project.id)}
+                  >
+                    {project.name}
+                  </Button>
+                </Box>
+              ))}
           </Flex>
         </Box>
       </Flex>

@@ -2,13 +2,13 @@ import Fastify from 'fastify';
 
 import cookie from '@fastify/cookie';
 import cors from '@fastify/cors';
+import formBody from '@fastify/formbody';
 import session from '@fastify/session';
 
 import { CONSTANTS } from './constants';
-import sequelize from './db';
+import dbInit from './db/dbInit';
 import logger from './logger';
 import { authRoutes } from './routes/authRoutes';
-import { fileRoutes } from './routes/fileRoutes';
 import { projectRoutes } from './routes/projectRoutes';
 
 const fastify = Fastify({
@@ -20,6 +20,7 @@ fastify.register(cors, {
   origin: 'http://localhost:3000', // add frontend url here
   credentials: true
 });
+fastify.register(formBody);
 // cookie plugin registering
 fastify.register(cookie);
 
@@ -29,15 +30,15 @@ fastify.register(session, {
   cookieName: 'sessionId',
   cookie: {
     secure: false,
-    httpOnly: true
-  }
+    httpOnly: true,
+    maxAge: 7 * 24 * 60 * 60 * 1000 // 1 day
+  },
+  saveUninitialized: false
 });
 fastify.get('/', async (request, reply) => {
   reply.status(200).send({ message: 'Middleware Server is running' });
 });
 
-// Register routes
-fastify.register(fileRoutes);
 // Register routes
 fastify.register(projectRoutes);
 // Register auth routes
@@ -46,10 +47,7 @@ fastify.register(authRoutes);
 // Start the server
 const start = async () => {
   try {
-    await sequelize.sync({
-      alter: true,
-      force: true
-    }); // Sync all defined models to the DB.
+    await dbInit();
     await fastify.listen({
       port: CONSTANTS.PORT
     });

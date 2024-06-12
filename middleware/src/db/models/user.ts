@@ -1,5 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../index';
+import Project from './project';
 
 interface UserAttributes {
   id: number;
@@ -19,6 +20,8 @@ class User
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+
+  public readonly projects?: Project[];
 }
 
 User.init(

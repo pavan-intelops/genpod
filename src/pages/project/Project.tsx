@@ -1,86 +1,22 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import useCodeOperations from 'src/api/useCodeOperations/useCodeOperations';
 import { useProjectOperations } from 'src/api/useProjectOperations/useProjectOperations';
 import Flow from 'src/canvas/Flow';
 import { useFlowsStore } from 'src/canvas/store/flowstore';
-import { CustomEdge, CustomNode } from 'src/canvas/store/types.store';
 import Layout from 'src/components/common/layout/Layout';
 import { sideNavData } from 'src/components/common/side-nav/data';
 import SideNavbar from 'src/components/common/side-nav/SideNavbar';
-import { emitter } from 'src/emitter';
+import TerminalComponent from 'src/components/common/terminal/Terminal';
 import HydrationZustand from 'src/hoc/hydrationZustand';
 import Protected from 'src/hoc/protected';
-import { InAppNotifications } from 'src/notifications';
 import { useProjectStore } from 'src/store/useProjectStore';
 
-import {
-  Anchor,
-  Breadcrumbs,
-  Button,
-  Flex,
-  Grid,
-  rem,
-  Tabs
-} from '@mantine/core';
+import { Anchor, Breadcrumbs, Flex, Grid, rem, Tabs } from '@mantine/core';
 import { IconHttpConnect, IconPhoto } from '@tabler/icons-react';
 
-import type { Project } from 'src/components/user/projects/types';
-import TerminalComponent from 'src/components/common/terminal/Terminal';
 interface ProjectParams {
   projectId: string;
 }
-interface ConvertFlowDataToProjectProps {
-  nodes: CustomNode[];
-  edges: CustomEdge[];
-  project: Project;
-}
-
-const convertFlowDataToProject = ({
-  edges,
-  nodes,
-  project
-}: ConvertFlowDataToProjectProps) => {
-  const json = {
-    nodes: {} as Record<string, CustomNode>,
-    edges: {} as Record<string, CustomEdge>
-  };
-  nodes.forEach(node => {
-    json.nodes[node.id] = {
-      id: node.id,
-      type: node.type,
-      position: node.position,
-      data: node.data
-    };
-  });
-  edges.forEach(edge => {
-    json.edges[edge.id] = {
-      id: edge.id,
-      source: edge.source,
-      target: edge.target,
-      type: edge.type,
-      data: edge.data
-    };
-  });
-  return {
-    ...project,
-    json
-  };
-};
-/**
- * Converts a project object to flow data.
- * @param {Project} project - The project object.
- * @returns {Object} - The converted flow data.
- */
-const convertProjectToFlowData = (project: Project) => {
-  if (project.json === undefined) return { nodes: [], edges: [] };
-  const nodes = Object.values(project.json.nodes);
-  const edges = Object.values(project.json.edges);
-  return {
-    nodes,
-    edges
-  };
-};
 
 /**
  * Renders the Project component.
@@ -106,50 +42,16 @@ export default function Project() {
       const { data } = await getProject(params.projectId);
       if (!data) return;
       setFetchProjectCompleted(true);
-      const { nodes, edges } = convertProjectToFlowData(data);
+      const { edges, nodes } = data.flow;
       setNodes(nodes);
       setEdges(edges);
     })();
   }, [setActiveProject]);
 
-  const { generateCode } = useCodeOperations();
   const projectDetails = projects.find(
     project => project.id == params.projectId
   );
-  useEffect(() => {
-    if (!fetchProjectCompleted) return;
-    const handleSaveToServer = async () => {
-      const currentFlow = getFlow();
 
-      if (!currentFlow) return;
-
-      if (!projectDetails) return;
-      const formattedProject = convertFlowDataToProject({
-        ...projectDetails,
-        nodes: currentFlow.nodes,
-        edges: currentFlow.edges,
-        project: {
-          ...projectDetails
-        }
-      });
-      updateProject(params.projectId, formattedProject);
-    };
-
-    emitter.on('nodesChange', handleSaveToServer);
-  }, [getFlow, params.projectId, projects, updateProject]);
-
-  const handleGenerateClick = async () => {
-    await generateCode({
-      onFail(args) {
-        InAppNotifications.code.failedToGenerate(args?.message);
-      },
-      onSuccess() {
-        InAppNotifications.code.generatedSuccessfully(params.projectId);
-      }
-    });
-  };
-
-  console.log('projectDetails: ', projectDetails);
   const items = [
     { title: 'Home', href: '/' },
     {
@@ -178,7 +80,7 @@ export default function Project() {
           <Grid.Col span="auto">
             <Flex justify="space-between" p="lg" align="center">
               <Breadcrumbs separator=">">{items}</Breadcrumbs>
-              <Button onClick={handleGenerateClick}>Generate</Button>
+              {/* <Button onClick={handleGenerateClick}>Generate</Button> */}
             </Flex>
             <HydrationZustand>
               <Tabs variant="outline" defaultValue="flow">

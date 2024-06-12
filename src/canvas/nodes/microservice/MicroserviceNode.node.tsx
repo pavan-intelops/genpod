@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Handle, NodeProps, Position } from 'reactflow';
 
-import { Box, Flex, Grid, Text } from '@mantine/core';
+import { Flex, Grid, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconArrowForwardUp, IconEdit } from '@tabler/icons-react';
 
@@ -59,16 +59,6 @@ export default function MicroserviceNode(props: NodeProps<CustomNodeFormData>) {
               </Link>
             </Grid.Col>
           </Grid>
-          <Box
-            bg="gray.4"
-            w="100%"
-            style={{
-              flex: 1
-            }}
-            p="xs"
-          >
-            <Text c="gray.0">{getNodeFormData(id)?.description}</Text>
-          </Box>
         </Flex>
         <MicroserviceDrawer opened={opened} close={close} nodeId={id} />
         <Handle type="source" position={Position.Left} id="a" />

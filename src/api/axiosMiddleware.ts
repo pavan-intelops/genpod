@@ -15,12 +15,14 @@ axiosMiddleware.interceptors.request.use(request => {
   return request;
 });
 
-axiosMiddleware.interceptors.response.use(
-  response => response,
-  error => {
-    console.log('Response Error', error);
-    return Promise.reject(error);
+axiosMiddleware.interceptors.response.use(response => {
+  if (response.status === 401) {
+    axiosMiddleware.post('/logout').then(() => {
+      window.localStorage.clear();
+      window.location.reload();
+    });
   }
-);
+  return response;
+});
 
 export default axiosMiddleware;

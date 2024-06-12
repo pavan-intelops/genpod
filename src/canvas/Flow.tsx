@@ -18,8 +18,8 @@ import DBNode from './nodes/db-node/DBNode.node';
 import MicroserviceNode from './nodes/microservice/MicroserviceNode.node';
 import { useFlowsStore } from './store/flowstore';
 import { NodeTypes } from './store/types.store';
-import { convertFlowDataToProject } from './utils';
 import AddCustomLicenseModal from './modals/AddCustomLicenseModal';
+import { Project } from 'src/components/user/projects/types';
 
 const nodeTypes = {
   [NodeTypes.MICROSERVICE]: MicroserviceNode,
@@ -36,6 +36,7 @@ export default function Flow() {
     flows,
     activeFlow
   } = useFlowsStore();
+
   const projectId = activeFlow?.slice(4);
   const { nodes, edges } = getNodesAndEdges();
   const [
@@ -55,15 +56,14 @@ export default function Flow() {
     return flows[activeFlow];
   }, [flows, activeFlow]);
 
-  const handleSyncClick = async () => {
+  const handleSaveConfigClick = async () => {
     const currentFlow = getFlow();
 
     if (!currentFlow) {
-      console.error('No flow found');
       return;
     }
 
-    const projectDetails = projects.find(project => project.id === projectId);
+    const projectDetails = projects.find(project => project.id == projectId);
 
     if (!projectDetails || !activeFlow || !projectId) {
       console.error({
@@ -73,18 +73,14 @@ export default function Flow() {
       });
       return;
     }
-    const formattedProject = convertFlowDataToProject({
-      ...projectDetails,
-      nodes: currentFlow.nodes,
-      edges: currentFlow.edges,
-      project: {
-        ...projectDetails,
-        metadata: {
-          ...projectDetails.metadata,
-          licenses: currentFlow.licenses
-        }
-      }
-    });
+    const formattedProject: Project = {
+      flow: {
+        nodes,
+        edges
+      },
+      id: projectId,
+      name: projectDetails.name
+    };
     const { data, error } = await updateProject(projectId, formattedProject);
     if (error || !data) {
       InAppNotifications.project.failedToSync(projectId);
@@ -112,16 +108,7 @@ export default function Flow() {
               buttonText="Add Microservice Node"
               mx="sm"
             />
-            {/* <AddNodeModal
-              type={NodeTypes.DB_NODE}
-              buttonText="Add DB Node"
-              mx="sm"
-            /> */}
-            {/* <AddNodeModal
-              type={NodeTypes.CLIENT_NODE}
-              buttonText="Add Client Node"
-              mx="sm"
-            /> */}
+
             <Button
               bg="blue.4"
               ml="sm"
@@ -134,11 +121,10 @@ export default function Flow() {
               bg="blue.4"
               ml="sm"
               leftSection={<IconCircleArrowUp />}
-              onClick={handleSyncClick}
+              onClick={handleSaveConfigClick}
             >
               Save Config
             </Button>
-            <AddCustomLicenseModal />
           </Panel>
           <Controls />
           <Background variant={BackgroundVariant.Dots} gap={12} size={1} />

@@ -14,8 +14,8 @@ export const createProject = async (
   if (!name) {
     return reply.status(400).send({ error: 'Project name is required' });
   }
-
-  const project = await Project.create({ name, flow });
+  const userId = request.user?.id!;
+  const project = await Project.create({ name, flow, userId });
 
   reply.status(201).send({ message: 'Project created successfully', project });
 };

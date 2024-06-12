@@ -37,7 +37,7 @@ export const useProjectOperations = () => {
     try {
       const { data } = await axiosMiddleware.get(`/projects/${projectId}`);
       options?.onSuccess?.(data);
-      return { data };
+      return { data: JSON.parse(data) };
     } catch (error) {
       options?.onFail?.(error);
       return { error };

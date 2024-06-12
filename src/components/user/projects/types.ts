@@ -3,7 +3,7 @@ import { CustomEdge, CustomNode } from 'src/canvas/store/types.store';
 export interface Project {
   id: string;
   name: string;
-  flowData: {
+  flow: {
     nodes: CustomNode[];
     edges: CustomEdge[];
   };

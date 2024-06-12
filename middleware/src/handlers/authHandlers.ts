@@ -29,7 +29,7 @@ export const login = async (request: FastifyRequest, reply: FastifyReply) => {
   }
 
   request.session.authenticated = true;
-  request.session.user = username;
+  request.session.user = user.id;
 
   reply.status(200).send({
     message: 'Logged in successfully',
@@ -43,11 +43,13 @@ export const login = async (request: FastifyRequest, reply: FastifyReply) => {
 };
 
 export const logout = async (request: FastifyRequest, reply: FastifyReply) => {
-  request.session.destroy(err => {
-    if (err) {
-      reply.status(500).send({ error: 'Failed to log out' });
-    } else {
-      reply.status(200).send({ message: 'Logged out successfully' });
-    }
-  });
+  if (request.session.authenticated) {
+    request.session.destroy(err => {
+      if (err) {
+        reply.status(500).send({ error: 'Failed to log out' });
+      } else {
+        reply.status(200).send({ message: 'Logged out successfully' });
+      }
+    });
+  }
 };
