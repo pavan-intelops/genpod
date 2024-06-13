@@ -64,7 +64,9 @@ export const getAllProjects = async (
   request: FastifyRequest,
   reply: FastifyReply
 ) => {
-  const projects = await Project.findAll();
+  const projects = await Project.findAll({
+    where: { userId: request.user?.id }
+  });
   reply.status(200).send(projects);
 };
 

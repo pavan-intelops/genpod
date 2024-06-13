@@ -1,14 +1,15 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../index';
-import User from './user';
 import Project from './project';
+import User from './user';
+import { v4 as uuidv4 } from 'uuid';
 
 interface ProjectSnapshotAttributes {
-  id: number;
-  projectId: number;
+  id: string;
+  projectId: string;
   name: string;
   flow: object;
-  userId: number;
+  userId: string;
   createdAt: Date;
 }
 
@@ -19,23 +20,23 @@ class ProjectSnapshot
   extends Model<ProjectSnapshotAttributes, ProjectSnapshotCreationAttributes>
   implements ProjectSnapshotAttributes
 {
-  public id!: number;
-  public projectId!: number;
+  public id!: string;
+  public projectId!: string;
   public name!: string;
   public flow!: object;
-  public userId!: number;
+  public userId!: string;
   public createdAt!: Date;
 }
 
 ProjectSnapshot.init(
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      type: DataTypes.UUID,
+      defaultValue: uuidv4,
       primaryKey: true
     },
     projectId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'projects',
@@ -51,7 +52,7 @@ ProjectSnapshot.init(
       allowNull: false
     },
     userId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'users',

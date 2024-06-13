@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useProjectOperations } from 'src/api/useProjectOperations/useProjectOperations';
 import Flow from 'src/canvas/Flow';
@@ -76,7 +76,7 @@ export default function Project() {
               {/* <Button onClick={handleGenerateClick}>Generate</Button> */}
             </Flex>
             <HydrationZustand>
-              <Tabs variant="outline" defaultValue="flow">
+              <Tabs variant="outline" defaultValue="flow" keepMounted={false}>
                 <Tabs.List>
                   <Tabs.Tab
                     value="flow"

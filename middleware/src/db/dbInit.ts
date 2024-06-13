@@ -3,7 +3,7 @@ import Project from './models/project';
 import ProjectSnapshot from './models/projectSnapshot';
 import User from './models/user';
 
-export default (async function () {
+export default async function () {
   // Define associations
   User.hasMany(Project, { foreignKey: 'userId', as: 'projects' });
   Project.belongsTo(User, { foreignKey: 'userId', as: 'projectUser' });
@@ -25,4 +25,4 @@ export default (async function () {
     alter: false, // This updates the tables to match the models without dropping them
     force: false // Ensure this is false to avoid dropping tables
   });
-});
+}

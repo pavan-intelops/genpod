@@ -18,8 +18,7 @@ import DBNode from './nodes/db-node/DBNode.node';
 import MicroserviceNode from './nodes/microservice/MicroserviceNode.node';
 import { useFlowsStore } from './store/flowstore';
 import { NodeTypes } from './store/types.store';
-import AddCustomLicenseModal from './modals/AddCustomLicenseModal';
-import { Project } from 'src/components/user/projects/types';
+import { Project } from 'src/store/types';
 
 const nodeTypes = {
   [NodeTypes.MICROSERVICE]: MicroserviceNode,

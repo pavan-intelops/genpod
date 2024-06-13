@@ -63,25 +63,3 @@ export interface FlowStore {
   onConnect: OnConnect;
 }
 export type NodeConsumerData = MicroServiceNodeData;
-export interface CompageJson {
-  edges: Record<string, CustomEdge>;
-  nodes: Record<string, CustomNode>;
-  version?: string;
-  workspace?: unknown;
-  undoHistory?: unknown;
-  potentialNode?: unknown;
-  potentialEdge?: unknown;
-  plugins?: unknown;
-  panels?: unknown;
-  editor?: unknown;
-}
-
-export interface ProjectStore {
-  projects: {
-    [key: string]: CompageJson;
-  };
-  setProjects: (projects: { [key: string]: CompageJson }) => void;
-  addProject: (projectKey: string, project: CompageJson) => void;
-  updateProject: (projectKey: string, project: CompageJson) => void;
-  deleteProject: (projectKey: string) => void;
-}

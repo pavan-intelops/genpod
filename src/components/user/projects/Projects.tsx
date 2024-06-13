@@ -14,8 +14,8 @@ import { useNavigate } from 'react-router-dom';
 import { useProjectOperations } from 'src/api/useProjectOperations/useProjectOperations';
 import { useSyncActions } from 'src/hooks/useSyncActions';
 import { InAppNotifications } from 'src/notifications';
+import { Project } from 'src/store/types';
 import { useProjectStore } from 'src/store/useProjectStore';
-import { Project } from './types';
 
 interface TabularProjectData {
   id: string;

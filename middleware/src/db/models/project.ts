@@ -2,12 +2,13 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../index';
 import User from './user';
 import ProjectSnapshot from './projectSnapshot';
+import { v4 as uuidv4 } from 'uuid';
 
 interface ProjectAttributes {
-  id: number;
+  id: string;
   name: string;
   flow: object;
-  userId: number;
+  userId: string;
 }
 
 interface ProjectCreationAttributes extends Optional<ProjectAttributes, 'id'> {}
@@ -16,10 +17,10 @@ class Project
   extends Model<ProjectAttributes, ProjectCreationAttributes>
   implements ProjectAttributes
 {
-  public id!: number;
+  public id!: string;
   public name!: string;
   public flow!: object;
-  public userId!: number;
+  public userId!: string;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -28,8 +29,8 @@ class Project
 Project.init(
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      type: DataTypes.UUID,
+      defaultValue: uuidv4,
       primaryKey: true
     },
     name: {
@@ -41,7 +42,7 @@ Project.init(
       allowNull: true
     },
     userId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'users',

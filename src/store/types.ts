@@ -1,5 +1,4 @@
 import { CustomEdge, CustomNode } from 'src/canvas/store/types.store';
-import { Project } from 'src/components/user/projects/types';
 import {
   FEATURE_FLAG,
   FeatureFlagsState
@@ -15,6 +14,16 @@ export interface UserStore {
 export interface PersonalDetails {
   username: string;
   id: string;
+}
+
+export interface Project {
+  id: string;
+  name: string;
+  flow: {
+    nodes: CustomNode[];
+    edges: CustomEdge[];
+  };
+  requirements?: string; // basically a string version of json or yaml
 }
 
 export type ProjectStoreState = {
@@ -56,7 +65,7 @@ export type FeatureFlagStoreActions = {
 
 export type ProjectSnapshot = {
   createdAt: string;
-  id: number;
+  id: string;
   projectId: number;
   userId: number;
   flow: {

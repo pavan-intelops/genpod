@@ -3,14 +3,14 @@ import { useEffect, useState } from 'react';
 import { useProjectOperations } from 'src/api/useProjectOperations/useProjectOperations';
 import { ProjectSnapshot } from 'src/store/types';
 import { useProjectStore } from 'src/store/useProjectStore';
-import { Table, ScrollArea, Checkbox } from '@mantine/core';
+import { Table, ScrollArea, Checkbox, Button } from '@mantine/core';
 import { Link } from 'react-router-dom';
 
 export default function Snapshots() {
   const { getProjectSnapshots } = useProjectOperations();
   const { activeProject } = useProjectStore();
   const [snapshots, setSnapshots] = useState<ProjectSnapshot[] | null>([]);
-  const [selectedRows, setSelectedRows] = useState<number[]>([]);
+  const [selectedRows, setSelectedRows] = useState<string[]>([]);
 
   useEffect(() => {
     (async function () {
@@ -31,7 +31,7 @@ export default function Snapshots() {
         });
       }
     })();
-  }, [activeProject]);
+  }, []);
   const rows = snapshots?.map(snapshot => (
     <Table.Tr
       key={snapshot.id}
@@ -60,6 +60,9 @@ export default function Snapshots() {
       </Table.Td>
       <Table.Td>{snapshot.userId}</Table.Td>
       <Table.Td>{new Date(snapshot.createdAt).toLocaleString()}</Table.Td>
+      <Table.Td>
+        <Button variant="subtle">Load Snapshot</Button>
+      </Table.Td>
     </Table.Tr>
   ));
 
@@ -69,10 +72,11 @@ export default function Snapshots() {
         <Table.Thead>
           <Table.Tr>
             <Table.Th />
-            <Table.Th>ID</Table.Th>
+            <Table.Th>Version</Table.Th>
             <Table.Th>Project ID</Table.Th>
             <Table.Th>User ID</Table.Th>
             <Table.Th>Created At</Table.Th>
+            <Table.Th>Actions</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>{rows}</Table.Tbody>

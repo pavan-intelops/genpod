@@ -1,7 +1,6 @@
-import { Project } from 'src/components/user/projects/types';
 import { UseOperationsOptions, UseOperationsReturnType } from '../api.types';
 import axiosMiddleware from '../axiosMiddleware';
-import { ProjectSnapshot } from 'src/store/types';
+import { Project, ProjectSnapshot } from 'src/store/types';
 
 export const useProjectOperations = () => {
   const postProject = async (

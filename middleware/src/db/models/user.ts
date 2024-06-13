@@ -1,9 +1,10 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../index';
 import Project from './project';
+import { v4 as uuidv4 } from 'uuid';
 
 interface UserAttributes {
-  id: number;
+  id: string;
   username: string;
   password: string;
 }
@@ -14,7 +15,7 @@ class User
   extends Model<UserAttributes, UserCreationAttributes>
   implements UserAttributes
 {
-  public id!: number;
+  public id!: string;
   public username!: string;
   public password!: string;
 
@@ -27,8 +28,8 @@ class User
 User.init(
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      type: DataTypes.UUID,
+      defaultValue: uuidv4,
       primaryKey: true
     },
     username: {
