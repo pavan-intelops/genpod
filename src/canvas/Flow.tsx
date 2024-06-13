@@ -1,6 +1,3 @@
-import { Box, Button, Drawer } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import { IconCircleArrowUp, IconEyeCode } from '@tabler/icons-react';
 import { useCallback } from 'react';
 import ReactFlow, {
   Background,
@@ -11,20 +8,18 @@ import ReactFlow, {
 import { useProjectOperations } from 'src/api/useProjectOperations/useProjectOperations';
 import AddNodeModal from 'src/components/common/modal/AddNodeModal';
 import { InAppNotifications } from 'src/notifications';
+import { Project } from 'src/store/types';
 import { useProjectStore } from 'src/store/useProjectStore';
+
+import { Box, Button, Drawer } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { IconCircleArrowUp, IconEyeCode } from '@tabler/icons-react';
+
 import CodeViewDrawer from './drawers/code-view/CodeViewDrawer';
-import ClientNode from './nodes/client-node/ClientNode.node';
-import DBNode from './nodes/db-node/DBNode.node';
-import MicroserviceNode from './nodes/microservice/MicroserviceNode.node';
+import { edgeTypes } from './edges';
+import { nodeTypes } from './nodes';
 import { useFlowsStore } from './store/flowstore';
 import { NodeTypes } from './store/types.store';
-import { Project } from 'src/store/types';
-
-const nodeTypes = {
-  [NodeTypes.MICROSERVICE]: MicroserviceNode,
-  [NodeTypes.DB_NODE]: DBNode,
-  [NodeTypes.CLIENT_NODE]: ClientNode
-};
 
 export default function Flow() {
   const {
@@ -95,6 +90,7 @@ export default function Flow() {
             hideAttribution: true
           }}
           nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
           nodes={nodes}
           edges={edges}
           onNodesChange={onNodesChange}

@@ -6,11 +6,10 @@ import { useFlowsStore } from '../store/flowstore';
 
 export function AddDBNodeModal() {
   const { addNode } = useFlowsStore();
-  const handleAddNodeClick = (name: string, description: string) => {
+  const handleAddNodeClick = (name: string) => {
     const node: MicroServiceNode = {
       data: {
         ...getInitialMicroserviceNodeFormData(),
-        description: description,
         name: name,
         type: NodeTypes.MICROSERVICE
       },
@@ -35,7 +34,7 @@ export function AddDBNodeModal() {
             }}
             onSubmit={e => {
               const target = e.target as unknown as { value: string }[];
-              handleAddNodeClick(target[0].value, target[1].value);
+              handleAddNodeClick(target[0].value);
               modals.closeAll();
             }}
           >

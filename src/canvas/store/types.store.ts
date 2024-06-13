@@ -10,6 +10,10 @@ export enum NodeTypes {
   CLIENT_NODE = 'client-node'
 }
 
+export enum EdgeTypes {
+  CUSTOM_EDGE = 'custom-edge'
+}
+
 export type MicroServiceNode = Node<MicroServiceNodeData, NodeTypes>;
 export type DBNode = Node<DBNodeFormData, NodeTypes>;
 export type ClientNode = Node<ClientNodeFormData, NodeTypes>;
@@ -21,6 +25,10 @@ export type CustomNodeFormData =
   | ClientNodeFormData;
 
 export type CustomEdge = Edge;
+export type CustomEdgeFormData = {
+  name: string;
+  requirements: string;
+};
 export interface License {
   id: string;
   type: 'file' | 'link' | 'path';
@@ -32,6 +40,7 @@ interface FlowData {
   nodes: CustomNode[];
   edges: CustomEdge[];
   activeNode: CustomNode | null;
+  activeEdge: CustomEdge | null;
   licenses: License[];
 }
 export interface FlowStore {
@@ -46,13 +55,18 @@ export interface FlowStore {
   getActiveFlow: () => FlowData | null;
   setActiveFlow: (flowKey: string) => void;
   refreshActiveNode: () => void;
+  refreshActiveEdge: () => void;
   setActiveNode: (nodeId: string) => void;
+  setActiveEdge: (edgeId: string) => void;
   getNodesAndEdges: (flowKey?: string) => {
     nodes: CustomNode[];
     edges: CustomEdge[];
   };
   setNodeFormData: (nodeFormData: CustomNodeFormData, nodeId?: string) => void;
   getNodeFormData: (nodeId: string) => CustomNodeFormData | undefined;
+
+  setEdgeFormData: (edgeFormData: CustomEdgeFormData, edgeId?: string) => void;
+  getEdgeFormData: (edgeId: string) => CustomEdgeFormData | undefined;
 
   // The below functions are required for the react-flow to function
   addNode: (node: CustomNode) => void;

@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form';
 import { TextInput } from 'react-hook-form-mantine';
 import { useNavigate } from 'react-router-dom';
 import { useProjectOperations } from 'src/api/useProjectOperations/useProjectOperations';
-import { Project } from 'src/components/user/projects/types';
 import { useSyncActions } from 'src/hooks/useSyncActions';
 import { useProjectStore } from 'src/store/useProjectStore';
 import * as z from 'zod';
@@ -13,6 +12,7 @@ import { Box, Button, Divider, Flex, Text } from '@mantine/core';
 
 import classes from './AddOrLoadProject.module.css';
 import { AddNewProjectForm } from './AddOrLoadProject.types';
+import { Project } from 'src/store/types';
 
 const resolver = z.object({
   name: z.string().min(1, 'Project Name is required')

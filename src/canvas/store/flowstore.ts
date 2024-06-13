@@ -1,19 +1,25 @@
 import {
+  addEdge,
+  applyEdgeChanges,
+  applyNodeChanges,
   Connection,
   Edge,
   EdgeChange,
   MarkerType,
   Node,
-  NodeChange,
-  addEdge,
-  applyEdgeChanges,
-  applyNodeChanges
+  NodeChange
 } from 'reactflow';
 import { emitter } from 'src/emitter';
 import theme from 'src/theme';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { CustomNode, CustomNodeFormData, FlowStore } from './types.store';
+
+import {
+  CustomNode,
+  CustomNodeFormData,
+  EdgeTypes,
+  FlowStore
+} from './types.store';
 
 function defaultFlow(flowKey: string) {
   return {
@@ -21,6 +27,7 @@ function defaultFlow(flowKey: string) {
     nodes: [] as CustomNode[],
     edges: [] as Edge[],
     activeNode: null,
+    activeEdge: null,
     licenses: []
   };
 }
@@ -103,6 +110,26 @@ export const useFlowsStore = create<FlowStore>()(
           }
         });
       },
+      refreshActiveEdge: () => {
+        const flows = get().flows;
+        if (!flows) return;
+        const activeFlow = get().activeFlow || '';
+        if (!activeFlow) return;
+        const { activeEdge } = flows[activeFlow];
+        if (!activeEdge) return;
+        set({
+          flows: {
+            ...flows,
+            [activeFlow]: {
+              ...flows[activeFlow],
+              activeEdge:
+                flows[activeFlow].edges.find(
+                  edge => edge.id === activeEdge.id
+                ) || null
+            }
+          }
+        });
+      },
       setActiveNode: (nodeId: string) => {
         const flows = get().flows;
         if (!flows) return;
@@ -117,6 +144,24 @@ export const useFlowsStore = create<FlowStore>()(
             [activeFlow]: {
               ...flows[activeFlow],
               activeNode: node
+            }
+          }
+        });
+      },
+      setActiveEdge: (edgeId: string) => {
+        const flows = get().flows;
+        if (!flows) return;
+        const activeFlow = get().activeFlow || '';
+        if (!activeFlow) return;
+        const { edges } = flows[activeFlow];
+        const edge = edges.find(edge => edge.id === edgeId);
+        if (!edge) return;
+        set({
+          flows: {
+            ...flows,
+            [activeFlow]: {
+              ...flows[activeFlow],
+              activeEdge: edge
             }
           }
         });
@@ -252,6 +297,64 @@ export const useFlowsStore = create<FlowStore>()(
         if (!activeFlow) return;
         return flows[activeFlow].nodes.find(node => node.id === nodeId)?.data;
       },
+      setEdgeFormData: (edgeFormData: CustomNodeFormData, edgeId?: string) => {
+        const flows = get().flows;
+        if (!flows) return;
+        const activeFlow = get().activeFlow || '';
+        if (!activeFlow) return;
+        if (edgeId) {
+          set({
+            flows: {
+              ...flows,
+              [activeFlow]: {
+                ...flows[activeFlow],
+                edges: flows[activeFlow].edges.map(edge => {
+                  if (edge.id === edgeId) {
+                    return {
+                      ...edge,
+                      data: {
+                        ...edge.data,
+                        ...edgeFormData
+                      }
+                    };
+                  }
+                  return edge;
+                })
+              }
+            }
+          });
+        }
+        const { activeEdge } = flows[activeFlow];
+        if (!activeEdge) return;
+        const updatedEdge = {
+          ...activeEdge,
+          data: {
+            ...activeEdge.data,
+            ...edgeFormData
+          }
+        };
+        set({
+          flows: {
+            ...flows,
+            [activeFlow]: {
+              ...flows[activeFlow],
+              edges: flows[activeFlow].edges.map(edge => {
+                if (edge.id === activeEdge.id) {
+                  return updatedEdge;
+                }
+                return edge;
+              })
+            }
+          }
+        });
+      },
+      getEdgeFormData: (edgeId: string) => {
+        const flows = get().flows;
+        if (!flows) return;
+        const activeFlow = get().activeFlow || '';
+        if (!activeFlow) return;
+        return flows[activeFlow].edges.find(edge => edge.id === edgeId)?.data;
+      },
       onNodesChange: (changes: NodeChange[]) => {
         const flows = get().flows;
         if (!flows) return;
@@ -270,11 +373,6 @@ export const useFlowsStore = create<FlowStore>()(
           }
         });
         get().refreshActiveNode();
-        // We are emitting nodesChange event here to listen this in the parent component and trigger the save flow function
-        // to check where the emitted events are consumed search for 'nodesChange' in the codebase
-        // debounce(emitNodesChange, 5000, {
-        // 	maxWait: 1,
-        // })()
       },
       onEdgesChange: (changes: EdgeChange[]) => {
         const flows = get().flows;
@@ -290,6 +388,7 @@ export const useFlowsStore = create<FlowStore>()(
             }
           }
         });
+        get().refreshActiveEdge();
       },
       onConnect: (connection: Connection) => {
         const flows = get().flows;
@@ -304,7 +403,7 @@ export const useFlowsStore = create<FlowStore>()(
               edges: addEdge(
                 {
                   ...connection,
-                  type: 'default',
+                  type: EdgeTypes.CUSTOM_EDGE,
                   markerStart: {
                     type: MarkerType.Arrow,
                     color: theme.colors?.orange?.[5],
