@@ -45,8 +45,8 @@ Create a `scripts/dev.sh` file with the following content:
     # parallelly run the server and client
     bash -c "cd socket-server && yarn && yarn dev" &
     bash -c "yarn && vite --host --force" &
-    # run the file-server
-    bash -c "cd file-server && yarn && yarn dev"
+    # run the middleware
+    bash -c "cd middleware && yarn && yarn dev"
 
 Make the script executable:
 
@@ -58,11 +58,11 @@ Run the development script:
 
 ### 5\. Setting Up the File Server
 
-    cd file-server
+    cd middleware
     yarn
     yarn dev
 
-The `file-server` should now be running at `http://localhost:3003`.
+The `middleware` should now be running at `http://localhost:3003`.
 
 ### 6\. Setting Up the Socket Server
 

@@ -1,7 +1,7 @@
 import { Edge, Node, OnConnect, OnEdgesChange, OnNodesChange } from 'reactflow';
 import { ClientNodeFormData } from '../nodes/client-node/ClientNode.types';
 import { DBNodeFormData } from '../nodes/db-node/DBNode.types';
-import { MicroServiceNodeFormData } from '../nodes/microservice/MicroserviceNode.types';
+import { MicroServiceNodeData } from '../nodes/microservice/MicroserviceNode.types';
 
 export enum NodeTypes {
   MICROSERVICE = 'microservice',
@@ -10,17 +10,25 @@ export enum NodeTypes {
   CLIENT_NODE = 'client-node'
 }
 
-export type MicroServiceNode = Node<MicroServiceNodeFormData, NodeTypes>;
+export enum EdgeTypes {
+  CUSTOM_EDGE = 'custom-edge'
+}
+
+export type MicroServiceNode = Node<MicroServiceNodeData, NodeTypes>;
 export type DBNode = Node<DBNodeFormData, NodeTypes>;
 export type ClientNode = Node<ClientNodeFormData, NodeTypes>;
 
 export type CustomNode = MicroServiceNode | DBNode | ClientNode;
 export type CustomNodeFormData =
-  | MicroServiceNodeFormData
+  | MicroServiceNodeData
   | DBNodeFormData
   | ClientNodeFormData;
 
 export type CustomEdge = Edge;
+export type CustomEdgeFormData = {
+  name: string;
+  requirements: string;
+};
 export interface License {
   id: string;
   type: 'file' | 'link' | 'path';
@@ -32,6 +40,7 @@ interface FlowData {
   nodes: CustomNode[];
   edges: CustomEdge[];
   activeNode: CustomNode | null;
+  activeEdge: CustomEdge | null;
   licenses: License[];
 }
 export interface FlowStore {
@@ -46,13 +55,18 @@ export interface FlowStore {
   getActiveFlow: () => FlowData | null;
   setActiveFlow: (flowKey: string) => void;
   refreshActiveNode: () => void;
+  refreshActiveEdge: () => void;
   setActiveNode: (nodeId: string) => void;
+  setActiveEdge: (edgeId: string) => void;
   getNodesAndEdges: (flowKey?: string) => {
     nodes: CustomNode[];
     edges: CustomEdge[];
   };
   setNodeFormData: (nodeFormData: CustomNodeFormData, nodeId?: string) => void;
   getNodeFormData: (nodeId: string) => CustomNodeFormData | undefined;
+
+  setEdgeFormData: (edgeFormData: CustomEdgeFormData, edgeId?: string) => void;
+  getEdgeFormData: (edgeId: string) => CustomEdgeFormData | undefined;
 
   // The below functions are required for the react-flow to function
   addNode: (node: CustomNode) => void;
@@ -62,26 +76,4 @@ export interface FlowStore {
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
 }
-export type NodeConsumerData = MicroServiceNodeFormData;
-export interface CompageJson {
-  edges: Record<string, CustomEdge>;
-  nodes: Record<string, CustomNode>;
-  version?: string;
-  workspace?: unknown;
-  undoHistory?: unknown;
-  potentialNode?: unknown;
-  potentialEdge?: unknown;
-  plugins?: unknown;
-  panels?: unknown;
-  editor?: unknown;
-}
-
-export interface ProjectStore {
-  projects: {
-    [key: string]: CompageJson;
-  };
-  setProjects: (projects: { [key: string]: CompageJson }) => void;
-  addProject: (projectKey: string, project: CompageJson) => void;
-  updateProject: (projectKey: string, project: CompageJson) => void;
-  deleteProject: (projectKey: string) => void;
-}
+export type NodeConsumerData = MicroServiceNodeData;

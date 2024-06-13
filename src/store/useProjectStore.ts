@@ -14,7 +14,7 @@ export const useProjectStore = create<
           projects: [],
           setActiveProject: projectId => {
             if (!projectId) return set({ activeProject: null });
-            const activeProject = get().projects.find(p => p.id === projectId);
+            const activeProject = get().projects.find(p => p.id == projectId);
             return set({ activeProject });
           },
           setProjects: projects => {

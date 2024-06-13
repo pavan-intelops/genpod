@@ -1,12 +1,13 @@
+import './index.css';
+
 // skipcq: JS-W1028
-import React from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './App.tsx';
 
 import { MantineProvider } from '@mantine/core';
-import './index.css';
-import theme, { cssVariableResolver } from './theme.ts';
+
+import App from './App.tsx';
 import { initStores } from './store/initStores.ts';
+import theme, { cssVariableResolver } from './theme.ts';
 
 initStores();
 

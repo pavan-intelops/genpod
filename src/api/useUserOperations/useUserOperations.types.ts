@@ -3,11 +3,6 @@ export enum Status {
 	INACTIVE = 'INACTIVE',
 }
 export interface UserDTO {
-	email: string
-	firstName?: string
-	lastName?: string
-	role?: string
-	status?: Status
-	createdAt?: string
-	updatedAt?: string
+  username: string;
+  id: string;
 }

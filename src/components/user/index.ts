@@ -1,9 +1,7 @@
-import GitPlatforms from './git-platforms/GitPlatforms'
-import Projects from './projects/Projects'
+import Projects from './projects/Projects';
 
 const User = {
-	Projects,
-	GitPlatforms,
-}
+  Projects
+};
 
-export default User
+export default User;

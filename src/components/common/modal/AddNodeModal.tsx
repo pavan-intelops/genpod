@@ -1,31 +1,23 @@
-import React, { useState } from 'react';
-import {
-  Box,
-  Button,
-  ButtonProps,
-  Group,
-  TextInput,
-  Textarea
-} from '@mantine/core';
+import { Box, Button, ButtonProps, Group, TextInput } from '@mantine/core';
 import { modals } from '@mantine/modals';
+import React, { useState } from 'react';
 import { getInitialNodeFormData } from 'src/canvas/nodes/utils';
 import { useFlowsStore } from 'src/canvas/store/flowstore';
 import { CustomNode, NodeTypes } from 'src/canvas/store/types.store';
 
 interface ModalContentProps {
-  onSubmit: (nodeName: string, nodeDescription: string) => void;
+  onSubmit: (nodeName: string) => void;
 }
 
 const ModalContent: React.FC<ModalContentProps> = ({ onSubmit }) => {
   const [nodeName, setNodeName] = useState<string>('');
-  const [nodeDescription, setNodeDescription] = useState<string>('');
 
   return (
     <Box>
       <form
         onSubmit={e => {
           e.preventDefault();
-          onSubmit(nodeName, nodeDescription);
+          onSubmit(nodeName);
         }}
       >
         <TextInput
@@ -37,16 +29,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ onSubmit }) => {
           value={nodeName}
           onChange={e => setNodeName(e.target.value.replace(/\s+/g, '_'))}
         />
-        <Textarea
-          rows={4}
-          mt="md"
-          withAsterisk
-          required
-          label="Node Description"
-          placeholder="Enter Node Description"
-          value={nodeDescription}
-          onChange={e => setNodeDescription(e.target.value)}
-        />
+
         <Group mt="md">
           <Button type="submit">Submit</Button>
         </Group>
@@ -72,11 +55,10 @@ export default function AddNodeModal({
       title: 'Add Node of type ' + type,
       children: (
         <ModalContent
-          onSubmit={(nodeName: string, nodeDescription: string) => {
+          onSubmit={(nodeName: string) => {
             const node: CustomNode = {
               data: {
                 ...getInitialNodeFormData(type),
-                description: nodeDescription,
                 name: nodeName,
                 type
               },
@@ -92,11 +74,7 @@ export default function AddNodeModal({
           }}
         />
       ),
-      onClose: () => {
-        // Reset form state when modal closes
-        // setNodeName('');
-        // setNodeDescription('');
-      }
+      onClose: () => {}
     });
   };
 

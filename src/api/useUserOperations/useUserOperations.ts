@@ -1,30 +1,45 @@
-import axios from '../axios';
+import axiosMiddleware from '../axiosMiddleware';
 import { UserDTO } from './useUserOperations.types';
 
 export function useUserOperations() {
-  const postUser = async (user: UserDTO): Promise<UserDTO> => {
-    const { data } = await axios.post('/users', JSON.stringify(user));
-    return data;
-  };
-  const getUser = async (email: string): Promise<UserDTO | null> => {
-    if (!email) {
-      return Promise.resolve(null); // Or handle this case as needed
-    }
+  const login = async (
+    username: string,
+    password: string
+  ): Promise<UserDTO | null> => {
     try {
-      const { data } = await axios.get(`/users/${email}`);
-      if (!data) {
-        const newUser = await postUser({ email }); // Assuming email is the only required field for UserDTO
-        return newUser;
+      const response = await axiosMiddleware.post('/login', {
+        username,
+        password
+      });
+
+      if (response.status === 200) {
+        const parsedData = JSON.parse(response.data) as {
+          data: { user: UserDTO };
+        };
+        // Handle successful login, e.g., update user store, navigate, etc.
+        return parsedData.data.user;
       } else {
-        return data;
+        // Handle error response
+        console.error('Login failed:', response.data);
+        return null;
       }
     } catch (error) {
-      // If the user is not found, you might want to automatically post/create the user
-      // This behavior was inferred from your original useQuery and useMutation setup
-      const newUser = await postUser({ email }); // Assuming email is the only required field for UserDTO
-      return newUser;
+      console.error('An error occurred:', error);
+    }
+    return null;
+  };
+  const logout = async (): Promise<void> => {
+    try {
+      const response = await axiosMiddleware.post('/logout');
+      if (response.status === 200) {
+        // Handle successful logout, e.g., update user store, navigate, etc.
+      } else {
+        // Handle error response
+        console.error('Logout failed:', response.data);
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
     }
   };
-
-  return { postUser, getUser };
+  return { login, logout };
 }

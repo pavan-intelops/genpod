@@ -1,17 +1,10 @@
-import { Project } from 'src/components/user/projects/types';
+import { CustomEdge, CustomNode } from 'src/canvas/store/types.store';
 import {
   FEATURE_FLAG,
   FeatureFlagsState
 } from 'src/feature-flag-configs/types';
 
-export interface GitPlatform {
-  gitPlatform: string;
-  personalAccessToken: string;
-  url: string;
-  username: string;
-}
 export interface UserStore {
-  gitPlatformStore: GitPlatformStore;
   personalDetails: PersonalDetails;
   setPersonalDetails: (personalDetails: PersonalDetails) => void;
   isUserLoggedIn: () => boolean;
@@ -19,15 +12,18 @@ export interface UserStore {
 }
 
 export interface PersonalDetails {
-  email: string;
+  username: string;
+  id: string;
 }
-export interface GitPlatformStore {
-  gitPlatforms: GitPlatform[];
-  setGitPlatforms: (
-    gitPlatforms: GitPlatform | GitPlatform[],
-    append?: boolean
-  ) => void;
-  removeGitPlatform: (gitPlatform: GitPlatform) => void;
+
+export interface Project {
+  id: string;
+  name: string;
+  flow: {
+    nodes: CustomNode[];
+    edges: CustomEdge[];
+  };
+  requirements?: string; // basically a string version of json or yaml
 }
 
 export type ProjectStoreState = {
@@ -65,4 +61,17 @@ export type FeatureFlagStoreActions = {
   getFeatureFlag: (id: FEATURE_FLAG) => FeatureFlagsList;
   removeFeatureFlag: (id: FEATURE_FLAG) => void;
   fetchAllFeatureFlags: () => void;
+};
+
+export type ProjectSnapshot = {
+  createdAt: string;
+  id: string;
+  projectId: number;
+  userId: number;
+  flow: {
+    nodes: CustomNode[];
+    edges: CustomEdge[];
+  };
+  name: string;
+  updatedAt: string;
 };

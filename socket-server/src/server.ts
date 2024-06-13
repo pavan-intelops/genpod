@@ -1,11 +1,13 @@
+import cors from 'cors';
 import dotenv from 'dotenv';
-dotenv.config();
 import express from 'express';
-import { Server as SocketIOServer } from 'socket.io';
 import { createServer } from 'http';
 import { spawn } from 'node-pty';
-import cors from 'cors';
+import { Server as SocketIOServer } from 'socket.io';
+
 import logger from './logger';
+
+dotenv.config();
 const app = express();
 
 function bootstrap() {

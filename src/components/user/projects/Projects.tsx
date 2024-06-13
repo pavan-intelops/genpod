@@ -14,27 +14,20 @@ import { useNavigate } from 'react-router-dom';
 import { useProjectOperations } from 'src/api/useProjectOperations/useProjectOperations';
 import { useSyncActions } from 'src/hooks/useSyncActions';
 import { InAppNotifications } from 'src/notifications';
+import { Project } from 'src/store/types';
 import { useProjectStore } from 'src/store/useProjectStore';
-import { Project } from './types';
 
 interface TabularProjectData {
   id: string;
   name: string;
-  repositoryUrl: string;
-  isRepositoryPublic: boolean;
-  version: string;
 }
 
 const convertProjectDataToTabularData = (projects: Project[]) => {
   return projects.map(project => {
-    const { id, displayName, gitPlatformName, isRepositoryPublic, version } =
-      project;
+    const { id, name } = project;
     return {
       id,
-      name: displayName,
-      repositoryUrl: gitPlatformName,
-      isRepositoryPublic,
-      version
+      name
     };
   });
 };
@@ -93,9 +86,6 @@ export default function Projects() {
       <Table.Tr key={project.id}>
         <Table.Td>{project.id}</Table.Td>
         <Table.Td>{project.name}</Table.Td>
-        <Table.Td>{project.repositoryUrl}</Table.Td>
-        <Table.Td>{project.isRepositoryPublic ? 'Public' : 'Private'}</Table.Td>
-        <Table.Td>{project.version}</Table.Td>
         <Table.Td>
           <SimpleGrid cols={2}>
             <Tooltip label="Load">
