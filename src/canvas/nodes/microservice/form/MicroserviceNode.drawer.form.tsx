@@ -47,33 +47,31 @@ export default function MicroServiceNodeDrawerForm(
   const handleSubmitCapture = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const transformedData = transformToNodeData(form.getValues());
-    console.log('transformedData: ', transformedData);
+
     setNodeFormData(transformedData, props.nodeId);
     props.onSubmit(transformedData);
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmitCapture}>
-        <TextInput
-          control={form.control}
-          label="Name"
-          placeholder="Name"
-          name="name"
-          onChange={handleNameChange}
-        />
-        <Text> Configuration File (Yaml)</Text>
-        <Controller
-          name="requirements"
-          control={form.control}
-          render={({ field }) => (
-            <CodeEditor onChange={field.onChange} value={field.value ?? ''} />
-          )}
-        />
-        <Button type="submit" mt="lg">
-          Save
-        </Button>
-      </form>
-    </>
+    <form onSubmit={handleSubmitCapture}>
+      <TextInput
+        control={form.control}
+        label="Name"
+        placeholder="Name"
+        name="name"
+        onChange={handleNameChange}
+      />
+      <Text> Configuration File (Yaml)</Text>
+      <Controller
+        name="requirements"
+        control={form.control}
+        render={({ field }) => (
+          <CodeEditor onChange={field.onChange} value={field.value ?? ''} />
+        )}
+      />
+      <Button type="submit" mt="lg">
+        Save
+      </Button>
+    </form>
   );
 }

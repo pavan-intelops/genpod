@@ -1,8 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize';
-import sequelize from '../index';
-import User from './user';
-import ProjectSnapshot from './projectSnapshot';
 import { v4 as uuidv4 } from 'uuid';
+import sequelize from '../index';
+import ProjectSnapshot from './projectSnapshot';
 
 interface ProjectAttributes {
   id: string;
@@ -56,7 +55,7 @@ Project.init(
     sequelize,
     tableName: 'projects',
     hooks: {
-      afterUpdate: async (project: Project, options) => {
+      afterUpdate: async (project: Project) => {
         await ProjectSnapshot.create({
           projectId: project.id,
           name: project.name,

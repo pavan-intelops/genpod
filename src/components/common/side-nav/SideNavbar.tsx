@@ -71,80 +71,78 @@ export default function SideNavbar({ data }: SideNavbarProps) {
   });
 
   return (
-    <>
-      <nav
-        className={`${classes.navbar} ${
-          isNavOpen ? classes.open : classes.closed
-        }`}
-      >
-        {isNavOpen ? (
-          <IconX onClick={handleNavToggle} className={classes.menuButton} />
-        ) : (
-          <IconMenu2 onClick={handleNavToggle} className={classes.menuButton} />
-        )}
+    <nav
+      className={`${classes.navbar} ${
+        isNavOpen ? classes.open : classes.closed
+      }`}
+    >
+      {isNavOpen ? (
+        <IconX onClick={handleNavToggle} className={classes.menuButton} />
+      ) : (
+        <IconMenu2 onClick={handleNavToggle} className={classes.menuButton} />
+      )}
 
-        <div className={classes.navbarMain}>
-          <ScrollArea className={classes.links}>
-            <Group className={classes.header}>
-              <Group justify="space-between">
-                <GenPodLogo />
-                <Tooltip label="Toggle Theme">
-                  {colorScheme === 'dark' ? (
-                    <ActionIcon
-                      variant="gradient"
-                      bg="orange"
-                      onClick={() => setColorScheme('light')}
-                    >
-                      <IconSun />
-                    </ActionIcon>
-                  ) : (
-                    <ActionIcon
-                      bg="gray"
-                      variant="gradient"
-                      onClick={() => setColorScheme('dark')}
-                    >
-                      <IconMoon />
-                    </ActionIcon>
-                  )}
-                </Tooltip>
-                <Code fw={700}>v1.0.0</Code>
-              </Group>
-              <Group>
-                <Autocomplete
-                  className={classes.search}
-                  placeholder="Search"
-                  leftSection={
-                    <IconSearch
-                      style={{ width: rem(16), height: rem(16) }}
-                      stroke={1.5}
-                    />
-                  }
-                />
-              </Group>
+      <div className={classes.navbarMain}>
+        <ScrollArea className={classes.links}>
+          <Group className={classes.header}>
+            <Group justify="space-between">
+              <GenPodLogo />
+              <Tooltip label="Toggle Theme">
+                {colorScheme === 'dark' ? (
+                  <ActionIcon
+                    variant="gradient"
+                    bg="orange"
+                    onClick={() => setColorScheme('light')}
+                  >
+                    <IconSun />
+                  </ActionIcon>
+                ) : (
+                  <ActionIcon
+                    bg="gray"
+                    variant="gradient"
+                    onClick={() => setColorScheme('dark')}
+                  >
+                    <IconMoon />
+                  </ActionIcon>
+                )}
+              </Tooltip>
+              <Code fw={700}>v1.0.0</Code>
             </Group>
+            <Group>
+              <Autocomplete
+                className={classes.search}
+                placeholder="Search"
+                leftSection={
+                  <IconSearch
+                    style={{ width: rem(16), height: rem(16) }}
+                    stroke={1.5}
+                  />
+                }
+              />
+            </Group>
+          </Group>
 
-            <div className={classes.linksInner}>{links}</div>
-            <div className={classes.footer}>
-              <Link to="/profile" className={classes.link}>
-                <IconUser className={classes.linkIcon} stroke={1.5} />
-                <span>Profile</span>
-              </Link>
+          <div className={classes.linksInner}>{links}</div>
+          <div className={classes.footer}>
+            <Link to="/profile" className={classes.link}>
+              <IconUser className={classes.linkIcon} stroke={1.5} />
+              <span>Profile</span>
+            </Link>
 
-              <Link
-                to="/login"
-                className={classes.link}
-                onClick={() => {
-                  clearLocalStorageToLogout();
-                  networkCallToLogout();
-                }}
-              >
-                <IconLogout className={classes.linkIcon} stroke={1.5} />
-                <span>Logout</span>
-              </Link>
-            </div>
-          </ScrollArea>
-        </div>
-      </nav>
-    </>
+            <Link
+              to="/login"
+              className={classes.link}
+              onClick={() => {
+                clearLocalStorageToLogout();
+                networkCallToLogout();
+              }}
+            >
+              <IconLogout className={classes.linkIcon} stroke={1.5} />
+              <span>Logout</span>
+            </Link>
+          </div>
+        </ScrollArea>
+      </div>
+    </nav>
   );
 }

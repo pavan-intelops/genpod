@@ -26,7 +26,7 @@ export default function Snapshots() {
       } else {
         notifications.show({
           title: 'Snapshots fetch failed',
-          message: res.error as any,
+          message: res.error as string,
           color: 'red'
         });
       }

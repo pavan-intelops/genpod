@@ -8,7 +8,7 @@ export const attachUser = async (
 ) => {
   if (request.session && request.session.user) {
     const userId = request.session.user;
-    console.log('userId: ', userId);
+
     if (userId) {
       try {
         const user = await User.findByPk(userId);

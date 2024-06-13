@@ -40,7 +40,6 @@ export default function AddOrLoadProject() {
   }, []);
 
   const handleOnSubmit = addNewForm.handleSubmit(async data => {
-    console.log('data: ', data);
     const project: Project = {
       id: '',
       name: data.name,

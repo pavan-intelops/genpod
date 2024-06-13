@@ -1,8 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize';
-import sequelize from '../index';
-import Project from './project';
-import User from './user';
 import { v4 as uuidv4 } from 'uuid';
+import sequelize from '../index';
 
 interface ProjectSnapshotAttributes {
   id: string;
