@@ -9,10 +9,11 @@ interface ProjectSnapshotAttributes {
   flow: object;
   userId: string;
   createdAt: Date;
+  version: string;
 }
 
 interface ProjectSnapshotCreationAttributes
-  extends Optional<ProjectSnapshotAttributes, 'id'> {}
+  extends Optional<ProjectSnapshotAttributes, 'id' | 'version'> {}
 
 class ProjectSnapshot
   extends Model<ProjectSnapshotAttributes, ProjectSnapshotCreationAttributes>
@@ -24,6 +25,7 @@ class ProjectSnapshot
   public flow!: object;
   public userId!: string;
   public createdAt!: Date;
+  public version!: string;
 }
 
 ProjectSnapshot.init(
@@ -61,6 +63,11 @@ ProjectSnapshot.init(
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: DataTypes.NOW
+    },
+    version: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'v0.0.1'
     }
   },
   {

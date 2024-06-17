@@ -23,6 +23,22 @@ class Project
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+
+  public static async getNextVersion(projectId: string): Promise<string> {
+    const lastSnapshot = await ProjectSnapshot.findOne({
+      where: { projectId },
+      order: [['createdAt', 'DESC']]
+    });
+
+    if (!lastSnapshot) {
+      return 'v0.0.1';
+    }
+
+    const versionParts = lastSnapshot.version.slice(1).split('.').map(Number);
+    versionParts[2] += 1; // Increment patch version
+
+    return `v${versionParts.join('.')}`;
+  }
 }
 
 Project.init(
@@ -56,12 +72,14 @@ Project.init(
     tableName: 'projects',
     hooks: {
       afterUpdate: async (project: Project) => {
+        const nextVersion = await Project.getNextVersion(project.id);
         await ProjectSnapshot.create({
           projectId: project.id,
           name: project.name,
           flow: project.flow,
           userId: project.userId,
-          createdAt: new Date()
+          createdAt: new Date(),
+          version: nextVersion
         });
       }
     }

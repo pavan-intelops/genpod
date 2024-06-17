@@ -74,4 +74,5 @@ export type ProjectSnapshot = {
   };
   name: string;
   updatedAt: string;
+  version: string;
 };

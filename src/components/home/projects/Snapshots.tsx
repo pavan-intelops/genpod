@@ -54,7 +54,7 @@ export default function Snapshots() {
           }
         />
       </Table.Td>
-      <Table.Td>{snapshot.id}</Table.Td>
+      <Table.Td>{snapshot.version}</Table.Td>
       <Table.Td>
         <Link to={`/project/${snapshot.projectId}`}>{snapshot.projectId}</Link>
       </Table.Td>
