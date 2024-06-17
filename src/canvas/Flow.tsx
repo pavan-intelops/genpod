@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import ReactFlow, {
   Background,
   BackgroundVariant,
@@ -13,8 +13,13 @@ import { useProjectStore } from 'src/store/useProjectStore';
 
 import { Box, Button, Drawer } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconCircleArrowUp, IconEyeCode } from '@tabler/icons-react';
+import {
+  IconCircleArrowUp,
+  IconEyeCode,
+  IconRobotFace
+} from '@tabler/icons-react';
 
+import axiosMiddleware from 'src/api/axiosMiddleware';
 import CodeViewDrawer from './drawers/code-view/CodeViewDrawer';
 import { edgeTypes } from './edges';
 import { nodeTypes } from './nodes';
@@ -22,6 +27,8 @@ import { useFlowsStore } from './store/flowstore';
 import { NodeTypes } from './store/types.store';
 
 export default function Flow() {
+  const [data, setData] = useState('');
+  console.log('data: ', data);
   const {
     onNodesChange,
     onEdgesChange,
@@ -37,7 +44,10 @@ export default function Flow() {
     isCodeViewDrawerOpen,
     { close: closeCodeViewDrawer, open: openCodeViewDrawer }
   ] = useDisclosure(false);
-
+  const [
+    isGenerateCodeDrawerOpen,
+    { close: closeGenerateCodeDrawer, open: openGenerateCodeDrawer }
+  ] = useDisclosure(false);
   const projects = useProjectStore(state => state.projects);
   const { updateProject } = useProjectOperations();
 
@@ -82,6 +92,27 @@ export default function Flow() {
       InAppNotifications.project.syncedSuccessfully(projectId);
     }
   };
+
+  const handleGenerateClick = async () => {
+    openGenerateCodeDrawer();
+    // Dummy code to test the stream
+    // should be removed eventually
+    try {
+      const response = await fetch('http://localhost:3003/stream');
+      const reader = response.body!.getReader();
+      const decoder = new TextDecoder();
+      let result = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        result += decoder.decode(value);
+        setData(prevData => prevData + decoder.decode(value));
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
   return (
     <>
       <Box w="100%" h="100%">
@@ -120,6 +151,14 @@ export default function Flow() {
             >
               Save Config
             </Button>
+            <Button
+              // bg="blue.4"
+              ml="sm"
+              leftSection={<IconRobotFace />}
+              onClick={handleGenerateClick}
+            >
+              Generate Code
+            </Button>
           </Panel>
           <Controls />
           <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
@@ -134,6 +173,21 @@ export default function Flow() {
         closeOnEscape={false}
       >
         <CodeViewDrawer />
+      </Drawer>
+      <Drawer
+        size="xl"
+        position="right"
+        onClose={() => {
+          closeGenerateCodeDrawer();
+          setData('');
+        }}
+        opened={isGenerateCodeDrawerOpen}
+        closeOnEscape
+        closeOnClickOutside
+      >
+        <Box p="lg" w="100%" h="100%">
+          <pre>{data}</pre>
+        </Box>
       </Drawer>
     </>
   );

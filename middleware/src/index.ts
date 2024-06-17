@@ -10,6 +10,7 @@ import dbInit from './db/dbInit';
 import logger from './logger';
 import { authRoutes } from './routes/authRoutes';
 import { projectRoutes } from './routes/projectRoutes';
+import { llmRoutes } from './routes/llmRoutes';
 
 const fastify = Fastify({
   logger: logger
@@ -18,7 +19,16 @@ const fastify = Fastify({
 // Add CORS as *
 fastify.register(cors, {
   origin: 'http://localhost:3000', // add frontend url here
-  credentials: true
+  credentials: true,
+  maxAge: 86400,
+  allowedHeaders: [
+    'Content-Type',
+    'Transfer-Encoding',
+    'Accept-Encoding',
+    'Cookie',
+    'Set-Cookie',
+    'Authorization'
+  ]
 });
 fastify.register(formBody);
 // cookie plugin registering
@@ -43,6 +53,7 @@ fastify.get('/', async (request, reply) => {
 fastify.register(projectRoutes);
 // Register auth routes
 fastify.register(authRoutes);
+fastify.register(llmRoutes);
 
 // Start the server
 const start = async () => {
