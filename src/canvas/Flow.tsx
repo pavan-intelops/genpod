@@ -19,7 +19,6 @@ import {
   IconRobotFace
 } from '@tabler/icons-react';
 
-import axiosMiddleware from 'src/api/axiosMiddleware';
 import CodeViewDrawer from './drawers/code-view/CodeViewDrawer';
 import { edgeTypes } from './edges';
 import { nodeTypes } from './nodes';

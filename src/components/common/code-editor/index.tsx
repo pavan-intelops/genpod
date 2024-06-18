@@ -5,9 +5,14 @@ import CodeMirror, { basicSetup, ViewUpdate } from '@uiw/react-codemirror';
 interface CodeEditorProps {
   value: string;
   onChange: (value: string, viewUpdate: ViewUpdate) => void;
+  height?: string;
 }
 
-export default function CodeEditor({ value, onChange }: CodeEditorProps) {
+export default function CodeEditor({
+  value,
+  onChange,
+  height
+}: CodeEditorProps) {
   const myCompletions = (context: CompletionContext) => {
     const word = context.matchBefore(/\w*/);
     if (!word) return null;
@@ -29,7 +34,7 @@ export default function CodeEditor({ value, onChange }: CodeEditorProps) {
     <>
       <CodeMirror
         value={value}
-        height="88vh"
+        height={height || '88vh'}
         width="100%"
         extensions={[
           basicSetup({

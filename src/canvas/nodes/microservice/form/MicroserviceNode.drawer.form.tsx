@@ -66,11 +66,18 @@ export default function MicroServiceNodeDrawerForm(
         name="requirements"
         control={form.control}
         render={({ field }) => (
-          <CodeEditor onChange={field.onChange} value={field.value ?? ''} />
+          <CodeEditor
+            height="50vh"
+            onChange={field.onChange}
+            value={field.value ?? ''}
+          />
         )}
       />
-      <Button type="submit" mt="lg">
+      <Button type="submit" mt="lg" mr="lg">
         Save
+      </Button>
+      <Button mt="lg" variant="gradient" onClick={props.onGenerateButtonClick}>
+        Generate
       </Button>
     </form>
   );
