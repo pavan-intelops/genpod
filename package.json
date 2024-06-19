@@ -30,6 +30,7 @@
     "@mantine/hooks": "^7.6.1",
     "@mantine/modals": "^7.6.1",
     "@mantine/notifications": "^7.6.1",
+    "@melloware/react-logviewer": "^5.1.1",
     "@tabler/icons": "^2.47.0",
     "@tabler/icons-react": "^2.47.0",
     "@uiw/codemirror-extensions-langs": "^4.22.0",

@@ -1,19 +1,13 @@
 import { FastifyInstance } from 'fastify';
 
 import {
-  createProject,
-  getAllProjects,
-  getProject,
-  getProjectSnapshots,
-  updateProject
-} from '../handlers/projectHandlers';
-import { attachUser } from '../middleware/attachUser';
-import { streamLLMResponse } from 'src/handlers/llmHandlerts';
+  getAllTasksForANode,
+  streamLogForANodeTask,
+  streamSummaryForANodeTask
+} from 'src/handlers/llmHandlers';
 
 export async function llmRoutes(fastify: FastifyInstance) {
-  // attachUser
-  // fastify.addHook('preHandler', (req, reply, done) => {
-  //   attachUser(req, reply, done);
-  // });
-  fastify.get('/stream', streamLLMResponse);
+  fastify.get('/:nodeId/tasks', getAllTasksForANode);
+  fastify.get('/:nodeId/:taskId/summary', streamSummaryForANodeTask);
+  fastify.get('/:nodeId/:taskId/logs', streamLogForANodeTask);
 }

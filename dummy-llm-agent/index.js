@@ -6,12 +6,14 @@ const cors = require('@fastify/cors');
 const app = fastify({
   logger: true
 });
+
 app.register(cors, {
   origin: '*'
 });
-app.get('/llm', (request, reply) => {
-  const filePath = path.join(__dirname, 'sample.txt');
-
+const getRandomInt = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+const streamFile = (filePath, reply) => {
   fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) {
       reply.code(500).send('Internal Server Error');
@@ -35,12 +37,67 @@ app.get('/llm', (request, reply) => {
         clearInterval(interval);
         reply.raw.end();
       }
-    }, 500);
+    }, getRandomInt(500, 1000));
 
     reply.raw.on('close', () => {
       clearInterval(interval);
     });
   });
+};
+
+app.get('/llm', (request, reply) => {
+  const filePath = path.join(__dirname, 'sample.txt');
+  streamFile(filePath, reply);
+});
+
+app.get('/:nodeId/:taskId/summary', (request, reply) => {
+  const filePath = path.join(__dirname, 'log.txt'); // Adjust the path to your summary file if different
+  streamFile(filePath, reply);
+});
+
+app.get('/:nodeId/:taskId/logs', (request, reply) => {
+  const filePath = path.join(__dirname, 'log.txt'); // Adjust the path to your log file if different
+  streamFile(filePath, reply);
+});
+
+app.get('/:nodeId/tasks', (request, reply) => {
+  reply.send([
+    {
+      id: '12345',
+      name: 'Initialising',
+      value: 'initialising',
+      tabs: [
+        {
+          name: 'Summary',
+          value: 'summary'
+        },
+        {
+          name: 'Logs',
+          value: 'logs'
+        }
+      ]
+    },
+    {
+      id: '6789',
+      name: 'Building',
+      value: 'building',
+      tabs: [
+        {
+          name: 'Summary',
+          value: 'summary'
+        },
+        {
+          name: 'Logs',
+          value: 'logs'
+        }
+      ]
+    },
+    {
+      id: '622789',
+      name: 'Testing',
+      value: 'testing'
+    }
+  ]);
 });
 
 const start = async () => {

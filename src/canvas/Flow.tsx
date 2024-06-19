@@ -27,7 +27,7 @@ import { NodeTypes } from './store/types.store';
 
 export default function Flow() {
   const [data, setData] = useState('');
-  console.log('data: ', data);
+
   const {
     onNodesChange,
     onEdgesChange,
@@ -108,9 +108,7 @@ export default function Flow() {
         result += decoder.decode(value);
         setData(prevData => prevData + decoder.decode(value));
       }
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
+    } catch (error) {}
   };
   return (
     <>

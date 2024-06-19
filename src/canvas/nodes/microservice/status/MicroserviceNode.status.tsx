@@ -1,7 +1,11 @@
-import { Accordion, Flex, Loader, Tabs, Text } from '@mantine/core';
-import { MicroserviceNodeStatusProps, Task } from './types';
 import { useEffect, useState } from 'react';
 import Loading from 'src/components/common/loading/Loading';
+
+import { Accordion } from '@mantine/core';
+
+import MicroserviceNodeTask from './MicroserviceNode.task';
+import { MicroserviceNodeStatusProps, Task } from './types';
+import axiosMiddleware from 'src/api/axiosMiddleware';
 
 /**
  * value key prefixed with id should be the endpoint
@@ -12,75 +16,28 @@ import Loading from 'src/components/common/loading/Loading';
 export default function MicroserviceNodeStatus(
   props: MicroserviceNodeStatusProps
 ) {
-  const [tasks, setTasks] = useState<Task[] | null>(null);
+  const [tasks, setTasks] = useState<Task[] | null | undefined>(null);
   useEffect(() => {
-    if (!tasks)
-      setTimeout(() => {
-        setTasks([
-          {
-            id: '12345',
-            name: 'Initialising',
-            value: 'initialising',
-            tabs: [
-              {
-                name: 'Summary',
-                value: 'summary'
-              },
-              {
-                name: 'Logs',
-                value: 'logs'
-              }
-            ]
-          },
-          {
-            id: '6789',
-            name: 'Building',
-            value: 'building',
-            tabs: [
-              {
-                name: 'Summary',
-                value: 'summary'
-              },
-              {
-                name: 'Logs',
-                value: 'logs'
-              }
-            ]
-          },
-          {
-            id: '622789',
-            name: 'Testing',
-            value: 'testing'
-          }
-        ]);
-      }, 1000);
+    const fetchTasks = async () => {
+      try {
+        const response = await axiosMiddleware.get(
+          `/llm/${props.nodeId}/tasks`
+        );
+        return response.data as Task[];
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    if (!tasks) {
+      fetchTasks().then(tasks => {
+        setTasks(JSON.parse(tasks as unknown as string));
+      });
+    }
   }, []);
   return tasks ? (
-    <Accordion mt="lg" multiple variant="separated">
+    <Accordion mt="lg" variant="separated">
       {tasks.map(task => (
-        <Accordion.Item key={task.id} value={task.value}>
-          <Accordion.Control>{task.name}</Accordion.Control>
-          <Accordion.Panel>
-            {task.tabs && task.tabs.length > 0 ? (
-              <Tabs defaultValue={task.tabs[0].value} variant="outline">
-                <Tabs.List>
-                  {task.tabs.map(tab => (
-                    <Tabs.Tab key={tab.value} value={tab.value}>
-                      {tab.name}
-                    </Tabs.Tab>
-                  ))}
-                </Tabs.List>
-                {task.tabs.map(tab => (
-                  <Tabs.Panel key={tab.value} value={tab.value}>
-                    {tab.value}
-                  </Tabs.Panel>
-                ))}
-              </Tabs>
-            ) : (
-              <Text>No tabs available</Text>
-            )}
-          </Accordion.Panel>
-        </Accordion.Item>
+        <MicroserviceNodeTask key={task.id} nodeId={props.nodeId} task={task} />
       ))}
     </Accordion>
   ) : (

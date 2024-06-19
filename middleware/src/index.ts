@@ -53,7 +53,9 @@ fastify.get('/', async (request, reply) => {
 fastify.register(projectRoutes);
 // Register auth routes
 fastify.register(authRoutes);
-fastify.register(llmRoutes);
+fastify.register(llmRoutes, {
+  prefix: '/llm'
+});
 
 // Start the server
 const start = async () => {
