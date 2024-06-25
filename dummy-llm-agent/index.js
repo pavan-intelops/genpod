@@ -51,12 +51,12 @@ app.get('/llm', (request, reply) => {
 });
 
 app.get('/:nodeId/:taskId/summary', (request, reply) => {
-  const filePath = path.join(__dirname, 'log.txt'); // Adjust the path to your summary file if different
+  const filePath = path.join(__dirname, 'log.txt');
   streamFile(filePath, reply);
 });
 
 app.get('/:nodeId/:taskId/logs', (request, reply) => {
-  const filePath = path.join(__dirname, 'log.txt'); // Adjust the path to your log file if different
+  const filePath = path.join(__dirname, 'log.txt');
   streamFile(filePath, reply);
 });
 

@@ -1,25 +1,25 @@
 import {
-	ActionIcon,
-	Autocomplete,
-	Group,
-	Menu,
-	Tooltip,
-	rem,
-	useMantineColorScheme,
-} from '@mantine/core'
+  ActionIcon,
+  Autocomplete,
+  Group,
+  Menu,
+  Tooltip,
+  rem,
+  useMantineColorScheme
+} from '@mantine/core';
 import {
-	IconBell,
-	IconLogout,
-	IconMoon,
-	IconSearch,
-	IconSettings,
-	IconSun,
-	IconUser,
-} from '@tabler/icons-react'
-import { Link, useNavigate } from 'react-router-dom'
-import GenPodLogo from 'src/assets/logos/GenpodLogo'
-import classes from './HeaderDefault.module.css'
-import useUserStore from 'src/store/userStore'
+  IconBell,
+  IconLogout,
+  IconMoon,
+  IconSearch,
+  IconSettings,
+  IconSun,
+  IconUser
+} from '@tabler/icons-react';
+import { Link, useNavigate } from 'react-router-dom';
+import GenPodLogo from 'src/assets/logos/GenpodLogo';
+import classes from './HeaderDefault.module.css';
+import useUserStore from 'src/store/userStore';
 
 export function HeaderDefault() {
   const { colorScheme, setColorScheme } = useMantineColorScheme({

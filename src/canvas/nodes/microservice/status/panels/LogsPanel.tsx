@@ -1,17 +1,38 @@
-import { useEffect, useState } from 'react';
+import { Box } from '@mantine/core';
+import { LazyLog, ScrollFollow } from '@melloware/react-logviewer';
+import { useRef } from 'react';
+import { GLOBAL_CONSTANTS } from 'src/constants.global';
 
-export default function LogsPanel() {
-  const [random, setRandom] = useState(4324);
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setRandom(Math.random());
-    }, 200);
-    return () => clearInterval(interval);
-  }, []);
+interface LogsPanelProps {
+  nodeId: string;
+  taskId: string;
+}
+export default function LogsPanel({ nodeId, taskId }: LogsPanelProps) {
+  const url = `${GLOBAL_CONSTANTS.middlewareUrl}/llm/${nodeId}/${taskId}/logs`;
+  const ref = useRef<LazyLog>(null);
+
   return (
     <div>
-      LogsPanel
-      {random}
+      <Box h="25vh" w="100%">
+        <ScrollFollow
+          render={({ follow, onScroll }) => (
+            <>
+              <LazyLog
+                url={url}
+                stream
+                follow={follow}
+                onScroll={onScroll}
+                enableMultilineHighlight
+                // enableGutters
+                enableSearchNavigation
+                enableSearch
+                ref={ref}
+                enableLineNumbers={false}
+              />
+            </>
+          )}
+        />
+      </Box>
     </div>
   );
 }

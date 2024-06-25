@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import { ProjectStoreActions, ProjectStoreState } from './types';
+import axiosMiddleware from 'src/api/axiosMiddleware';
 
 export const useProjectStore = create<
   ProjectStoreState & ProjectStoreActions
@@ -19,6 +20,11 @@ export const useProjectStore = create<
           },
           setProjects: projects => {
             set({ projects });
+          },
+          refreshProjects: async () => {
+            const { data } = await axiosMiddleware.get(`/projects`);
+            const parsedData = JSON.parse(data as unknown as string);
+            set({ projects: parsedData });
           },
           removeProject: project => {
             set(state => {

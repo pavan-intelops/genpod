@@ -34,6 +34,7 @@ export type ProjectStoreActions = {
   setProjects: (projects: Project[]) => void;
   setActiveProject: (projectId: string) => void;
   removeProject: (project: Project) => void;
+  refreshProjects: () => Promise<void>;
 };
 // Feature Flags Store
 export type FeatureFlagVariant = {

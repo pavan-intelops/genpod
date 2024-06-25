@@ -24,6 +24,7 @@ import { useFeatureFlagStore } from './store/useFeatureFlagStore';
 import { runEnvVariablesCheck } from './utils/checkEnvVariables';
 import { pingCheckServer } from './utils/pingCheckServer';
 import { initSocket } from './utils/socket';
+import Status from './pages/project/Status';
 
 function App() {
   const { fetchAllFeatureFlags, areFeatureFlagsLoaded } = useFeatureFlagStore();
@@ -52,6 +53,7 @@ function App() {
             <Route path="/test" element={<Layout />} />
             <Route path="/login" element={<Login />} />
             <Route path="/project/:projectId" element={<Project />} />
+            <Route path="/project/:projectId/status" element={<Status />} />
             <Route path="/profile" index element={<Profile />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>

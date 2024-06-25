@@ -1,12 +1,8 @@
 import { Box } from '@mantine/core';
-import { LazyLog, Line, ScrollFollow } from '@melloware/react-logviewer';
-import { useEffect, useRef } from 'react';
+import { LazyLog, ScrollFollow } from '@melloware/react-logviewer';
+import { useRef } from 'react';
 import { GLOBAL_CONSTANTS } from 'src/constants.global';
 
-// Use defaultProps.style to set the style for an internal component
-Line.defaultProps.style = {
-  color: 'green'
-};
 interface SummaryPanelProps {
   nodeId: string;
   taskId: string;
@@ -17,7 +13,6 @@ export default function SummaryPanel({ nodeId, taskId }: SummaryPanelProps) {
 
   return (
     <div>
-      <h1>Streamed Data</h1>
       <Box h="25vh" w="100%">
         <ScrollFollow
           render={({ follow, onScroll }) => (
@@ -28,10 +23,10 @@ export default function SummaryPanel({ nodeId, taskId }: SummaryPanelProps) {
                 follow={follow}
                 onScroll={onScroll}
                 enableMultilineHighlight
-                enableGutters
+                // enableGutters
                 enableSearch
                 ref={ref}
-                containerStyle={{}}
+                enableLineNumbers={false}
               />
             </>
           )}

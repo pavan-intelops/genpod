@@ -13,7 +13,8 @@ export const useSyncActions = () => {
       return;
     }
     if (projects && projects?.length > 0) {
-      setProjects(JSON.parse(projects as unknown as string));
+      const parsedProjects = JSON.parse(projects as unknown as string);
+      setProjects(parsedProjects);
     }
   }, []);
 

@@ -46,7 +46,7 @@ const renderPanel = (tab: Tab, nodeId: string, taskId: string) => {
   if (tab.value === 'summary') {
     return <SummaryPanel nodeId={nodeId} taskId={taskId} />;
   } else if (tab.value === 'logs') {
-    return <LogsPanel />;
+    return <LogsPanel nodeId={nodeId} taskId={taskId} />;
   }
   return null;
 };

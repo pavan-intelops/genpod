@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ReactFlow, {
   Background,
   BackgroundVariant,
@@ -36,7 +37,7 @@ export default function Flow() {
     flows,
     activeFlow
   } = useFlowsStore();
-
+  const navigate = useNavigate();
   const projectId = activeFlow?.slice(4);
   const { nodes, edges } = getNodesAndEdges();
   const [
@@ -110,6 +111,9 @@ export default function Flow() {
       }
     } catch (error) {}
   };
+  const handleViewStatusClick = () => {
+    navigate(`/project/${projectId}/status`);
+  };
   return (
     <>
       <Box w="100%" h="100%">
@@ -149,12 +153,14 @@ export default function Flow() {
               Save Config
             </Button>
             <Button
-              // bg="blue.4"
               ml="sm"
               leftSection={<IconRobotFace />}
               onClick={handleGenerateClick}
             >
               Generate Code
+            </Button>
+            <Button ml="sm" onClick={handleViewStatusClick}>
+              View Project Status
             </Button>
           </Panel>
           <Controls />
