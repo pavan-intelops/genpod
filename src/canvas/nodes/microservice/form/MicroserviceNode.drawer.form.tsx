@@ -1,7 +1,7 @@
 import { Controller, useForm } from 'react-hook-form';
 import { TextInput } from 'react-hook-form-mantine';
 import { useFlowsStore } from 'src/canvas/store/flowstore';
-import { CustomNodeFormData, NodeTypes } from 'src/canvas/store/types.store';
+import { NodeTypes } from 'src/canvas/store/types.store';
 import { NodeDrawerFormProps } from 'src/canvas/types';
 import CodeEditor from 'src/components/common/code-editor';
 
@@ -45,7 +45,6 @@ export default function MicroServiceNodeDrawerForm(
   };
   const handleNodeDataChange = () => {
     const transformedData = transformToNodeData(form.getValues());
-
     setNodeFormData(transformedData, props.nodeId);
   };
 
